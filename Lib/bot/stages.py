@@ -1,30 +1,44 @@
-from Lib.BotDB_Func import BotDB_Func
-from Lib.keyboards import *
-from config import db_path, data_folder
+from Lib.bot.BotDB_Func import BotDB_Func
+from Lib.bot.keyboards import *
+from Lib.bot.stages_names import Stages_names
+from Lib.bot.output_texts import (passwords_info_str, 
+                                settings_password_str, start_message_str)
+from config import db_path
 
 db = BotDB_Func(db_path=db_path)
 
 class Pages:
     def __init__(self, sender):
         self.s = sender
+        self.sn = Stages_names()
+    
 
-    def start_page(self):
-        pass
+    def reset_page(self, user_id: int):
+        text = f"Кнопки сброшены\nОбновление!\n[ Информацию об обновлении "\
+            f"искать на странице сообщества ]\nНажмите кнопку 'Начать'"
+        keyboard = stage_start_keyboard()
+        self.s.sender(id=user_id, text=text, keyboard=keyboard)
 
 
-    def home_page(self, id: int, null:bool|None=None):
-        db.change_stage(user_id=id, stage=100)
-        if null is not None:
+    def start_page(self, id:int):
+        db.start(user_id=id)
+        text = start_message_str()
+        self.s.sender(id=id, text=text)
+        Pages.home_page(self, id=id, null_user=True)
+
+
+    def home_page(self, id: int, null_user:bool|None=None):
+        db.change_stage(user_id=id, stage=self.sn.HOME)
+        if null_user is not None:
             db.null_user(user_id=id)
-        stage = 100
         subgroup = db.get_subgroup(user_id=id)
         text = "Выберите: "
-        keyboard = stage_home_keyboard(stage=stage, subgroup=subgroup)
+        keyboard = stage_home_keyboard(subgroup=subgroup)
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
     def other_page(self, id: int):
-        db.change_stage(user_id=id, stage=101)
+        db.change_stage(user_id=id, stage=self.sn.OTHER)
         text = 'Выберите: '
         can_get_teachers = False
         if 'teachers' in db.get_passwords(user_id=id):
@@ -34,7 +48,7 @@ class Pages:
         
 
     def passwords_page(self, id: int, event):
-        db.change_stage(user_id=id, stage=102)
+        db.change_stage(user_id=id, stage=self.sn.PASSWORDS)
         if 'callback' in event.button_actions:
             text = 'Что такое код-пароль?'
             settings = dict(inline=True)
@@ -46,27 +60,7 @@ class Pages:
                     )
             self.s.sender(id=id, text=text, inline_keyboard=inline_keyboard)
         else:
-            text = '🔵Для добавления пароля, находясь в данной вкладке '\
-                    '("Пароли"), напишите боту сообщение с придуманным '\
-                    'кодовым словом. (Вводить без пробелов)\n' \
-                    'После этого у Вас будет возможность '\
-                    'выбрать тип пароля:\n'\
-                    '➡Открытая -> делать рассылку могут все '\
-                    'пользователи, которые ввели пароль\n'\
-                    '➡Приватная -> делать рассылку может только '\
-                    'создатель пароля\n\n'\
-                    '🔵Для удаления пароля, находясь в данной '\
-                    'вкладке ("Пароли"), напишите боту сообщение: '\
-                    '"del кодовое слово"\n'\
-                    'Пример: del 123\n(у вас удалится пароль 123)\n\n'\
-                    '🔵Список Ваших паролей можно найти при нажатии '\
-                    'кнопки "Мои пароли". \n\n' \
-                    '❕Для рассылки сообщений всем,у кого введён '\
-                    'такой же пароль, перейдите на любую другую страницу '\
-                    'бота и введите "пароль сообщение".\n' \
-                    'Пример: 123 Всем привет!\n' \
-                    '(всем пользователям с введенным кодовым словом '\
-                    '123 отправится сообщение "Всем привет!" )'
+            text = passwords_info_str() 
             self.s.sender(id=id, text=text)
         text = 'Введите пароль:'
         keyboard = stage_passwords_keyboard()
@@ -74,18 +68,14 @@ class Pages:
 
 
     def setting_password_page(self, id: int):
-        text = f'Выберите параметр приватности рассылки:\n'\
-                'Приватная -> делать рассылку может только '\
-                'создатель\n'\
-                'Открытая -> делать рассылку могут все '\
-                'пользователи, которые ввели пароль'
-        db.change_stage(user_id=id, stage=103)
+        db.change_stage(user_id=id, stage=self.sn.SETTING_PASSWORDS)
+        text = settings_password_str()
         keyboard = stage_setting_passwords_keyboard()
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
     def mail_page(self, id: int):
-        db.change_stage(user_id=id, stage=104)
+        db.change_stage(user_id=id, stage=self.sn.MAIL)
         daily_mail = db.get_daily_mail(user_id=id)
         weekly_mail = db.get_weekly_mail(user_id=id)
         text = 'Включите/выключите рассылку расписания:'
@@ -98,49 +88,43 @@ class Pages:
 
     def form_page(self, id: int, update_forms: bool|None = None):
         if update_forms is None:
-            db.change_stage(user_id=id, stage=1)
+            db.change_stage(user_id=id, stage=self.sn.FORM)
             db.null_schedule(user_id=id)
         text = "Выберите одну из форм обучения:"
-        keyboard = stage_form_keyboard(data_folder=data_folder)
+        keyboard = stage_form_keyboard()
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
     def fac_page(self, id: int, msg: str):
-        forms = get_forms(data_folder=data_folder)
+        forms = get_forms()
         for form in forms:
             if form.lower() == msg:
-                db.change_stage(user_id=id, stage=2)
+                db.change_stage(user_id=id, stage=self.sn.FAC)
                 db.change_form(user_id=id, form=form)
                 text = 'Выберите один из факультетов:'
-                keyboard = stage_fac_keyboard(
-                        data_folder=data_folder, 
-                        form=form
-                        )
+                keyboard = stage_fac_keyboard(form=form)
                 self.s.sender(id=id, text=text, keyboard=keyboard)
 
     def group_select_page(self, id: int, msg: None|str = None, 
             update_stage: bool|None = None):
+        form = db.get_form(user_id=id)
+        group_page = db.get_group_page(user_id=id)
         fac = ''
         if msg is not None:
-            form = db.get_form(user_id=id)
-            group_page = db.get_group_page(user_id=id)
-            facs = get_facs(data_folder=data_folder, form=form)
+            facs = get_facs(form=form)
             for fac in facs:
                 if fac.lower() == msg:
                     db.change_fac(user_id=id, fac=fac)
-                    db.change_stage(user_id=id, stage=3)
+                    db.change_stage(user_id=id, stage=self.sn.GROUP_SELECT)
                     break
         else:
             if update_stage is not None:
-                db.change_stage(user_id=id, stage=3)
+                db.change_stage(user_id=id, stage=self.sn.GROUP_SELECT)
             db.del_group(user_id=id)
             db.del_subgroup(user_id=id)
-            form = db.get_form(user_id=id)
             fac = db.get_fac(user_id=id)
-            group_page = db.get_group_page(user_id=id)
         text = f'Выберите одну из групп:\nПоказана страница {group_page}'
         keyboard = stage_group_keyboard(
-                data_folder=data_folder, 
                 form=form, 
                 fac=fac, 
                 group_page=group_page
@@ -150,13 +134,12 @@ class Pages:
 
     def session_group_select_page(self, id: int, update_stage:bool|None = None):
         if update_stage is not None:
-            db.change_stage(user_id=id, stage=3.5)
+            db.change_stage(user_id=id, stage=self.sn.SESSION_GROUP_SELECT)
         form = db.get_form(user_id=id)
         fac = db.get_fac(user_id=id)
         session_group_page = db.get_session_group_page(user_id=id)
         text = f'Выберите одну из групп:\nПоказана страница {session_group_page}'
         keyboard = stage_session_group_keyboard(
-                data_folder=data_folder, 
                 form=form, 
                 fac=fac, 
                 session_group_page=session_group_page
@@ -165,28 +148,25 @@ class Pages:
 
 
     def subgroup_page(self, id: int, session:None|bool=None, msg:None|str=None):
+        form = db.get_form(user_id=id)
+        fac = db.get_fac(user_id=id)
         group = ''
         if msg is not None:
-            form = db.get_form(user_id=id)
-            fac = db.get_fac(user_id=id)
             if session == True:
-                groups = get_session_groups(data_folder=data_folder, form=form, fac=fac)
+                groups = get_session_groups(form=form, fac=fac)
             else:
-                groups = get_groups(data_folder=data_folder, form=form, fac=fac)
+                groups = get_groups(form=form, fac=fac)
             for group in groups:
                 if group.lower() == msg:
-                    db.change_stage(user_id=id, stage=4)
+                    db.change_stage(user_id=id, stage=self.sn.SUBGROUP)
                     db.change_group(user_id=id, group=group)
                     break
         else:
-            db.change_stage(user_id=id, stage=4)
+            db.change_stage(user_id=id, stage=self.sn.SUBGROUP)
             db.del_subgroup(user_id=id)
-            form = db.get_form(user_id=id)
-            fac = db.get_fac(user_id=id)
             group = db.get_group(user_id=id)
         text = 'Выберите подгруппу:'
         keyboard = stage_subgroup_keyboard(
-                data_folder=data_folder, 
                 form=form, 
                 fac=fac, 
                 group=group
@@ -200,7 +180,6 @@ class Pages:
             fac = db.get_fac(user_id=id)
             group = db.get_group(user_id=id)
             all_subgroups = get_subgroups(
-                    data_folder=data_folder, 
                     form=form, 
                     fac=fac, 
                     group=group
@@ -208,14 +187,14 @@ class Pages:
             for subgroup in range(1, all_subgroups + 1):
                 if str(subgroup).lower() == msg:
                     db.change_subgroup(user_id=id, subgroup=str(subgroup))
-        db.change_stage(user_id=id, stage=5)
+        db.change_stage(user_id=id, stage=self.sn.SCHEDULE_TYPE)
         text = 'Выберите: '
         keyboard = stage_schedule_type_keyboard()
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
     def date_select_page(self, id: int, update:bool|None=None):
-        db.change_stage(user_id=id, stage=6)
+        db.change_stage(user_id=id, stage=self.sn.DATE_SELECT)
         form = db.get_form(user_id=id)
         fac = db.get_fac(user_id=id)
         group = db.get_group(user_id=id)
@@ -225,7 +204,6 @@ class Pages:
         else:
             text = f'Выберите дату:\nПоказана страница {date_page}'
         keyboard = stage_date_keyboard(
-                data_folder=data_folder, 
                 form=form, 
                 fac=fac, 
                 group=group, 
@@ -235,7 +213,7 @@ class Pages:
 
 
     def week_select_page(self, id: int):
-        db.change_stage(user_id=id, stage=7)
+        db.change_stage(user_id=id, stage=self.sn.WEEK_SELECT)
         week_page = db.get_week_page(user_id=id)
         form = db.get_form(user_id=id)
         fac = db.get_fac(user_id=id)
@@ -245,7 +223,6 @@ class Pages:
         mode = db.get_mode(user_id=id)
         text = 'Выберите неделю:'
         keyboard = stage_week_keyboard(
-                data_folder=data_folder, 
                 week_page=week_page, 
                 form=form, 
                 fac=fac, 
@@ -257,9 +234,21 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def settings_week_page(self, id: int):
-        db.change_stage(user_id=id, stage=8)
-        text = 'Выберите:'
+    def settings_week_page(self, id: int, edit: str | None = None):
+        """ edit = None -> переход на страницу с настройками
+        edit = 'mode' -> изменение цветовой схемы
+        edit = 'quality' -> изменение качество изображений"""
+        if edit == None:
+            text = 'Выберите:'
+            db.change_stage(user_id=id, stage=self.sn.SETTINGS_WEEK)
+        elif edit == 'mode':
+            text = 'Изменена цветовая схема'
+            db.change_mode(user_id=id)
+        elif edit == 'quality':
+            text = 'Изменено качество изображений'
+            db.change_quality(user_id=id)
+        else:
+            return
         mode = db.get_mode(user_id=id)
         quality = db.get_quality(user_id=id)
         keyboard = stage_settings_week_keyboard(mode=mode, quality=quality)

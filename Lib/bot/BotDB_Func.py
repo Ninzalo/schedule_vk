@@ -1,4 +1,4 @@
-from Lib.BotDataBase import BotDB 
+from Lib.bot.BotDataBase import BotDB 
 from typing import NamedTuple
 
 class Error_handler(NamedTuple):
@@ -53,13 +53,13 @@ class BotDB_Func:
         with BotDB(self.db_path) as db:
             db.null_schedule(user_id=user_id)
 
-    def get_stage(self, user_id: int) -> float:
+    def get_stage(self, user_id: int) -> str:
         """ Получаем stage пользователя """
         with BotDB(self.db_path) as db:
             stage = db.get_stage(user_id=user_id)
             return stage
 
-    def change_stage(self, user_id: int, stage: float):
+    def change_stage(self, user_id: int, stage: str):
         """ Меняем stage пользователя """
         with BotDB(self.db_path) as db:
             db.change_stage(user_id=user_id, stage=stage)

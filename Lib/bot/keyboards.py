@@ -1,8 +1,9 @@
 import json
-from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import datetime
+from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
-from Lib.getter import get_forms, get_facs, get_session_groups, get_groups, get_subgroups, closest_week
+from Lib.bot.getter import get_forms, get_facs, get_session_groups, get_groups, get_subgroups, closest_week
+from config import data_folder
 
 
 def stage_start_keyboard():
@@ -11,9 +12,9 @@ def stage_start_keyboard():
     return keyboard
 
 
-def stage_home_keyboard(stage: int, subgroup: str):
+def stage_home_keyboard(subgroup: str):
     keyboard = VkKeyboard()
-    if stage == 100 and subgroup != "None":
+    if subgroup != "None":
         keyboard.add_button('Расписание выбранной группы', color=VkKeyboardColor.POSITIVE)
         keyboard.add_line()
     keyboard.add_button('Расписание', color=VkKeyboardColor.PRIMARY)
@@ -67,8 +68,8 @@ def stage_mail_keyboard(daily_mail: int, weekly_mail: int):
     return keyboard
 
 
-def stage_form_keyboard(data_folder: str):
-    forms = get_forms(data_folder=data_folder)
+def stage_form_keyboard():
+    forms = get_forms()
     keyboard = VkKeyboard()
     for form in forms:
         keyboard.add_button(f"{form}", color=VkKeyboardColor.PRIMARY)
@@ -79,9 +80,9 @@ def stage_form_keyboard(data_folder: str):
     return keyboard
 
 
-def stage_fac_keyboard(data_folder: str, form: str):
+def stage_fac_keyboard(form: str):
     keyboard = VkKeyboard()
-    facs = get_facs(data_folder=data_folder, form=form)
+    facs = get_facs(form=form)
     for fac in facs[:8]:
         keyboard.add_button(f"{fac.strip()}", color=VkKeyboardColor.PRIMARY)
         keyboard.add_line()
@@ -89,10 +90,10 @@ def stage_fac_keyboard(data_folder: str, form: str):
     return keyboard
 
 
-def stage_group_keyboard(data_folder: str, form: str, fac: str, group_page: int):
+def stage_group_keyboard(form: str, fac: str, group_page: int):
     keyboard = VkKeyboard()
-    session_groups = get_session_groups(data_folder=data_folder, form=form, fac=fac)
-    groups = get_groups(data_folder=data_folder, form=form, fac=fac)
+    session_groups = get_session_groups(form=form, fac=fac)
+    groups = get_groups(form=form, fac=fac)
     if len(session_groups) != 0:
         amount_of_groups = 3
         keyboard.add_button("Сессия", color=VkKeyboardColor.POSITIVE)
@@ -115,9 +116,9 @@ def stage_group_keyboard(data_folder: str, form: str, fac: str, group_page: int)
     return keyboard
 
 
-def stage_session_group_keyboard(data_folder: str, form: str, fac: str, session_group_page: int):
+def stage_session_group_keyboard(form: str, fac: str, session_group_page: int):
     keyboard = VkKeyboard()
-    groups = get_session_groups(data_folder=data_folder, form=form, fac=fac)
+    groups = get_session_groups(form=form, fac=fac)
     amount_of_groups = 3
     keyboard.add_button("Обычное расписание", color=VkKeyboardColor.POSITIVE)
     keyboard.add_line()
@@ -137,9 +138,9 @@ def stage_session_group_keyboard(data_folder: str, form: str, fac: str, session_
     return keyboard
 
 
-def stage_subgroup_keyboard(data_folder: str, form: str, fac: str, group: str):
+def stage_subgroup_keyboard(form: str, fac: str, group: str):
     keyboard = VkKeyboard()
-    all_subgroups = get_subgroups(data_folder=data_folder, form=form, fac=fac, group=group)
+    all_subgroups = get_subgroups(form=form, fac=fac, group=group)
     for item in range(1, all_subgroups + 1):
         keyboard.add_button(f"{str(item).strip()}", color=VkKeyboardColor.PRIMARY)
         keyboard.add_line()
@@ -158,7 +159,7 @@ def stage_schedule_type_keyboard():
     return keyboard
 
 
-def stage_date_keyboard(data_folder: str, form: str, fac: str, group: str, date_page: int):
+def stage_date_keyboard(form: str, fac: str, group: str, date_page: int):
     keyboard = VkKeyboard()
     with open(f'{data_folder}\\{form}\\{fac}\\data\\schedule\\schedule_{group}.json') as f:
         data = json.load(f)
@@ -194,15 +195,16 @@ def stage_date_keyboard(data_folder: str, form: str, fac: str, group: str, date_
         buttons_in_row += 1
     if len(new_data[start_num_date + 4:fin_num_date + 4]) != 0 or buttons_in_row > 0:
         keyboard.add_line()
-    # keyboard.add_line()
     keyboard.add_button(f"Обновить", color=VkKeyboardColor.PRIMARY)
     keyboard.add_button(f"В начало", color=VkKeyboardColor.NEGATIVE)
     keyboard.add_button(f"Назад", color=VkKeyboardColor.NEGATIVE)
     return keyboard
 
 
-def stage_week_keyboard(data_folder: str, week_page: int, form: str, fac: str, group: str, subgroup: str, quality: int, mode: str):
-    _closest_week_dates, user_week_page = closest_week(data_folder=data_folder, form=form, fac=fac, group=group, subgroup=subgroup, quality=quality, mode=mode)
+def stage_week_keyboard(week_page: int, form: str, fac: str, group: str, 
+        subgroup: str, quality: int, mode: str):
+    _, user_week_page = closest_week(form=form, fac=fac, group=group, 
+            subgroup=subgroup, quality=quality, mode=mode)
     keyboard = VkKeyboard()
     if user_week_page != week_page - 1 and user_week_page != week_page and user_week_page != week_page + 1:
         if user_week_page != -1 and user_week_page != 0 and user_week_page != 1:

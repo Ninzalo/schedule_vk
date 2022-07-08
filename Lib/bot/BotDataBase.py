@@ -40,7 +40,7 @@ class BotDB:
     def null_user(self, user_id: int):
         """ Выставляем стандартное значение stage и всех параметров """
         sql = """ UPDATE users 
-        SET on_stage=100, group_page=1, session_group_page=1, week_page=0, date_page=1, 
+        SET on_stage='home', group_page=1, session_group_page=1, week_page=0, date_page=1, 
         form=null, fac=null, subgroup=null, group_name=null
         WHERE user_id=?"""
         self.cursor.execute(sql, (user_id,))
@@ -55,13 +55,13 @@ class BotDB:
         self.cursor.execute(sql, (user_id,))
         return self.conn.commit()
 
-    def get_stage(self, user_id: int) -> float:
+    def get_stage(self, user_id: int) -> str:
         """ Получаем Stage пользователя """
         sql = """ SELECT on_stage FROM users WHERE user_id = ? """
         result = self.cursor.execute(sql, (user_id,))
         return result.fetchone()[0]
 
-    def change_stage(self, user_id: int, stage: float):
+    def change_stage(self, user_id: int, stage: str):
         """ Изменяем Stage пользователя """
         sql = """UPDATE users SET on_stage = ? WHERE id = ?"""
         self.cursor.execute(sql, (stage, self.get_user_id(user_id=user_id)))
@@ -231,10 +231,12 @@ class BotDB:
 
     def get_all_daily_mail(self) -> list:
         """ Достаем daily_mail=1 всех пользователей """
-        sql = """ SELECT daily_mail FROM users WHERE daily_mail=1"""
+        sql = """ SELECT user_id FROM users WHERE daily_mail=1 AND subgroup IS NOT NULL"""
         result = self.cursor.execute(sql)
-        result = [int(item[0]) for item in result.fetchall()]
-        return result
+        result_list = []
+        for item in result.fetchall():
+            result_list.append(int(item[0]))
+        return result_list
 
     def get_weekly_mail(self, user_id: int) -> int:
         """ Получаем weekly_mail пользователя """
@@ -250,10 +252,12 @@ class BotDB:
 
     def get_all_weekly_mail(self) -> list:
         """ Достаем weekly_mail=1 всех пользователей """
-        sql = """ SELECT weekly_mail FROM users WHERE weekly_mail=1"""
+        sql = """ SELECT user_id FROM users WHERE weekly_mail=1 AND subgroup IS NOT NULL"""
         result = self.cursor.execute(sql)
-        result = [int(item[0]) for item in result.fetchall()]
-        return result
+        result_list = []
+        for item in result.fetchall():
+            result_list.append(int(item[0]))
+        return result_list
 
     def get_passwords(self, user_id: int) -> list:
         """ Получаем пароли пользователя """
@@ -310,7 +314,7 @@ class BotDB:
 
     def set_privacy(self, user_id: int, privacy: int) -> str:
         """ Изменяем privacy пароля """
-        sql = """ SELECT password FROM passwords WHERE user_id=?, creator_id=?, privacy IS NULL"""
+        sql = """ SELECT password FROM passwords WHERE user_id=? AND creator_id=? AND privacy IS NULL"""
         password = self.cursor.execute(sql, (user_id, user_id))
         password = password.fetchone()[0]
         sql = """ UPDATE passwords SET privacy=? WHERE user_id=? AND creator_id=? AND privacy IS NULL """
