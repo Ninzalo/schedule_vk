@@ -267,6 +267,12 @@ class BotDB:
         for item in result.fetchall():
             passwords.append(str(item[0]))
         return passwords
+
+    def _set_creator(self, creator_id: int, password: str):
+        """ Меняем создателя пароля """
+        sql = """ UPDATE passwords SET creator_id = ? WHERE password = ? """
+        self.cursor.execute(sql, (creator_id, password))
+        return self.conn.commit()
     
     def get_creator(self, password: str) -> int | None:
         """ Получаем создателя пароля """
@@ -321,6 +327,7 @@ class BotDB:
         self.cursor.execute(sql, (privacy, user_id, user_id))
         self.conn.commit()
         return password
+        # return 'true'
 
     def del_password(self, user_id: int, password: str) -> bool:
         """ Проверяем наличие пароля у пользователя """

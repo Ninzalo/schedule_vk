@@ -8,7 +8,7 @@ import socket
 import urllib3
 import requests
 from vk_api.bot_longpoll import VkBotEventType, VkBotLongPoll
-from config import token_vk, group_id, db_path, data_folder, delay, time_str
+from config import token_vk, group_id, db_path, delay, time_str
 
 from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.bot_func import Bot_class
@@ -19,6 +19,8 @@ from Lib.bot.mail import daily_mail, weekly_mail
 
 from Lib.bot.group import group_online, wall_sender
 from Lib.bot.output_texts import passwords_info_str
+
+from Lib.bot.table import create_tables
 
 import multiprocessing
 
@@ -128,5 +130,10 @@ def run_parallel():
     p2.join()
 
 
+def table():
+    create_tables()
+
+
 if __name__ == '__main__':
+    table()
     run_parallel()

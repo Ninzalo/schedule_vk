@@ -24,7 +24,7 @@ def get_facs(form: str) -> List[str]:
 
 
 def get_groups(form: str, fac: str) -> List[str]:
-    schedule_data_folder = f"{data_folder}\\{form}\\{fac}\\data\\schedule"
+    schedule_data_folder = f"{data_folder}\\{form}\\{fac}\\data\\json\\schedule"
     list_of_groups = os.listdir(schedule_data_folder)
     groups = []
     for item in list_of_groups:
@@ -34,7 +34,7 @@ def get_groups(form: str, fac: str) -> List[str]:
 
 
 def get_session_groups(form: str, fac: str) -> List[str]:
-    schedule_data_folder = f"{data_folder}\\{form}\\{fac}\\data\\schedule"
+    schedule_data_folder = f"{data_folder}\\{form}\\{fac}\\data\\json\\schedule"
     list_of_groups = os.listdir(schedule_data_folder)
     groups = []
     for item in list_of_groups:
@@ -235,13 +235,13 @@ def get_all_weeks(vk, db, id: int, event: Event_hint,
 def get_schedule_picture_path(form: str, fac: str, group: str, 
         subgroup: str, quality: int, mode: str, first_date: str, 
         last_date: str) -> str:
-    path = f'{data_folder}\\{form}\\{fac}\\data\\schedule\\{group}'\
+    path = f'{data_folder}\\{form}\\{fac}\\data\\week\\{group}'\
             f'\\s{subgroup}\\q{quality}\\{mode}'\
             f'\\week_{first_date}_{last_date}.jpg'
     return path
 
 
 def get_schedule_path(form: str, fac: str, group: str) -> str:
-    path = f'{data_folder}\\{form}\\{fac}\\data\\schedule'\
+    path = f'{data_folder}\\{form}\\{fac}\\data\\json\\schedule'\
             f'\\schedule_{group}.json'
     return path

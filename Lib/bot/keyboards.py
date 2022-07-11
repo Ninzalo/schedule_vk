@@ -2,7 +2,7 @@ import json
 import datetime
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
-from Lib.bot.getter import get_forms, get_facs, get_session_groups, get_groups, get_subgroups, closest_week
+from Lib.bot.getter import get_forms, get_facs, get_session_groups, get_groups, get_subgroups, closest_week, get_schedule_path
 from config import data_folder
 
 
@@ -161,7 +161,8 @@ def stage_schedule_type_keyboard():
 
 def stage_date_keyboard(form: str, fac: str, group: str, date_page: int):
     keyboard = VkKeyboard()
-    with open(f'{data_folder}\\{form}\\{fac}\\data\\schedule\\schedule_{group}.json') as f:
+    path = get_schedule_path(form=form, fac=fac, group=group)
+    with open(path) as f:
         data = json.load(f)
     fin_num_date = date_page * 4
     start_num_date = fin_num_date - 4

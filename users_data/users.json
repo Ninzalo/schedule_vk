@@ -262,8 +262,11 @@
         "subgroup": "1",
         "date_page": 1,
         "passwords": [],
+        "week_page": 0,
+        "quality": 1,
+        "mode": "night",
         "session_group_page": 1,
-        "daily_mail": 0,
+        "daily_mail": 1,
         "weekly_mail": 0
     },
     {
@@ -344,8 +347,11 @@
         "subgroup": "2",
         "date_page": 1,
         "passwords": [],
+        "week_page": 0,
+        "quality": 1,
+        "mode": "night",
         "session_group_page": 1,
-        "daily_mail": 0,
+        "daily_mail": 1,
         "weekly_mail": 0
     },
     {

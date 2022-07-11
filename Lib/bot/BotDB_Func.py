@@ -237,6 +237,11 @@ class BotDB_Func:
             passwords = db.get_passwords(user_id=user_id)
             return passwords
 
+    def _set_creator(self, creator_id: int, password: str) -> None:
+        """ Меняем создателя пароля """
+        with BotDB(self.db_path) as db:
+            db._set_creator(creator_id=creator_id, password=password)
+
     def get_creator(self, password: str) -> int | None:
         """ Получаем user_id создателя пароля """
         with BotDB(self.db_path) as db:

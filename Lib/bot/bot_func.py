@@ -9,7 +9,7 @@ from Lib.bot.event_hint import Event_hint
 from Lib.bot.stages import Pages
 from Lib.bot.stages_names import Stages_names
 from Lib.bot.mail import mail  
-from Lib.bot.getter import get_all_weeks
+from Lib.bot.getter import get_all_weeks, get_schedule_path
 from config import data_folder
 
 
@@ -69,8 +69,9 @@ class Bot_class:
         fac = self.db.get_fac(user_id=id)
         if form != "None" and fac != "None" and group != "None":
             try:
-                path = f'{self.data_folder}\\{form}\\{fac}\\data\\schedule\\'\
-                        f'schedule_{group}.json'
+                # path = f'{self.data_folder}\\{form}\\{fac}\\data\\schedule\\'\
+                        # f'schedule_{group}.json'
+                path = get_schedule_path(form=form, fac=fac, group=group)
                 open(path)
             except:
                 self.db.change_stage(user_id=id, stage=self.sn.START)
