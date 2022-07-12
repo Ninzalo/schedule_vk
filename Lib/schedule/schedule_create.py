@@ -1,6 +1,8 @@
 import calendar
-from Lib.schedule.dates import parity_check
 from typing import List, Tuple
+from Lib.schedule.dates import parity_check
+from Lib.schedule.schedule_data import Schedule, Other
+
 
 def schedule_create(teachers_data: List[dict]) -> List[dict]:
     min_year_file, max_year_file = _get_min_and_max_year(
@@ -25,6 +27,7 @@ def schedule_create(teachers_data: List[dict]) -> List[dict]:
                         day = int(date['date'].split('-')[2])
                         month = int(date['date'].split('-')[1])
                         year = int(date['date'].split('-')[0])
+                        # print(teacher_data)
                         schedule.append({
                             'date': date["date"],
                             'all_subgroups': teacher_data['all_subgroups'],
@@ -41,6 +44,7 @@ def schedule_create(teachers_data: List[dict]) -> List[dict]:
                                 'dates': teacher_data['dates']
                             }
                         })
+    # print(len(schedule))
 
     new_schedule = []
     for old in schedule:
@@ -64,6 +68,7 @@ def schedule_create(teachers_data: List[dict]) -> List[dict]:
                 new_schedule.append(old)
         else:
             new_schedule.append(old)
+    # print(len(new_schedule))
 
     schedule = _del_copies(new_schedule=new_schedule)
 
@@ -89,6 +94,7 @@ def schedule_create(teachers_data: List[dict]) -> List[dict]:
                     schedule.remove(copy[1])
         new_schedule.append(copies[min_index])
 
+    # print(len(new_schedule))
     schedule = _del_copies(new_schedule=new_schedule)
 
     new_schedule = []
@@ -108,6 +114,7 @@ def schedule_create(teachers_data: List[dict]) -> List[dict]:
                 # "dates": item['other']['dates']
             }
         })
+    # print(len(new_schedule))
     schedule = new_schedule
     del new_schedule
 
@@ -195,6 +202,11 @@ def compress(data: List[dict]) -> List[dict]:
         for new in data:
             if new['date'] == day['date']:
                 lessons.append(new['other'])
+        temp = []
+        for x in lessons:
+            if x not in temp:
+                temp.append(x)
+        lessons = temp
         day['lessons'] = lessons
         days.append(day)
 

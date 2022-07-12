@@ -11,8 +11,10 @@ def _deleter(path: str):
 def delete_old_files(files: List[str], start_day: int, start_hour: int, 
                     start_minute: int):
     for file in files:
-        last_change = str(str(time.ctime(os.path.getmtime(file))).strip().split(' '))
-        last_change = [i for i in last_change if i != '']
+        last_change = str(time.ctime(os.path.getmtime(file))).strip().split(' ')
+        # print(last_change)
+        # last_change = [i for i in last_change]
+        # print(last_change)
         change_day = int(last_change[2])
         change_hour = int(last_change[3].split(':')[0])
         change_minute = int(last_change[3].split(':')[1])

@@ -84,8 +84,11 @@ def main(test):
                 json.dump(teachers_data, f, indent=4, ensure_ascii=False)
 
             """ gets schedule """
+            # print(len(teachers_data))
             schedule = schedule_create(teachers_data=teachers_data)
+            # print(len(schedule))
             schedule = compress(data=schedule)
+            # print(len(schedule))
             with open(f'{path_to_schedule}\\schedule_{name.split(".x")[0]}.json', "w") as f:
                 json.dump(schedule, f, indent=4, ensure_ascii=False)
 
@@ -113,6 +116,6 @@ def main(test):
 
 
 if __name__ == '__main__':
-    test = True
+    test = False
     main(test=test)
     pass
