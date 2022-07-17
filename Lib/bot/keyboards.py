@@ -89,7 +89,10 @@ def stage_preset_keyboard(presets: List[Tuple[int, str, str, str, str]],
 
 
 def stage_form_keyboard():
-    forms = get_forms()
+    try:
+        forms = get_forms()
+    except:
+        return None, 1
     keyboard = VkKeyboard()
     if len(forms) == 0:
         return None, 1
