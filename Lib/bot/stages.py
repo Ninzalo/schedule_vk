@@ -105,13 +105,14 @@ class Pages:
 
     def form_page(self, id: int, update_forms: bool|None = None):
         db.add_new_group(user_id=id)
-        if update_forms is None:
-            db.change_stage(user_id=id, stage=self.sn.FORM)
-            db.null_schedule(user_id=id)
         text = "Выберите одну из форм обучения:"
         keyboard, error = stage_form_keyboard()
         if error == 1:
             text = 'Нет расписания :c'
+        else:
+            if update_forms is None:
+                db.change_stage(user_id=id, stage=self.sn.FORM)
+                db.null_schedule(user_id=id)
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
