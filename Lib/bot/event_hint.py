@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, List
 
 
 class Event_hint(NamedTuple):
@@ -6,5 +6,5 @@ class Event_hint(NamedTuple):
     message: str
     id: int
     peer_id: int
-    button_actions: list|None 
+    button_actions: List[str]|None 
     attachments: list|None = None

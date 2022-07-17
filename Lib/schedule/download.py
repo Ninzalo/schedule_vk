@@ -14,20 +14,16 @@ def download():
     urllib3.disable_warnings()
     all_amount_of_files = 0
     ua = UserAgent()
+    session = requests.Session()
 
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        # "Cookie": "BITRIX_SM_GUEST_ID=7910540; BX_USER_ID=2686dd73b2c2dcfad961a83e1d6c674f; BITRIX_CONVERSION_CONTEXT_s1=%7B%22ID%22%3A3%2C%22EXPIRE%22%3A1655931540%2C%22UNIQUE%22%3A%5B%22conversion_visit_day%22%5D%7D; PHPSESSID=bOIhX2c1Yjllvv4cSzI44l3tpOYLEZ8X; BITRIX_SM_LAST_VISIT=22.06.2022+11%3A02%3A44",
-        # "Connection": "keep-alive",
-        'User-Agent': ua.random,
-        # "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.49'
+        'User-Agent': ua.random
     }
 
     url = f"{mstuca_url}/students/shedule/"
-    r = retry(headers=headers, url=url)
-    # r = requests.get(url=url, headers=headers, verify=False)
+    r = retry(session=session, headers=headers, url=url)
     soup = BeautifulSoup(r.text, "lxml")
-    # print(soup)
     soup = soup.find("div", class_="news-list")
     url_to_fac = soup.find_all('a')
 
@@ -40,8 +36,7 @@ def download():
     time.sleep(2)
 
     for url in urls[:]:
-        r = retry(headers=headers, url=url)
-        # r = requests.get(url=url, headers=headers, verify=False)
+        r = retry(session=session, headers=headers, url=url)
 
         data = []
         soup = BeautifulSoup(r.text, "lxml")
@@ -93,17 +88,14 @@ def download():
         if not os.path.exists(f"{data_folder}\\{form}\\{name_of_fac}\\xls"):
             os.mkdir(f"{data_folder}\\{form}\\{name_of_fac}\\xls")
 
-        # if not os.path.exists(f"{data_folder}\\{form}\\{name_of_fac}\\xlsx"):
-            # os.mkdir(f"{data_folder}\\{form}\\{name_of_fac}\\xlsx")
-
         if not os.path.exists(f"{data_folder}\\{form}\\{name_of_fac}\\data"):
             os.mkdir(f"{data_folder}\\{form}\\{name_of_fac}\\data")
 
         iter = 1
         for item in data:
             try:
-                # get_file = requests.get(item['link'], stream=True, verify=False)
-                get_file = retry(headers=headers, url=item['link'], stream=True)
+                get_file = retry(session=session, headers=headers, 
+                        url=item['link'], stream=True)
                 xls_path = f"{data_folder}\\{form}\\{name_of_fac}\\xls"\
                         f"\\{item['name'].strip()}.xls"
                 with open(xls_path, "wb") as file:
@@ -120,13 +112,13 @@ def download():
     print(f'[INFO] All amoount of files: {all_amount_of_files}')
 
 
-def retry(headers: dict, url: str, stream: bool|None = None):
+def retry(session, headers: dict, url: str, stream: bool|None = None):
     retries = 0
     while True:
         if stream is not None:
-            r = requests.get(url=url, headers=headers, stream=stream, verify=False)
+            r = session.get(url=url, headers=headers, stream=stream, verify=False)
         else:
-            r = requests.get(url=url, headers=headers, verify=False)
+            r = session.get(url=url, headers=headers, verify=False)
         if '[200' in str(r):
             return r
         retries += 1

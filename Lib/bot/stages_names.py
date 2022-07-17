@@ -6,6 +6,7 @@ class Stages_names:
     PASSWORDS = 'passwords'
     SETTING_PASSWORDS = 'setting_passwords'
     MAIL = 'mail'
+    PRESETS = 'presets'
     FORM = 'form'
     FAC = 'fac'
     GROUP_SELECT = 'group_select'

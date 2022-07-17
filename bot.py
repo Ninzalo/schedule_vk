@@ -14,6 +14,7 @@ from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.bot_func import Bot_class
 from Lib.bot.sender import Sender
 from Lib.bot.event_hint import Event_hint
+from Lib.bot.stages_names import Stages_names
 
 from Lib.bot.mail import daily_mail, weekly_mail
 
@@ -30,6 +31,7 @@ vk = vk_session.get_api()
 longpoll = VkBotLongPoll(vk_session, group_id)
 
 sender = Sender(vk_session=vk_session)
+sn = Stages_names()
 db = BotDB_Func(db_path=db_path)
 bot_class = Bot_class(sender=sender, db=db, vk=vk)
 
@@ -84,6 +86,16 @@ def main():
                         conversation_message_id=event.object.conversation_message_id
                         )
 
+            elif event.object.payload.get('type') == 'add_new_preset':
+                text = 'Группа сохранена'
+                db.change_new_group(user_id=event.object.user_id, new_group=True)
+                vk.messages.edit(
+                        peer_id=event.object.peer_id,
+                        message=text,
+                        conversation_message_id=event.object.conversation_message_id
+                        )
+
+
 
 def main_start():
     while True:
@@ -101,8 +113,6 @@ def main_start():
 
 def mail_gather(seconds: int, time_str: str):
     while True:
-        # print(f'{datetime.datetime.now().strftime("%H.%M.%S")}, '
-            # f'sleeping for {seconds} seconds')
         now_time = str(datetime.datetime.now().strftime("%H.%M"))
         try:
             group_online(vk_session=vk_session)

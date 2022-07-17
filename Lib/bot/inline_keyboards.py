@@ -23,3 +23,14 @@ def bot_info():
                 }
             )
     return inline_keyboard
+
+def add_new_preset():
+    """ Возвращает inline клавиатуру с подтверждением создания пресета """
+    settings = dict(inline=True)
+    inline_keyboard = VkKeyboard(**settings)
+    inline_keyboard.add_callback_button(
+            label='Да!', 
+            color=VkKeyboardColor.POSITIVE, 
+            payload={'type': 'add_new_preset'}
+            )
+    return inline_keyboard

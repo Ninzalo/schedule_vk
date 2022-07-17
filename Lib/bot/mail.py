@@ -5,7 +5,7 @@ from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.stages_names import Stages_names
 from Lib.bot.event_hint import Event_hint 
 from Lib.bot.output_texts import schedule_str
-from Lib.bot.getter import week_dates_gen, week_schedule
+from Lib.bot.getter import week_dates_gen, week_schedule, get_schedule_path
 from config import db_path, data_folder
 
 db = BotDB_Func(db_path=db_path)
@@ -66,13 +66,8 @@ def mail(event: Event_hint, sender, user_id: int):
 
 def daily_mail(sender):
     users_for_daily_mail = db.get_all_daily_mail()
-    for user_id in users_for_daily_mail:
-        form = db.get_form(user_id=user_id)
-        fac = db.get_fac(user_id=user_id)
-        group = db.get_group(user_id=user_id)
-        subgroup = db.get_subgroup(user_id=user_id)
-        schedule_path = f'{data_folder}\\{form}\\{fac}\\data\\'\
-            f'schedule\\schedule_{group}.json'
+    for user_id, form, fac, group, subgroup in users_for_daily_mail:
+        schedule_path = get_schedule_path(form=form, fac=fac, group=group)
         with open(schedule_path) as f:
             data = json.load(f)
         new_data = []
@@ -100,7 +95,6 @@ def daily_mail(sender):
                     f'{next_day_date_month}-{next_day_date_day}'
             for index in range(0, len(new_data)):
                 if new_data[index]['date'] == str(next_day_date_strf):
-                    print('success')
                     text = 'Расписание на завтра:\n\n'
                     text += schedule_str(
                                 data=new_data[index], 
@@ -116,11 +110,7 @@ def daily_mail(sender):
 
 def weekly_mail(sender, vk):
     users_for_weekly_mail = db.get_all_weekly_mail()
-    for user_id in users_for_weekly_mail:
-        form = db.get_form(user_id=user_id)
-        fac = db.get_fac(user_id=user_id)
-        group = db.get_group(user_id=user_id)
-        subgroup = db.get_subgroup(user_id=user_id)
+    for user_id, form, fac, group, subgroup in users_for_weekly_mail:
         quality = db.get_quality(user_id=user_id)
         mode = db.get_mode(user_id=user_id)
         first_date, last_date = week_dates_gen(user_week_page=1)
@@ -136,7 +126,8 @@ def weekly_mail(sender, vk):
                 first_date=first_date, 
                 last_date=last_date)
         if error == 0:
-            text = 'Расписание на следующую неделю:\n\n'
+            text = 'Расписание на следующую неделю:\n'
+            text += f'{group} | {subgroup}\n\n'
             text += f'Неделя {first_date} - {last_date}'
             try:
                 sender(id=user_id, text=text, preuploaded_doc=doc)

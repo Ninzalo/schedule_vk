@@ -43,7 +43,7 @@ def data_fetch(user: dict):
 
 @elapsed_time
 def update_users_from_file():
-    users_path = f'{os.getcwd()}\\users_data\\users.json'
+    users_path = f'D:\\Programs\\Python\\TestBot\\Schedule_vk\\users_data\\users.json'
     with open(users_path, 'r', encoding='utf-8') as f:
         users_data = json.load(f)
 

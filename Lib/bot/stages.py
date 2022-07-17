@@ -1,5 +1,8 @@
+from typing import List
+from Lib.bot.event_hint import Event_hint
 from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.keyboards import *
+from Lib.bot.inline_keyboards import add_new_preset
 from Lib.bot.stages_names import Stages_names
 from Lib.bot.output_texts import (passwords_info_str, 
                                 settings_password_str, start_message_str)
@@ -86,7 +89,22 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
+    def preset_page(self, id: int, on_delete: bool|None=None):
+        db.change_stage(user_id=id, stage=self.sn.PRESETS)
+        if on_delete is True:
+            db.change_on_delete(user_id=id, on_delete=1)
+        else:
+            db.change_on_delete(user_id=id, on_delete=0)
+        text = 'Выберите одну из сохраненных групп: '
+        presets = db.get_user_preset_data(user_id=id)
+        chosen_preset = db.get_preset(user_id=id)
+        keyboard = stage_preset_keyboard(presets=presets, 
+                chosen_preset=chosen_preset, on_delete=on_delete)
+        self.s.sender(id=id, text=text, keyboard=keyboard)
+
+
     def form_page(self, id: int, update_forms: bool|None = None):
+        db.add_new_group(user_id=id)
         if update_forms is None:
             db.change_stage(user_id=id, stage=self.sn.FORM)
             db.null_schedule(user_id=id)
@@ -174,7 +192,15 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def schedule_type_page(self, id: int, msg: str|None = None):
+    def schedule_type_page(self, id: int, new_group: bool|None = None, 
+            back_to_schedule_type_page: bool|None = None,
+            event: Event_hint|None = None, msg: str|None = None):
+        db.change_on_delete(user_id=id, on_delete=0)
+        if back_to_schedule_type_page is True:
+            if db.get_new_group(user_id=id):
+                db.change_new_group(user_id=id, new_group=True)
+        else:
+            db.change_new_group(user_id=id, new_group=False)
         if msg is not None:
             form = db.get_form(user_id=id)
             fac = db.get_fac(user_id=id)
@@ -188,8 +214,28 @@ class Pages:
                 if str(subgroup).lower() == msg:
                     db.change_subgroup(user_id=id, subgroup=str(subgroup))
         db.change_stage(user_id=id, stage=self.sn.SCHEDULE_TYPE)
+        if new_group is not None:
+            user_presets = db.get_user_preset_data(user_id=id)
+            form = db.get_form(user_id=id)
+            fac = db.get_fac(user_id=id)
+            group = db.get_group(user_id=id)
+            subgroup = db.get_subgroup(user_id=id)
+            is_ok = 0
+            for (_, preset_form, preset_fac, preset_group, 
+                preset_subgroup) in user_presets:
+                if (preset_form == form and preset_fac == fac
+                and preset_group == group 
+                and str(preset_subgroup) == str(subgroup)):
+                    is_ok += 1
+            if is_ok < 2:
+                if 'callback' in event.button_actions:
+                    if len(db.get_all_user_presets(user_id=id)) < 5:
+                        text = 'Сохранить группу?'
+                        inline_keyboard = add_new_preset()
+                        self.s.sender(id=id, text=text, 
+                                inline_keyboard=inline_keyboard)
         text = 'Выберите: '
-        keyboard = stage_schedule_type_keyboard()
+        keyboard = stage_schedule_type_keyboard(user_id=id)
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 

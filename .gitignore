@@ -1,5 +1,7 @@
 /data
-event.json
 /Lib/__pycache__
+/Lib/schedule.bat
 __pycache__
+/start
 start.ps1
+schedule.ps1

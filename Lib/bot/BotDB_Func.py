@@ -1,5 +1,5 @@
 from Lib.bot.BotDataBase import BotDB 
-from typing import NamedTuple
+from typing import NamedTuple, Tuple, List
 
 class Error_handler(NamedTuple):
     error: str | None
@@ -53,11 +53,81 @@ class BotDB_Func:
         with BotDB(self.db_path) as db:
             db.null_schedule(user_id=user_id)
 
+    def add_new_preset(self, user_id: int):
+        """ Добавляем новый пресет пользователю """
+        with BotDB(self.db_path) as db:
+            db.add_new_preset(user_id=user_id)
+
+    def get_preset(self, user_id: int) -> int:
+        """ Получаем chosen_preset пользователя """
+        with BotDB(self.db_path) as db:
+            result = db.get_preset(user_id=user_id)
+            return result
+
+    def change_preset(self, user_id: int, preset: int):
+        """ Меняем chosen_preset пользователя """
+        with BotDB(self.db_path) as db:
+            db.change_preset(user_id=user_id, preset=preset)
+
+    def get_all_user_presets(self, user_id: int) -> list:
+        """ Получаем все preset_num пользователя """
+        with BotDB(self.db_path) as db:
+            result = db.get_all_user_presets(user_id=user_id)
+            return result
+
+    def get_user_preset_data(self, user_id: int) -> List[Tuple[int, str, str, str, str]]:
+        """ Получаем данные по всем пресетам пользователя """
+        with BotDB(self.db_path) as db:
+            result = db.get_user_preset_data(user_id=user_id)
+            return result
+
+    def get_new_group(self, user_id: int) -> bool:
+        """ Получаем new_group пользователя """
+        with BotDB(self.db_path) as db:
+            result = db.add_new_group(user_id=user_id)
+            return result
+
+    def add_new_group(self, user_id: int):
+        """ Добавляем новую группу, если new_group = 1 """
+        with BotDB(self.db_path) as db:
+            if (db.add_new_group(user_id=user_id) 
+                    and db.get_subgroup(user_id=user_id) != "None"):
+                old_preset = self.get_all_user_presets(user_id=user_id)[-1]
+                self.change_preset(user_id=user_id, preset=int(old_preset) + 1)
+                self.add_new_preset(user_id=user_id)
+
+    def change_new_group(self, user_id: int, new_group: bool):
+        """ Переключаем создание нового пресета """
+        with BotDB(self.db_path) as db:
+            db.change_new_group(user_id=user_id, new_group=new_group)
+
+    def del_preset_by_num(self, user_id: int, preset_num: int):
+        """ Удаляем группу по preset_num """
+        with BotDB(self.db_path) as db:
+            db.del_preset_by_num(user_id=user_id, preset=preset_num)
+
+    def update_preset_num(self, user_id: int, deleted_preset_num: int):
+        """ Меняем preset_num, где preset_num > deleted_preset_num """
+        with BotDB(self.db_path) as db:
+            db.update_preset_num(user_id=user_id, 
+                    deleted_preset_num=deleted_preset_num)
+
+    def get_on_delete(self, user_id: int) -> int:
+        """ Получаем on_delete_page пользователя """
+        with BotDB(self.db_path) as db:
+            on_delete = db.get_on_delete(user_id=user_id)
+            return on_delete
+
     def get_stage(self, user_id: int) -> str:
         """ Получаем stage пользователя """
         with BotDB(self.db_path) as db:
             stage = db.get_stage(user_id=user_id)
             return stage
+
+    def change_on_delete(self, user_id: int, on_delete: int):
+        """ Меняем on_delete_page пользователя """
+        with BotDB(self.db_path) as db:
+            db.change_on_delete(user_id=user_id, on_delete=on_delete)
 
     def change_stage(self, user_id: int, stage: str):
         """ Меняем stage пользователя """
@@ -209,10 +279,10 @@ class BotDB_Func:
             db.change_daily_mail(user_id=user_id, daily_mail=daily_mail)
 
     def get_all_daily_mail(self) -> list:
-        """ Получаем всех пользователей с daily_mail = 1 """
+        """ Достаем данные пользователей с daily_mail = 1 """
         with BotDB(self.db_path) as db:
-            users_id = db.get_all_daily_mail()
-            return users_id
+            users_data = db.get_all_daily_mail()
+            return users_data
 
     def get_weekly_mail(self, user_id: int) -> int:
         """ Получаем weekly_mail пользователя """
@@ -226,10 +296,10 @@ class BotDB_Func:
             db.change_weekly_mail(user_id=user_id, weekly_mail=weekly_mail)
 
     def get_all_weekly_mail(self) -> list:
-        """ Получаем всех пользователей с weekly_mail = 1 """
+        """ Достаем данные пользователей с weekly_mail = 1 """
         with BotDB(self.db_path) as db:
-            users_id = db.get_all_weekly_mail()
-            return users_id
+            users_data = db.get_all_weekly_mail()
+            return users_data
 
     def get_passwords(self, user_id: int) -> list:
         """ Получаем passwords пользователя """

@@ -1,9 +1,12 @@
 import json
 import datetime
+from typing import List, Tuple
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
-
 from Lib.bot.getter import get_forms, get_facs, get_session_groups, get_groups, get_subgroups, closest_week, get_schedule_path
-from config import data_folder
+from Lib.bot.BotDB_Func import BotDB_Func
+from config import data_folder, db_path
+
+db = BotDB_Func(db_path=db_path)
 
 
 def stage_start_keyboard():
@@ -64,6 +67,23 @@ def stage_mail_keyboard(daily_mail: int, weekly_mail: int):
     else:
         keyboard.add_button("Еженедельная рассылка", color=VkKeyboardColor.SECONDARY)
     keyboard.add_line()
+    keyboard.add_button("Назад", color=VkKeyboardColor.NEGATIVE)
+    return keyboard
+
+
+def stage_preset_keyboard(presets: List[Tuple[int, str, str, str, str]], 
+        chosen_preset: int, on_delete: bool|None = None):
+    keyboard = VkKeyboard()
+    for preset_num, _, _, group, subgroup in presets[:5]:
+        color = VkKeyboardColor.POSITIVE if preset_num == chosen_preset else VkKeyboardColor.SECONDARY
+        if on_delete is True:
+            color = VkKeyboardColor.NEGATIVE
+        keyboard.add_button(f'{preset_num}]. {group} | {subgroup}', color=color)
+        keyboard.add_line()
+    if on_delete is True:
+        keyboard.add_button("К пресетам", color=VkKeyboardColor.POSITIVE)
+    else:
+        keyboard.add_button("Удалить", color=VkKeyboardColor.NEGATIVE)
     keyboard.add_button("Назад", color=VkKeyboardColor.NEGATIVE)
     return keyboard
 
@@ -148,12 +168,15 @@ def stage_subgroup_keyboard(form: str, fac: str, group: str):
     return keyboard
 
 
-def stage_schedule_type_keyboard():
+def stage_schedule_type_keyboard(user_id: int):
     keyboard = VkKeyboard()
     keyboard.add_button(f"Расписание по дням", color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
     keyboard.add_button(f"Расписание на неделю", color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
+    if len(db.get_all_user_presets(user_id=user_id)) > 1:
+        keyboard.add_button('Сохраненные группы', color=VkKeyboardColor.POSITIVE)
+        keyboard.add_line()
     keyboard.add_button(f"В начало", color=VkKeyboardColor.NEGATIVE)
     keyboard.add_button(f"Подгруппы", color=VkKeyboardColor.NEGATIVE)
     return keyboard

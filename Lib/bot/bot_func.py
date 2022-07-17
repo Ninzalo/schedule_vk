@@ -69,8 +69,6 @@ class Bot_class:
         fac = self.db.get_fac(user_id=id)
         if form != "None" and fac != "None" and group != "None":
             try:
-                # path = f'{self.data_folder}\\{form}\\{fac}\\data\\schedule\\'\
-                        # f'schedule_{group}.json'
                 path = get_schedule_path(form=form, fac=fac, group=group)
                 open(path)
             except:
@@ -96,7 +94,7 @@ class Bot_class:
                 """ Переход на stage 5 """
             elif 'расписание выбранной группы' == msg:
                 if self.db.get_subgroup(user_id=id) != 'None':
-                    self.pages.schedule_type_page(id=id)
+                    self.pages.schedule_type_page(id=id, back_to_schedule_type_page=True)
 
             """ Кнопки на stage 101 """
         elif on_stage == self.sn.OTHER:
@@ -319,7 +317,7 @@ class Bot_class:
 
                 """ Переход на stage 5 """
             else:
-                self.pages.schedule_type_page(id=id, msg=msg)
+                self.pages.schedule_type_page(id=id, new_group=True, event=event, msg=msg)
 
             """ Кнопки на stage 5 """
         elif on_stage == self.sn.SCHEDULE_TYPE:
@@ -339,11 +337,33 @@ class Bot_class:
             elif 'расписание на неделю' == msg:
                 self.pages.week_select_page(id=id)
 
+                """ Переход на stage PRESETS """
+            elif 'сохраненные группы' == msg:
+                self.pages.preset_page(id=id)
+
+            """ Кнопки на stage PRESETS """
+        elif on_stage == self.sn.PRESETS:
+            """ Переход на stage SCHEDULE_TYPE """
+            if 'назад' == msg:
+                self.pages.schedule_type_page(id=id, 
+                        back_to_schedule_type_page=True)
+
+            elif 'удалить' == msg:
+                self.pages.preset_page(id=id, on_delete=True)
+
+            elif 'к пресетам' == msg:
+                self.pages.preset_page(id=id)
+
+                """ Выбор или удаление пресета """
+            else:
+                self.display.presets_display(user_id=id, event=event)
+
+
             """ Кнопки на stage 6 """
         elif on_stage == self.sn.DATE_SELECT:
             """ Переход на stage 5 """
             if 'назад' == msg:
-                self.pages.schedule_type_page(id=id)
+                self.pages.schedule_type_page(id=id, back_to_schedule_type_page=True)
 
                 """ Переход на stage 100 """
             elif 'в начало' == msg:
@@ -428,7 +448,7 @@ class Bot_class:
 
                 """ Переход на stage 5 """
             elif 'назад' == msg:
-                self.pages.schedule_type_page(id=id)
+                self.pages.schedule_type_page(id=id, back_to_schedule_type_page=True)
 
                 """ Переход на stage 100 """
             elif 'в начало' == msg:
