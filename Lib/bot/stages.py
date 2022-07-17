@@ -109,7 +109,9 @@ class Pages:
             db.change_stage(user_id=id, stage=self.sn.FORM)
             db.null_schedule(user_id=id)
         text = "Выберите одну из форм обучения:"
-        keyboard = stage_form_keyboard()
+        keyboard, error = stage_form_keyboard()
+        if error == 1:
+            text = 'Нет расписания :c'
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 

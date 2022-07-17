@@ -91,13 +91,15 @@ def stage_preset_keyboard(presets: List[Tuple[int, str, str, str, str]],
 def stage_form_keyboard():
     forms = get_forms()
     keyboard = VkKeyboard()
+    if len(forms) == 0:
+        return None, 1
     for form in forms:
         keyboard.add_button(f"{form}", color=VkKeyboardColor.PRIMARY)
         keyboard.add_line()
     keyboard.add_button(f"Обновить формы", color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
     keyboard.add_button(f"В начало", color=VkKeyboardColor.NEGATIVE)
-    return keyboard
+    return keyboard, 0
 
 
 def stage_fac_keyboard(form: str):
