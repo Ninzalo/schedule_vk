@@ -82,7 +82,8 @@ def daily_mail(sender):
                 new_data.append(date)
             elif file_year == date_year and file_month > date_month:
                 new_data.append(date)
-            elif file_year == date_year and file_month == date_month and file_day >= date_day:
+            elif (file_year == date_year and file_month == date_month 
+            and file_day >= date_day):
                 new_data.append(date)
         if len(new_data) != 0:
             delta = 1
