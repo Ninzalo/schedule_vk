@@ -30,13 +30,13 @@ def _passwords_table():
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
 
-    sql = """ CREATE TABLE IF NOT EXISTS users_info (
-    user_id       INTEGER  UNIQUE
-                           NOT NULL,
-    date          DATETIME NOT NULL
-                           DEFAULT ( (DATETIME('now') ) ),
-    chosen_preset INTEGER  NOT NULL
-                           DEFAULT (1) 
+    sql = """ CREATE TABLE IF NOT EXISTS passwords (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT
+                       UNIQUE,
+    user_id    INTEGER NOT NULL,
+    password   STRING  NOT NULL,
+    creator_id INTEGER NOT NULL,
+    privacy    INTEGER
 ); """
     cur.execute(sql)
     conn.commit()

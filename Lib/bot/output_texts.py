@@ -1,5 +1,6 @@
 import os
 import json
+from config import teachers_info_path
 
 def schedule_str(data: dict, subgroup: str, date: str) -> str:
     """ Выводит str расписания """
@@ -35,7 +36,7 @@ def teachers_info_str(db, id: int) -> str:
     """ Выводит информацию о преподавателях из файла teachers.json 
     в формате str"""
     if 'teachers' in db.get_passwords(user_id=id):
-        path = f'{os.getcwd()}\\users_data\\teachers.json'
+        path = f'{teachers_info_path}\\teachers.json'
         if os.path.exists(path):
             with open(path, 'r', encoding='utf-8') as teachers:
                 list_of_teachers = json.load(teachers)
