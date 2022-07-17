@@ -1,9 +1,9 @@
 import calendar
 import datetime
 import xlrd
-from typing import List
+from typing import List, Tuple
 from Lib.schedule.cell_data import Cell
-from Lib.schedule.find import find_cell
+# from Lib.schedule.find import find_cell
 from Lib.schedule.getter import get_num_of_lesson, get_type_of_week, get_type_of_lesson, get_name_of_lesson, get_room, get_day_of_week, get_dates, get_dates_list, get_subgroup
 # from Lib.schedule.dates import only, since
 
@@ -25,13 +25,9 @@ def book_to_list(path) -> list:
     worksheet_names = workbook.sheet_names()
 
     book_data = []
-    # for worksheet_name in worksheet_names:
     for worksheet_name in reversed(range(0, len(worksheet_names))):
-        # worksheet = workbook.sheet_by_name(worksheet_name)
         worksheet = workbook.sheet_by_index(worksheet_name)
-        # row_data = []
         for row in range(0, worksheet.nrows):
-            # cell_data = []
             for col in range(0, worksheet.ncols):
                 cell = worksheet.cell_value(row, col)
                 line_style = worksheet.cell(row, col).xf_index
@@ -53,12 +49,6 @@ def book_to_list(path) -> list:
                             top_line_style=top_line_style, 
                             bottom_line_style=bottom_line_style)
                 book_data.append(cell_data)
-                # print(f'{abc(j=col)}{row+1} row_num - {row} | '\
-                        # f'col_num - {col} | sheet_name - {worksheet_name} '\
-                        # f'| {cell}' )
-                # cell_data.append((row, col, cell))
-            # row_data.append((row, cell_data))
-        # book_data.append((worksheet_name, row_data))
     return book_data
 
 
@@ -165,22 +155,23 @@ def get_teachers_data(book_data: List[Cell]):
                                 f'{str(name).strip()}')
     return teachers_data
 
-def abc(j):
-    alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    return alphabet[j]
 
-def xlrd_test(path: str):
-    workbook = xlrd.open_workbook(path)
-    worksheet_names = workbook.sheet_names()
-    for worksheet_name in worksheet_names:
-        worksheet = workbook.sheet_by_name(worksheet_name)
-        for i in range(0, worksheet.nrows):
-            for j in range(0, worksheet.ncols):
-                cell = worksheet.cell_value(i, j)
-                if type(cell) == str:
-                    pass
-                else:
-                    cell = str(int(cell))
-                # if cell != '':
-                print(f'{abc(j=j)}{i+1} row_num - {i} | col_num - {j} | sheet_name - {worksheet_name} | {cell}' )
+# def abc(j):
+    # alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    # return alphabet[j]
+
+# def xlrd_test(path: str):
+    # workbook = xlrd.open_workbook(path)
+    # worksheet_names = workbook.sheet_names()
+    # for worksheet_name in worksheet_names:
+        # worksheet = workbook.sheet_by_name(worksheet_name)
+        # for i in range(0, worksheet.nrows):
+            # for j in range(0, worksheet.ncols):
+                # cell = worksheet.cell_value(i, j)
+                # if type(cell) == str:
+                    # pass
+                # else:
+                    # cell = str(int(cell))
+                # # if cell != '':
+                # print(f'{abc(j=j)}{i+1} row_num - {i} | col_num - {j} | sheet_name - {worksheet_name} | {cell}' )
 
