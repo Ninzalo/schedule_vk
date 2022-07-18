@@ -1,8 +1,7 @@
 /data
 /Lib/__pycache__
 /Lib/schedule.bat
-__pycache__
 /start
-start.ps1
-schedule.ps1
+/Lib/db/schedule_vk.db
 config.py
+__pycache__
