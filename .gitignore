@@ -3,5 +3,5 @@
 /Lib/schedule.bat
 /start
 /Lib/db/schedule_vk.db
-config.py
 __pycache__
+.env

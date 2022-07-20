@@ -448,18 +448,15 @@ class BotDB:
 
     def set_privacy(self, user_id: int, privacy: int) -> str:
         """ Изменяем privacy пароля """
-        """ delete while transfer """
         sql = """ SELECT password FROM passwords 
         WHERE user_id=? AND creator_id=? AND privacy IS NULL"""
         password = self.cursor.execute(sql, (user_id, user_id))
         password = password.fetchone()[0]
-        """"""
         sql = """ UPDATE passwords SET privacy=? 
         WHERE user_id=? AND creator_id=? AND privacy IS NULL """
         self.cursor.execute(sql, (privacy, user_id, user_id))
         self.conn.commit()
         return password
-        # return ''
 
     def del_password(self, user_id: int, password: str) -> bool:
         """ Проверяем наличие пароля у пользователя """
