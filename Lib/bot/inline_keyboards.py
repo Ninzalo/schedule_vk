@@ -34,3 +34,25 @@ def add_new_preset():
             payload={'type': 'add_new_preset'}
             )
     return inline_keyboard
+
+def passwords_desc():
+    """ Возвращает inline клавиатуру с описанием паролей """
+    settings = dict(inline=True)
+    inline_keyboard = VkKeyboard(**settings)
+    inline_keyboard.add_callback_button(
+            label='Узнать', 
+            color=VkKeyboardColor.POSITIVE, 
+            payload={'type': 'what_is_password'}
+            )
+    return inline_keyboard
+
+def short_description(): 
+    """ Возвращает inline клавиатуру с кратким описанием функционала группы """
+    settings = dict(inline=True)
+    inline_keyboard = VkKeyboard(**settings)
+    inline_keyboard.add_callback_button(
+            label='Хочу!', 
+            color=VkKeyboardColor.POSITIVE, 
+            payload={'type': 'short_description'}
+            )
+    return inline_keyboard

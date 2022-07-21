@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import time
-import json
 import vk_api
 import datetime
 import socket
@@ -15,11 +14,11 @@ from Lib.bot.bot_func import Bot_class
 from Lib.bot.sender import Sender
 from Lib.bot.event_hint import Event_hint
 from Lib.bot.stages_names import Stages_names
+from Lib.bot.callback_func import callback_func
 
 from Lib.bot.mail import daily_mail, weekly_mail
 
 from Lib.bot.group import group_online, wall_sender
-from Lib.bot.output_texts import passwords_info_str
 
 from Lib.bot.table import create_tables
 
@@ -68,32 +67,7 @@ def main():
         
             ''' Обработка событий '''
         elif event.type == VkBotEventType.MESSAGE_EVENT:
-            CALLBACK_TYPES = ('show_snackbar', 'open_link', 'open_app')
-
-            if event.object.payload.get('type') in CALLBACK_TYPES:
-                vk.messages.sendMessageEventAnswer(
-                    event_id=event.object.event_id,
-                    user_id=event.object.user_id,
-                    peer_id=event.object.peer_id,
-                    event_data=json.dumps(event.object.payload)
-                    )
-
-            elif event.object.payload.get('type') == 'what_is_password':
-                text = passwords_info_str()
-                vk.messages.edit(
-                        peer_id=event.object.peer_id,
-                        message=text,
-                        conversation_message_id=event.object.conversation_message_id
-                        )
-
-            elif event.object.payload.get('type') == 'add_new_preset':
-                text = 'Группа сохранена'
-                db.change_new_group(user_id=event.object.user_id, new_group=True)
-                vk.messages.edit(
-                        peer_id=event.object.peer_id,
-                        message=text,
-                        conversation_message_id=event.object.conversation_message_id
-                        )
+            callback_func(event=event, vk=vk)
 
 
 

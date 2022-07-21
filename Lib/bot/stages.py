@@ -2,7 +2,8 @@ from typing import List
 from Lib.bot.event_hint import Event_hint
 from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.keyboards import *
-from Lib.bot.inline_keyboards import add_new_preset
+from Lib.bot.inline_keyboards import (add_new_preset, passwords_desc, 
+                                    short_description)
 from Lib.bot.stages_names import Stages_names
 from Lib.bot.output_texts import (passwords_info_str, 
                                 settings_password_str, start_message_str)
@@ -27,6 +28,9 @@ class Pages:
         db.start(user_id=id)
         text = start_message_str()
         self.s.sender(id=id, text=text)
+        text = f'Хотите подробнее узнать о функционале бота?'
+        keyboard = short_description()
+        self.s.sender(id=id, text=text, inline_keyboard=keyboard)
         Pages.home_page(self, id=id, null_user=True)
 
 
@@ -54,13 +58,7 @@ class Pages:
         db.change_stage(user_id=id, stage=self.sn.PASSWORDS)
         if 'callback' in event.button_actions:
             text = 'Что такое код-пароль?'
-            settings = dict(inline=True)
-            inline_keyboard = VkKeyboard(**settings)
-            inline_keyboard.add_callback_button(
-                    label='Узнать', 
-                    color=VkKeyboardColor.POSITIVE, 
-                    payload={'type': 'what_is_password'}
-                    )
+            inline_keyboard = passwords_desc()
             self.s.sender(id=id, text=text, inline_keyboard=inline_keyboard)
         else:
             text = passwords_info_str() 
