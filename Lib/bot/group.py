@@ -10,12 +10,14 @@ def group_online(vk_session):
     time_now = int(datetime.datetime.now().strftime('%H'))
     if online['status'] == 'none':
         if time_now >= bot_start_time or time_now < bot_close_time:
-            enable_online = vk_session.method('groups.enableOnline', {'group_id': group_id}) 
+            enable_online = vk_session.method('groups.enableOnline', 
+                    {'group_id': group_id}) 
             if enable_online != 1:
                 return print(f'Failed to turn on online')
     elif online['status'] == 'online':
         if time_now >= bot_close_time and time_now < bot_start_time:
-            disable_online = vk_session.method('groups.disableOnline', {'group_id': group_id}) 
+            disable_online = vk_session.method('groups.disableOnline', 
+                    {'group_id': group_id}) 
             if disable_online != 1:
                 return print(f'Failed to turn off online')
 

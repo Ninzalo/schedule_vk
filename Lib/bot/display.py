@@ -4,19 +4,23 @@ from Lib.bot.inline_keyboards import bot_info
 from Lib.bot.keyboards import stage_preset_keyboard
 from Lib.bot.getter import get_schedule_path
 from Lib.bot.event_hint import Event_hint
+from Lib.bot.BotDB_Func import BotDB_Func
+from config import db_path
+
+
+db = BotDB_Func(db_path=db_path)
 
 
 class Display:
-    def __init__(self, db, s):
-        self.db = db
+    def __init__(self, s):
         self.s = s
 
     def schedule_display(self, id: int, msg: str):
         """ Отправляет сообщение с расписанием по дате """
-        form = self.db.get_form(user_id=id)
-        fac = self.db.get_fac(user_id=id)
-        group = self.db.get_group(user_id=id)
-        subgroup = self.db.get_subgroup(user_id=id)
+        form = db.get_form(user_id=id)
+        fac = db.get_fac(user_id=id)
+        group = db.get_group(user_id=id)
+        subgroup = db.get_subgroup(user_id=id)
         path = get_schedule_path(form=form, fac=fac, group=group)
         with open(path) as f:
             data = json.load(f)
@@ -56,17 +60,17 @@ class Display:
 
 
     def teachers_display(self, id: int):
-        teachers_info = teachers_info_str(db=self.db, id=id)
+        teachers_info = teachers_info_str(id=id)
         self.s.sender(id=id, text=teachers_info)
 
 
     def passwords_info_display(self, id: int):
-        user_passwords = self.db.get_passwords(user_id=id)
+        user_passwords = db.get_passwords(user_id=id)
         if not len(user_passwords) == 0:
             text = ''
             for password in user_passwords:
-                creator = self.db.get_creator(password=password)
-                privacy = self.db.get_privacy(password=password)
+                creator = db.get_creator(password=password)
+                privacy = db.get_privacy(password=password)
                 text += f'✅Пароль: {password}\nСоздатель: @id{creator}\n'\
                         f'Приватность: {"+" if privacy == 1 else "-"}\n\n'
         else:
@@ -74,33 +78,33 @@ class Display:
         self.s.sender(id=id, text=text)
 
     def presets_display(self, user_id, event: Event_hint):
-        user_presets = self.db.get_all_user_presets(user_id=user_id)
+        user_presets = db.get_all_user_presets(user_id=user_id)
         if ('].' in event.msg and int(event.msg[0]) in user_presets
                 and len(user_presets) > 1):
-            if self.db.get_on_delete(user_id=user_id) == 0:
+            if db.get_on_delete(user_id=user_id) == 0:
                 text = f'Выбран пресет {event.message}'
-                self.db.change_preset(user_id=user_id, preset=int(event.msg[0]))
-                presets = self.db.get_user_preset_data(user_id=user_id)
-                chosen_preset = self.db.get_preset(user_id=user_id)
+                db.change_preset(user_id=user_id, preset=int(event.msg[0]))
+                presets = db.get_user_preset_data(user_id=user_id)
+                chosen_preset = db.get_preset(user_id=user_id)
                 keyboard = stage_preset_keyboard(presets=presets, 
                         chosen_preset=chosen_preset)
             else:
                 text = f'Пресет {event.message} удален'
-                self.db.del_preset_by_num(user_id=user_id, 
+                db.del_preset_by_num(user_id=user_id, 
                         preset_num=int(event.msg[0]))
-                self.db.update_preset_num(user_id=user_id, 
+                db.update_preset_num(user_id=user_id, 
                         deleted_preset_num=int(event.msg[0]))
-                presets = self.db.get_user_preset_data(user_id=user_id)
-                chosen_preset = self.db.get_preset(user_id=user_id)
+                presets = db.get_user_preset_data(user_id=user_id)
+                chosen_preset = db.get_preset(user_id=user_id)
                 if chosen_preset == int(event.msg[0]):
                     chosen_preset = 1
-                    self.db.change_preset(user_id=user_id, preset=chosen_preset)
+                    db.change_preset(user_id=user_id, preset=chosen_preset)
                     warning_text = f'Выбранный пресет удален\n'\
                             f'Автоматическое переключение на пресет [1]'
                     self.s.sender(id=user_id, text=warning_text)
                 elif chosen_preset > int(event.msg[0]):
                     chosen_preset -= 1
-                    self.db.change_preset(user_id=user_id, preset=chosen_preset)
+                    db.change_preset(user_id=user_id, preset=chosen_preset)
                 keyboard = stage_preset_keyboard(presets=presets, 
                         chosen_preset=chosen_preset, on_delete=True)
             self.s.sender(id=user_id, text=text, keyboard=keyboard)

@@ -10,23 +10,26 @@ from Lib.bot.stages import Pages
 from Lib.bot.stages_names import Stages_names
 from Lib.bot.mail import mail  
 from Lib.bot.getter import get_all_weeks, get_schedule_path
-from config import data_folder
+from Lib.bot.BotDB_Func import BotDB_Func
+from config import data_folder, db_path
+
+
+db = BotDB_Func(db_path=db_path)
 
 
 class Bot_class:
-    def __init__(self, sender, db, vk):
-        self.db = db
+    def __init__(self, sender, vk):
         self.s = sender
         self.vk = vk
         self.data_folder = data_folder
         self.pages = Pages(sender=sender)
-        self.display = Display(db=db, s=sender)
+        self.display = Display(s=sender)
         self.sn = Stages_names()
 
 
     def old_messages(self, vk_session) -> int:
         amount_of_old_messages = 0
-        all_users = self.db.get_users()
+        all_users = db.get_users()
         for user_id in all_users:
             try:
                 post = {
@@ -64,22 +67,22 @@ class Bot_class:
             return
 
         """ Проверка наличия файла с расписанием """
-        form = self.db.get_form(user_id=id)
-        group = self.db.get_group(user_id=id)
-        fac = self.db.get_fac(user_id=id)
+        form = db.get_form(user_id=id)
+        group = db.get_group(user_id=id)
+        fac = db.get_fac(user_id=id)
         if form != "None" and fac != "None" and group != "None":
             try:
                 path = get_schedule_path(form=form, fac=fac, group=group)
                 open(path)
             except:
-                self.db.change_stage(user_id=id, stage=self.sn.START)
-                self.db.null_schedule(user_id=id)
+                db.change_stage(user_id=id, stage=self.sn.START)
+                db.null_schedule(user_id=id)
                 text = 'Данные о группе удалены'
                 keyboard = stage_start_keyboard()
                 self.s.sender(id=id, text=text, keyboard=keyboard)
         del form, group, fac
 
-        on_stage = self.db.get_stage(user_id=id)
+        on_stage = db.get_stage(user_id=id)
 
         """ Кнопки на stage 100 """
         if on_stage == self.sn.HOME:
@@ -93,8 +96,9 @@ class Bot_class:
 
                 """ Переход на stage 5 """
             elif 'расписание выбранной группы' == msg:
-                if self.db.get_subgroup(user_id=id) != 'None':
-                    self.pages.schedule_type_page(id=id, back_to_schedule_type_page=True)
+                if db.get_subgroup(user_id=id) != 'None':
+                    self.pages.schedule_type_page(id=id, 
+                            back_to_schedule_type_page=True)
 
             """ Кнопки на stage 101 """
         elif on_stage == self.sn.OTHER:
@@ -136,9 +140,9 @@ class Bot_class:
                 entered_password = event.message.strip('del').strip('Del')
                 entered_password = entered_password.strip()
                 text = ''
-                for pwd in self.db.get_passwords(user_id=id):
+                for pwd in db.get_passwords(user_id=id):
                     if pwd == entered_password:
-                        success = self.db.del_password(user_id=id, password=pwd)
+                        success = db.del_password(user_id=id, password=pwd)
                         if success:
                             text = f'Пароль #{entered_password} удален'
                 if text == '':
@@ -149,18 +153,18 @@ class Bot_class:
             else:
                 password = event.message
                 if 'пароли' not in password.lower():
-                    text, key = self.db.add_password(user_id=id, 
+                    text, key = db.add_password(user_id=id, 
                             password=password)
                     self.s.sender(id=id, text=text)
                     if key == 1 | True:
                         """ Отправляем сообщение всем пользователям 
                         с password=password """
                         text = f'Пользователь @id{id} ввел пароль #{password}'
-                        for user in self.db.get_all_users_with_pass(
+                        for user in db.get_all_users_with_pass(
                                 password=password):
                             self.s.sender(id=user, text=text)
 
-                        if self.db.get_privacy(password=password) == None:
+                        if db.get_privacy(password=password) == None:
                             """ Переход на stage 103 """
                             self.pages.setting_password_page(id=id)
 
@@ -168,14 +172,14 @@ class Bot_class:
         elif on_stage == self.sn.SETTING_PASSWORDS:
             """ Настройка приватности пароля пользователя """
             if 'приватная' == msg:
-                self.db.change_stage(user_id=id, stage=self.sn.PASSWORDS)
-                password = self.db.set_privacy(user_id=id, privacy=1)
+                db.change_stage(user_id=id, stage=self.sn.PASSWORDS)
+                password = db.set_privacy(user_id=id, privacy=1)
                 text = f'Пароль {password} успешно сохранен'
                 keyboard = stage_passwords_keyboard()
                 self.s.sender(id=id, text=text, keyboard=keyboard)
             elif 'открытая' == msg:
-                self.db.change_stage(user_id=id, stage=self.sn.PASSWORDS)
-                password = self.db.set_privacy(user_id=id, privacy=0)
+                db.change_stage(user_id=id, stage=self.sn.PASSWORDS)
+                password = db.set_privacy(user_id=id, privacy=0)
                 text = f'Пароль {password} успешно сохранен'
                 keyboard = stage_passwords_keyboard()
                 self.s.sender(id=id, text=text, keyboard=keyboard)
@@ -188,16 +192,16 @@ class Bot_class:
 
                 """ Переключение ежедневной рассылки """
             elif 'ежедневная рассылка' == msg:
-                if self.db.get_subgroup(user_id=id) != "None":
-                    if self.db.get_daily_mail(user_id=id) == 0:
+                if db.get_subgroup(user_id=id) != "None":
+                    if db.get_daily_mail(user_id=id) == 0:
                         text = 'Включена ежедневная рассылка'
-                        self.db.change_daily_mail(user_id=id, daily_mail=1)
+                        db.change_daily_mail(user_id=id, daily_mail=1)
                     else:
                         text = 'Ежедневная рассылка отключена'
-                        self.db.change_daily_mail(user_id=id, daily_mail=0)
+                        db.change_daily_mail(user_id=id, daily_mail=0)
                     keyboard = stage_mail_keyboard(
-                                daily_mail=self.db.get_daily_mail(user_id=id),
-                                weekly_mail=self.db.get_weekly_mail(user_id=id)
+                                daily_mail=db.get_daily_mail(user_id=id),
+                                weekly_mail=db.get_weekly_mail(user_id=id)
                             )
                     self.s.sender(id=id, text=text, keyboard=keyboard)
                 else:
@@ -207,16 +211,16 @@ class Bot_class:
 
                 """ Переключение еженедельной рассылки """
             elif 'еженедельная рассылка' == msg:
-                if self.db.get_subgroup(user_id=id) != "None":
-                    if self.db.get_weekly_mail(user_id=id) == 0:
+                if db.get_subgroup(user_id=id) != "None":
+                    if db.get_weekly_mail(user_id=id) == 0:
                         text = 'Включена еженедельная рассылка'
-                        self.db.change_weekly_mail(user_id=id, weekly_mail=1)
+                        db.change_weekly_mail(user_id=id, weekly_mail=1)
                     else:
                         text = 'Еженедельная рассылка отключена'
-                        self.db.change_weekly_mail(user_id=id, weekly_mail=0)
+                        db.change_weekly_mail(user_id=id, weekly_mail=0)
                     keyboard = stage_mail_keyboard(
-                                daily_mail=self.db.get_daily_mail(user_id=id),
-                                weekly_mail=self.db.get_weekly_mail(user_id=id)
+                                daily_mail=db.get_daily_mail(user_id=id),
+                                weekly_mail=db.get_weekly_mail(user_id=id)
                             )
                     self.s.sender(id=id, text=text, keyboard=keyboard)
                 else:
@@ -260,16 +264,16 @@ class Bot_class:
 
                 """ Изменение group_page """
             elif '>' in msg:
-                group_page = self.db.get_group_page(user_id=id)
-                self.db.change_group_page(user_id=id, 
+                group_page = db.get_group_page(user_id=id)
+                db.change_group_page(user_id=id, 
                         group_page=group_page + 1)
                 self.pages.group_select_page(id=id)
             elif '<' in msg:
                 if '< стр 1' == msg:
-                    self.db.change_group_page(user_id=id, group_page=1)
+                    db.change_group_page(user_id=id, group_page=1)
                 else:
-                    group_page = self.db.get_group_page(user_id=id)
-                    self.db.change_group_page(user_id=id, 
+                    group_page = db.get_group_page(user_id=id)
+                    db.change_group_page(user_id=id, 
                             group_page=group_page - 1)
                 self.pages.group_select_page(id=id)
 
@@ -289,18 +293,18 @@ class Bot_class:
 
                 """ Изменение session_group_page """
             elif '>' in msg:
-                session_group_page = self.db.get_session_group_page(user_id=id)
-                self.db.change_session_group_page(
+                session_group_page = db.get_session_group_page(user_id=id)
+                db.change_session_group_page(
                         user_id=id, 
                         session_group_page=session_group_page + 1)
                 self.pages.session_group_select_page(id=id)
             elif '<' in msg:
                 if '< стр 1' == msg:
-                    self.db.change_session_group_page(user_id=id, 
+                    db.change_session_group_page(user_id=id, 
                             session_group_page=1)
                 else:
-                    session_group_page = self.db.get_session_group_page(user_id=id)
-                    self.db.change_session_group_page(
+                    session_group_page = db.get_session_group_page(user_id=id)
+                    db.change_session_group_page(
                             user_id=id, 
                             session_group_page=session_group_page - 1)
                 self.pages.session_group_select_page(id=id)
@@ -317,7 +321,8 @@ class Bot_class:
 
                 """ Переход на stage 5 """
             else:
-                self.pages.schedule_type_page(id=id, new_group=True, event=event, msg=msg)
+                self.pages.schedule_type_page(id=id, new_group=True, 
+                                            event=event, msg=msg)
 
             """ Кнопки на stage 5 """
         elif on_stage == self.sn.SCHEDULE_TYPE:
@@ -363,7 +368,8 @@ class Bot_class:
         elif on_stage == self.sn.DATE_SELECT:
             """ Переход на stage 5 """
             if 'назад' == msg:
-                self.pages.schedule_type_page(id=id, back_to_schedule_type_page=True)
+                self.pages.schedule_type_page(id=id, 
+                        back_to_schedule_type_page=True)
 
                 """ Переход на stage 100 """
             elif 'в начало' == msg:
@@ -375,16 +381,16 @@ class Bot_class:
 
                 """ Переключение страниц на stage 6 """
             elif '>' in msg:
-                date_page = self.db.get_date_page(user_id=id)
-                self.db.change_date_page(user_id=id, 
+                date_page = db.get_date_page(user_id=id)
+                db.change_date_page(user_id=id, 
                         date_page=date_page + 1)
                 self.pages.date_select_page(id=id)
             elif '<' in msg:
                 if '< стр 1' == msg:
-                    self.db.change_date_page(user_id=id, date_page=1)
+                    db.change_date_page(user_id=id, date_page=1)
                 else:
-                    date_page = self.db.get_date_page(user_id=id)
-                    self.db.change_date_page(user_id=id, 
+                    date_page = db.get_date_page(user_id=id)
+                    db.change_date_page(user_id=id, 
                             date_page=date_page - 1)
                 self.pages.date_select_page(id=id)
 
@@ -398,7 +404,7 @@ class Bot_class:
             if 'текущая неделя' == msg:
                 type_of_week = 'now'
                 text, doc, keyboard = get_all_weeks(
-                        vk=self.vk, db=self.db, 
+                        vk=self.vk, 
                         id=id, event=event, 
                         type_of_week=type_of_week,
                         stage_week_keyboard=stage_week_keyboard
@@ -410,7 +416,7 @@ class Bot_class:
             elif 'ближайшая неделя' == msg:
                 type_of_week = 'closest'
                 text, doc, keyboard = get_all_weeks(
-                        vk=self.vk, db=self.db, 
+                        vk=self.vk, 
                         id=id, event=event, 
                         type_of_week=type_of_week,
                         stage_week_keyboard=stage_week_keyboard
@@ -422,7 +428,7 @@ class Bot_class:
             elif '<' in msg:
                 type_of_week = 'prev'
                 text, doc, keyboard = get_all_weeks(
-                        vk=self.vk, db=self.db, 
+                        vk=self.vk, 
                         id=id, event=event, 
                         type_of_week=type_of_week,
                         stage_week_keyboard=stage_week_keyboard
@@ -434,7 +440,7 @@ class Bot_class:
             elif '>' in msg:
                 type_of_week = 'next'
                 text, doc, keyboard = get_all_weeks(
-                        vk=self.vk, db=self.db, 
+                        vk=self.vk, 
                         id=id, event=event, 
                         type_of_week=type_of_week,
                         stage_week_keyboard=stage_week_keyboard
@@ -474,6 +480,6 @@ class Bot_class:
         """ Сброс кнопок """
         if id == 290711560:
             if '/res' == msg:
-                all_users = self.db.get_users()
+                all_users = db.get_users()
                 for user_id in all_users:
                     self.pages.reset_page(user_id=user_id)

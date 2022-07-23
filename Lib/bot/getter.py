@@ -5,12 +5,14 @@ import datetime
 from typing import List, Tuple
 from vk_api.keyboard import VkKeyboard
 from Lib.bot.event_hint import Event_hint
-from config import data_folder
+from Lib.bot.BotDB_Func import BotDB_Func
+from config import data_folder, db_path
 
+db = BotDB_Func(db_path=db_path)
 
 def get_forms() -> List[str]:
     forms = []
-    for _dirs, folders, _files, in os.walk(data_folder):
+    for _, folders, _, in os.walk(data_folder):
         forms.append(folders)
     return forms[0]
 
@@ -18,14 +20,13 @@ def get_forms() -> List[str]:
 def get_facs(form: str) -> List[str]:
     form_folder = get_form_path(form=form)
     facs = []
-    for _dirs, folders, _files, in os.walk(form_folder):
+    for _, folders, _, in os.walk(form_folder):
         facs.append(folders)
     return facs[0]
 
 
 def get_groups(form: str, fac: str) -> List[str]:
     schedule_data_folder = get_schedule_folder_path(form=form, fac=fac)
-    # schedule_data_folder = f"{data_folder}\\{form}\\{fac}\\data\\json\\schedule"
     list_of_groups = os.listdir(schedule_data_folder)
     groups = []
     for item in list_of_groups:
@@ -36,7 +37,6 @@ def get_groups(form: str, fac: str) -> List[str]:
 
 def get_session_groups(form: str, fac: str) -> List[str]:
     schedule_data_folder = get_schedule_folder_path(form=form, fac=fac)
-    # schedule_data_folder = f"{data_folder}\\{form}\\{fac}\\data\\json\\schedule"
     list_of_groups = os.listdir(schedule_data_folder)
     groups = []
     for item in list_of_groups:
@@ -62,8 +62,10 @@ def week_dates_gen(user_week_page: int) -> Tuple[str, str]:
     today_date = today_date.strftime('%Y-%m-%d') 
     today_date = datetime.datetime.strptime(today_date, '%Y-%m-%d')
     today_num = today_date.weekday()
-    days = [(today_date - datetime.timedelta(days=delta)).strftime('%Y-%m-%d') for delta in reversed(range(0, today_num + 1))]
-    days += ([(today_date + datetime.timedelta(days=delta)).strftime('%Y-%m-%d') for delta in range(1, 7 - today_num)])
+    days = [(today_date - datetime.timedelta(days=delta)).strftime('%Y-%m-%d') 
+            for delta in reversed(range(0, today_num + 1))]
+    days += ([(today_date + datetime.timedelta(days=delta)).strftime('%Y-%m-%d') 
+            for delta in range(1, 7 - today_num)])
     dates = []
     for date in days:
         date = date.split('-')
@@ -78,18 +80,23 @@ def week_dates_gen(user_week_page: int) -> Tuple[str, str]:
     return first_date, last_date
 
 
-def closest_week(form: str, fac: str, group: str, subgroup: str, quality: int, mode: str):
+def closest_week(form: str, fac: str, group: str, subgroup: str, 
+        quality: int, mode: str):
     change = 0
     while True:
         user_week_page = change
         first_date, last_date = week_dates_gen(user_week_page=user_week_page)
-        error = week_check(form=form, fac=fac, group=group, subgroup=subgroup, quality=quality, mode=mode, first_date=first_date, last_date=last_date)
+        error = week_check(form=form, fac=fac, group=group, subgroup=subgroup, 
+                quality=quality, mode=mode, first_date=first_date, 
+                last_date=last_date)
         if error == 0:
             closest_week_dates = first_date, last_date
             return closest_week_dates, user_week_page
         user_week_page = -change
         first_date, last_date = week_dates_gen(user_week_page=user_week_page)
-        error = week_check(form=form, fac=fac, group=group, subgroup=subgroup, quality=quality, mode=mode, first_date=first_date, last_date=last_date)
+        error = week_check(form=form, fac=fac, group=group, subgroup=subgroup, 
+                quality=quality, mode=mode, first_date=first_date, 
+                last_date=last_date)
         if error == 0:
             closest_week_dates = first_date, last_date
             return closest_week_dates, user_week_page
@@ -99,7 +106,8 @@ def closest_week(form: str, fac: str, group: str, subgroup: str, quality: int, m
         change += 1
 
 
-def week_check(form: str, fac: str, group: str, subgroup: str, quality: int, mode: str, first_date, last_date) -> int:
+def week_check(form: str, fac: str, group: str, subgroup: str, quality: int, 
+        mode: str, first_date, last_date) -> int:
     doc = get_schedule_picture_path(form=form, fac=fac, group=group, 
         subgroup=subgroup, quality=quality, mode=mode, 
         first_date=first_date, last_date=last_date)
@@ -110,15 +118,19 @@ def week_check(form: str, fac: str, group: str, subgroup: str, quality: int, mod
     return error
 
 
-def week_schedule(vk, form: str, fac: str, group: str, subgroup: str, quality: int, mode: str, user_id: int, first_date: str, last_date: str, event=None):
+def week_schedule(vk, form: str, fac: str, group: str, subgroup: str, 
+        quality: int, mode: str, user_id: int, first_date: str, 
+        last_date: str, event=None):
     try:
         doc = get_schedule_picture_path(form=form, fac=fac, group=group, 
             subgroup=subgroup, quality=quality, mode=mode, 
             first_date=first_date, last_date=last_date)
         if event is not None:
-            doc = doc_uploader(vk=vk, doc=doc, event=event, first_date=first_date, last_date=last_date)
+            doc = doc_uploader(vk=vk, doc=doc, event=event, 
+                    first_date=first_date, last_date=last_date)
         else:
-            doc = doc_uploader(vk=vk, doc=doc, peer_id=user_id, first_date=first_date, last_date=last_date)
+            doc = doc_uploader(vk=vk, doc=doc, peer_id=user_id, 
+                    first_date=first_date, last_date=last_date)
         error = 0
         return doc, error
     except:
@@ -126,22 +138,26 @@ def week_schedule(vk, form: str, fac: str, group: str, subgroup: str, quality: i
         error = 1
         return doc, error
 
-def doc_uploader(vk, doc, first_date:str, last_date: str, peer_id: int | None=None, event=None):
+def doc_uploader(vk, doc, first_date:str, last_date: str, 
+        peer_id: int | None=None, event=None):
     if event is not None:
         result = json.loads(requests.post(
-            vk.docs.getMessagesUploadServer(type='doc', peer_id=event.peer_id)['upload_url'],
+            vk.docs.getMessagesUploadServer(type='doc', 
+                peer_id=event.peer_id)['upload_url'],
             files={'file': open(doc, 'rb')}).text)
     else:
         result = json.loads(requests.post(
-            vk.docs.getMessagesUploadServer(type='doc', peer_id=peer_id)['upload_url'],
+            vk.docs.getMessagesUploadServer(type='doc', 
+                peer_id=peer_id)['upload_url'],
             files={'file': open(doc, 'rb')}).text)
-    jsonAnswer = vk.docs.save(file=result['file'], title=f'{first_date}-{last_date}', tags=[])
+    jsonAnswer = vk.docs.save(file=result['file'], 
+            title=f'{first_date}-{last_date}', tags=[])
     document = f"doc{jsonAnswer['doc']['owner_id']}_{jsonAnswer['doc']['id']}"
     return document
 
 def get_first_and_last_date(type_of_week: str, form: str, 
         fac: str, group: str, subgroup: str, quality: int, 
-        mode: str, db, user_id:int) -> Tuple[str, str, int]:
+        mode: str, user_id:int) -> Tuple[str, str, int]:
     """ Получаем first_date, last_date и user_week_page"""
     if type_of_week == 'closest':
         closest_week_dates, user_week_page = closest_week(
@@ -168,7 +184,7 @@ def get_first_and_last_date(type_of_week: str, form: str,
     return first_date, last_date, user_week_page
 
 
-def get_all_weeks(vk, db, id: int, event: Event_hint, 
+def get_all_weeks(vk, id: int, event: Event_hint, 
         type_of_week: str, stage_week_keyboard) -> Tuple[str, str, VkKeyboard]:
     """ type_of_week = 'closest' | 'now' | 'next' | 'prev' """
 
@@ -189,7 +205,6 @@ def get_all_weeks(vk, db, id: int, event: Event_hint,
             subgroup=subgroup, 
             quality=quality, 
             mode=mode, 
-            db=db,
             user_id=id
             )
 

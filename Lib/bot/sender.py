@@ -2,7 +2,8 @@ class Sender:
     def __init__(self, vk_session):
         self.vk_session = vk_session
 
-    def sender(self, id, text=None, preuploaded_doc=None, keyboard=None, inline_keyboard=None, attachments=None):
+    def sender(self, id, text=None, preuploaded_doc=None, keyboard=None, 
+            inline_keyboard=None, attachments=None):
         post = {
             'user_id': id,
             'random_id': 0

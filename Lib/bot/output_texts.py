@@ -1,6 +1,9 @@
 import os
 import json
-from config import teachers_info_path
+from Lib.bot.BotDB_Func import BotDB_Func
+from config import teachers_info_path, db_path
+
+db = BotDB_Func(db_path=db_path)
 
 def schedule_str(data: dict, subgroup: str, date: str) -> str:
     """ Выводит str расписания """
@@ -32,7 +35,7 @@ def schedule_str(data: dict, subgroup: str, date: str) -> str:
                         f'\n{entry["name"]}\n{entry["room"]}\n\n'
     return text.strip()
 
-def teachers_info_str(db, id: int) -> str:
+def teachers_info_str(id: int) -> str:
     """ Выводит информацию о преподавателях из файла teachers.json 
     в формате str"""
     if 'teachers' in db.get_passwords(user_id=id):
@@ -101,7 +104,7 @@ def short_description() -> str:
             f'❕️ Это группа автоматически становится выбранной и на '\
             f'начальной странице появляется кнопка "Расписание '\
             f'выбранной группы"\n'\
-            f'ℹ️ В боте есть Возможность сохранить 5 групп , чтобы вы '\
+            f'ℹ️ В боте есть Возможность сохранить 54групп , чтобы вы '\
             f'могли быстро проверить Расписание людей на потоке или, '\
             f'например, своих друзей.\n'\
             f'Для этого после выбора группы нужно нажать "Да!", когда '\

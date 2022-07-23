@@ -2,7 +2,8 @@ import json
 import datetime
 from typing import List, Tuple
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
-from Lib.bot.getter import get_forms, get_facs, get_session_groups, get_groups, get_subgroups, closest_week, get_schedule_path
+from Lib.bot.getter import (get_forms, get_facs, get_session_groups, 
+        get_groups, get_subgroups, closest_week, get_schedule_path)
 from Lib.bot.BotDB_Func import BotDB_Func
 from config import data_folder, db_path
 
@@ -18,7 +19,8 @@ def stage_start_keyboard():
 def stage_home_keyboard(subgroup: str):
     keyboard = VkKeyboard()
     if subgroup != "None":
-        keyboard.add_button('Расписание выбранной группы', color=VkKeyboardColor.POSITIVE)
+        keyboard.add_button('Расписание выбранной группы', 
+                color=VkKeyboardColor.POSITIVE)
         keyboard.add_line()
     keyboard.add_button('Расписание', color=VkKeyboardColor.PRIMARY)
     keyboard.add_button('Другое', color=VkKeyboardColor.PRIMARY)

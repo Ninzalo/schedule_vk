@@ -32,7 +32,7 @@ longpoll = VkBotLongPoll(vk_session, group_id)
 sender = Sender(vk_session=vk_session)
 sn = Stages_names()
 db = BotDB_Func(db_path=db_path)
-bot_class = Bot_class(sender=sender, db=db, vk=vk)
+bot_class = Bot_class(sender=sender, vk=vk)
 
 
 def main():
