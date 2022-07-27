@@ -14,6 +14,7 @@ db_path = f'{os.getcwd()}\\Lib\\db\\schedule_vk.db'
 data_folder = f'{os.getcwd()}\\data'
 font_path = f'{os.getcwd()}\\Lib\\Fonts'
 teachers_info_path = f'{os.getcwd()}\\Lib\\teachers_data'
+start_files_path = f'{os.getcwd()}\\start'
 
 mstuca_url = 'https://www.mstuca.ru'
 

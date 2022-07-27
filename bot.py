@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import time
+import os
 import vk_api
 import datetime
 import socket
@@ -21,6 +22,8 @@ from Lib.bot.mail import daily_mail, weekly_mail
 from Lib.bot.group import group_online, wall_sender
 
 from Lib.bot.table import create_tables
+
+from Lib.start_files.create_files import bot_start_file, schedule_start_file
 
 import multiprocessing
 
@@ -119,5 +122,7 @@ def table():
 
 
 if __name__ == '__main__':
+    bot_start_file(path=os.getcwd())
+    schedule_start_file(path=os.getcwd())
     table()
     run_parallel()
