@@ -43,17 +43,17 @@ class BotDB_Func:
             users = db.get_users()
             return users
 
-    def null_user(self, user_id: int):
+    def null_user(self, user_id: int) -> None:
         """ Сбрасываем все данные пользователя """
         with BotDB(self.db_path) as db:
             db.null_user(user_id=user_id)
 
-    def null_schedule(self, user_id: int):
+    def null_schedule(self, user_id: int) -> None:
         """ Сбрасываем расписание пользователя """
         with BotDB(self.db_path) as db:
             db.null_schedule(user_id=user_id)
 
-    def add_new_preset(self, user_id: int):
+    def add_new_preset(self, user_id: int) -> None:
         """ Добавляем новый пресет пользователю """
         with BotDB(self.db_path) as db:
             db.add_new_preset(user_id=user_id)
@@ -64,7 +64,7 @@ class BotDB_Func:
             result = db.get_preset(user_id=user_id)
             return result
 
-    def change_preset(self, user_id: int, preset: int):
+    def change_preset(self, user_id: int, preset: int) -> None:
         """ Меняем chosen_preset пользователя """
         with BotDB(self.db_path) as db:
             db.change_preset(user_id=user_id, preset=preset)
@@ -87,7 +87,7 @@ class BotDB_Func:
             result = db.add_new_group(user_id=user_id)
             return result
 
-    def add_new_group(self, user_id: int):
+    def add_new_group(self, user_id: int) -> None:
         """ Добавляем новую группу, если new_group = 1 """
         with BotDB(self.db_path) as db:
             if (db.add_new_group(user_id=user_id) 
@@ -96,17 +96,17 @@ class BotDB_Func:
                 self.change_preset(user_id=user_id, preset=int(old_preset) + 1)
                 self.add_new_preset(user_id=user_id)
 
-    def change_new_group(self, user_id: int, new_group: bool):
+    def change_new_group(self, user_id: int, new_group: bool) -> None:
         """ Переключаем создание нового пресета """
         with BotDB(self.db_path) as db:
             db.change_new_group(user_id=user_id, new_group=new_group)
 
-    def del_preset_by_num(self, user_id: int, preset_num: int):
+    def del_preset_by_num(self, user_id: int, preset_num: int) -> None:
         """ Удаляем группу по preset_num """
         with BotDB(self.db_path) as db:
             db.del_preset_by_num(user_id=user_id, preset=preset_num)
 
-    def update_preset_num(self, user_id: int, deleted_preset_num: int):
+    def update_preset_num(self, user_id: int, deleted_preset_num: int) -> None:
         """ Меняем preset_num, где preset_num > deleted_preset_num """
         with BotDB(self.db_path) as db:
             db.update_preset_num(user_id=user_id, 
@@ -124,12 +124,12 @@ class BotDB_Func:
             stage = db.get_stage(user_id=user_id)
             return stage
 
-    def change_on_delete(self, user_id: int, on_delete: int):
+    def change_on_delete(self, user_id: int, on_delete: int) -> None:
         """ Меняем on_delete_page пользователя """
         with BotDB(self.db_path) as db:
             db.change_on_delete(user_id=user_id, on_delete=on_delete)
 
-    def change_stage(self, user_id: int, stage: str):
+    def change_stage(self, user_id: int, stage: str) -> None:
         """ Меняем stage пользователя """
         with BotDB(self.db_path) as db:
             db.change_stage(user_id=user_id, stage=stage)
@@ -140,12 +140,12 @@ class BotDB_Func:
             form = db.get_form(user_id=user_id)
             return form
 
-    def change_form(self, user_id: int, form: str):
+    def change_form(self, user_id: int, form: str) -> None:
         """Меняем form пользователя"""
         with BotDB(self.db_path) as db:
             db.change_form(user_id=user_id, form=form)
 
-    def del_form(self, user_id: int):
+    def del_form(self, user_id: int) -> None:
         """ Удаляем form пользователя """
         with BotDB(self.db_path) as db:
             db.del_form(user_id=user_id)
@@ -156,12 +156,12 @@ class BotDB_Func:
             fac = db.get_fac(user_id=user_id)
             return fac
 
-    def change_fac(self, user_id: int, fac: str):
+    def change_fac(self, user_id: int, fac: str) -> None:
         """ Меняем fac пользователя """
         with BotDB(self.db_path) as db:
             db.change_fac(user_id=user_id, fac=fac)
 
-    def del_fac(self, user_id: int):
+    def del_fac(self, user_id: int) -> None:
         """ Удаляем fac пользователя """
         with BotDB(self.db_path) as db:
             db.del_fac(user_id=user_id)
@@ -172,7 +172,7 @@ class BotDB_Func:
             group_page = db.get_group_page(user_id=user_id)
             return group_page
 
-    def change_group_page(self, user_id: int, group_page: int):
+    def change_group_page(self, user_id: int, group_page: int) -> None:
         """ Меняем group_page пользователя """
         with BotDB(self.db_path) as db:
             db.change_group_page(user_id=user_id, group_page=group_page)
@@ -183,7 +183,8 @@ class BotDB_Func:
             session_group_page = db.get_session_group_page(user_id=user_id)
             return session_group_page
 
-    def change_session_group_page(self, user_id: int, session_group_page: int):
+    def change_session_group_page(self, user_id: int, 
+            session_group_page: int) -> None:
         """ Меняем session_group_page пользователя """
         with BotDB(self.db_path) as db:
             db.change_session_group_page(
@@ -197,12 +198,12 @@ class BotDB_Func:
             group = db.get_group(user_id=user_id)
             return group
 
-    def change_group(self, user_id: int, group: str):
+    def change_group(self, user_id: int, group: str) -> None:
         """ Меняем group пользователя """
         with BotDB(self.db_path) as db:
             db.change_group(user_id=user_id, group=group)
 
-    def del_group(self, user_id: int):
+    def del_group(self, user_id: int) -> None:
         """ Удаляем group пользователя """
         with BotDB(self.db_path) as db:
             db.del_group(user_id=user_id)
@@ -213,12 +214,12 @@ class BotDB_Func:
             subgroup = db.get_subgroup(user_id=user_id)
             return subgroup
 
-    def change_subgroup(self, user_id: int, subgroup: str):
+    def change_subgroup(self, user_id: int, subgroup: str) -> None:
         """ Меняем subgroup пользователя """
         with BotDB(self.db_path) as db:
             db.change_subgroup(user_id=user_id, subgroup=subgroup)
 
-    def del_subgroup(self, user_id: int):
+    def del_subgroup(self, user_id: int) -> None:
         """ Удаляем subgroup пользователя """
         with BotDB(self.db_path) as db:
             db.del_subgroup(user_id=user_id)
@@ -229,7 +230,7 @@ class BotDB_Func:
             quality = db.get_quality(user_id=user_id)
             return quality
 
-    def change_quality(self, user_id: int):
+    def change_quality(self, user_id: int) -> None:
         """ Меняем quality пользователя """
         with BotDB(self.db_path) as db:
             db.change_quality(user_id=user_id)
@@ -240,7 +241,7 @@ class BotDB_Func:
             mode = db.get_mode(user_id=user_id)
             return mode
 
-    def change_mode(self, user_id: int):
+    def change_mode(self, user_id: int) -> None:
         """ Меняем mode пользователя """
         with BotDB(self.db_path) as db:
             db.change_mode(user_id=user_id)
@@ -251,7 +252,7 @@ class BotDB_Func:
             week_page = db.get_week_page(user_id=user_id)
             return week_page
 
-    def change_week_page(self, user_id: int, week_page: int):
+    def change_week_page(self, user_id: int, week_page: int) -> None:
         """ Меняем week_page пользователя """
         with BotDB(self.db_path) as db:
             db.change_week_page(user_id=user_id, week_page=week_page)
@@ -262,7 +263,7 @@ class BotDB_Func:
             date_page = db.get_date_page(user_id=user_id)
             return date_page
 
-    def change_date_page(self, user_id: int, date_page: int):
+    def change_date_page(self, user_id: int, date_page: int) -> None:
         """ Меняем date_page пользователя """
         with BotDB(self.db_path) as db:
             db.change_date_page(user_id=user_id, date_page=date_page)
@@ -273,7 +274,7 @@ class BotDB_Func:
             daily_mail = db.get_daily_mail(user_id=user_id)
             return daily_mail
 
-    def change_daily_mail(self, user_id: int, daily_mail: int):
+    def change_daily_mail(self, user_id: int, daily_mail: int) -> None:
         """ Меняем daily_mail пользователя """
         with BotDB(self.db_path) as db:
             db.change_daily_mail(user_id=user_id, daily_mail=daily_mail)
@@ -290,7 +291,7 @@ class BotDB_Func:
             weekly_mail = db.get_weekly_mail(user_id=user_id)
             return weekly_mail
 
-    def change_weekly_mail(self, user_id: int, weekly_mail: int):
+    def change_weekly_mail(self, user_id: int, weekly_mail: int) -> None:
         """ Меняем weekly_mail пользователя """
         with BotDB(self.db_path) as db:
             db.change_weekly_mail(user_id=user_id, weekly_mail=weekly_mail)

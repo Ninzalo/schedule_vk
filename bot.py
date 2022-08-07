@@ -38,7 +38,7 @@ db = BotDB_Func(db_path=db_path)
 bot_class = Bot_class(sender=sender, vk=vk)
 
 
-def main():
+def main() -> None:
     start_time = datetime.datetime.now()
     amount_of_old_messages = bot_class.old_messages(vk_session=vk_session)
     if amount_of_old_messages != 0:
@@ -74,7 +74,7 @@ def main():
 
 
 
-def main_start():
+def main_start() -> None:
     while True:
         try:
             try:
@@ -88,7 +88,7 @@ def main_start():
             print('_______Timeout______')
 
 
-def mail_gather(seconds: int, time_str: str):
+def mail_gather(seconds: int, time_str: str) -> None:
     while True:
         now_time = str(datetime.datetime.now().strftime("%H.%M"))
         try:
@@ -106,7 +106,7 @@ def mail_gather(seconds: int, time_str: str):
     mail_gather(seconds=seconds, time_str=time_str)
 
 
-def run_parallel():
+def run_parallel() -> None:
     p1 = multiprocessing.Process(target=mail_gather, args=[delay, time_str])
     p2 = multiprocessing.Process(target=main_start, args=[])
 
@@ -117,7 +117,7 @@ def run_parallel():
     p2.join()
 
 
-def table():
+def table() -> None:
     create_tables()
 
 

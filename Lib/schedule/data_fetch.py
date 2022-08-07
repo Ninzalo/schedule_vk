@@ -1,7 +1,7 @@
 import calendar
 import datetime
 import xlrd
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Any
 from Lib.schedule.cell_data import Cell
 # from Lib.schedule.find import find_cell
 from Lib.schedule.getter import get_num_of_lesson, get_type_of_week, get_type_of_lesson, get_name_of_lesson, get_room, get_day_of_week, get_dates, get_dates_list, get_subgroup
@@ -60,7 +60,7 @@ def find_max_sheet(book: List[Cell]) -> int:
     return max_sheet + 1
 
 
-def get_teachers_data(book_data: List[Cell]):
+def get_teachers_data(book_data: List[Cell]) -> List[Dict[str, Any]]:
     teachers_data = []
     for cell in book_data:
         if cell.sheet != 1:

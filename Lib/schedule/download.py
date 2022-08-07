@@ -10,7 +10,7 @@ import sys
 from config import data_folder, mstuca_url
 
 
-def download():
+def download() -> None:
     urllib3.disable_warnings()
     all_amount_of_files = 0
     ua = UserAgent()
@@ -112,11 +112,13 @@ def download():
     print(f'[INFO] All amoount of files: {all_amount_of_files}')
 
 
-def retry(session, headers: dict, url: str, stream: bool|None = None):
+def retry(session, headers: dict, url: str, 
+        stream: bool|None = None) -> requests.models.Response:
     retries = 0
     while True:
         if stream is not None:
-            r = session.get(url=url, headers=headers, stream=stream, verify=False)
+            r = session.get(url=url, headers=headers, stream=stream, 
+                    verify=False)
         else:
             r = session.get(url=url, headers=headers, verify=False)
         if '[200' in str(r):

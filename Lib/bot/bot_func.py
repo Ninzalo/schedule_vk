@@ -2,14 +2,16 @@
 
 import time
 
-from Lib.bot.keyboards import *
+# from Lib.bot.keyboards import *
+from Lib.bot.keyboards import (stage_start_keyboard, stage_passwords_keyboard, 
+        stage_mail_keyboard, stage_week_keyboard)
 from Lib.bot.elapsed_time import elapsed_time
 from Lib.bot.display import Display
 from Lib.bot.event_hint import Event_hint
 from Lib.bot.stages import Pages
 from Lib.bot.stages_names import Stages_names
 from Lib.bot.mail import mail  
-from Lib.bot.getter import get_all_weeks, get_schedule_path
+from Lib.bot.bot_getter import get_all_weeks, get_schedule_path
 from Lib.bot.BotDB_Func import BotDB_Func
 from config import data_folder, db_path
 
@@ -58,7 +60,7 @@ class Bot_class:
         return amount_of_old_messages
 
     @elapsed_time
-    def bot(self, event: Event_hint):
+    def bot(self, event: Event_hint) -> None:
         msg = event.msg
         id = event.id
 
@@ -454,7 +456,8 @@ class Bot_class:
 
                 """ Переход на stage 5 """
             elif 'назад' == msg:
-                self.pages.schedule_type_page(id=id, back_to_schedule_type_page=True)
+                self.pages.schedule_type_page(id=id, 
+                        back_to_schedule_type_page=True)
 
                 """ Переход на stage 100 """
             elif 'в начало' == msg:

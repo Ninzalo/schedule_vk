@@ -5,7 +5,7 @@ from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.stages_names import Stages_names
 from Lib.bot.event_hint import Event_hint 
 from Lib.bot.output_texts import schedule_str
-from Lib.bot.getter import week_dates_gen, week_schedule, get_schedule_path
+from Lib.bot.bot_getter import week_dates_gen, week_schedule, get_schedule_path
 from config import db_path, data_folder
 
 db = BotDB_Func(db_path=db_path)
@@ -22,7 +22,7 @@ def _send_to_target(sender, password: str, user_id: int, text: str,
             sender(id=user_id, text=error_text)
 
 
-def mail(event: Event_hint, sender, user_id: int):
+def mail(event: Event_hint, sender, user_id: int) -> None:
     user_stage = db.get_stage(user_id=user_id)
     passwords = db.get_passwords(user_id=user_id)
 

@@ -19,10 +19,10 @@ def schedule_str(data: dict, subgroup: str, date: str) -> str:
                 'num': 1000
             }
             min_index = 100
-            for entry in enumerate(lessons_list):
-                if int(entry[1]['num']) < int(min_num['num']):
-                    min_num = entry[1]
-                    min_index = int(entry[0])
+            for entry_num, entry in enumerate(lessons_list):
+                if int(entry['num']) < int(min_num['num']):
+                    min_num = entry
+                    min_index = int(entry_num)
             new_list.append(min_num)
             lessons_list.pop(min_index)
         text = f"{data['date']}  "\

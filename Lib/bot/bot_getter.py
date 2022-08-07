@@ -2,7 +2,7 @@ import os
 import requests
 import json
 import datetime
-from typing import List, Tuple
+from typing import List, Tuple, Optional, Union, Type, Any
 from vk_api.keyboard import VkKeyboard
 from Lib.bot.event_hint import Event_hint
 from Lib.bot.BotDB_Func import BotDB_Func
@@ -68,20 +68,20 @@ def week_dates_gen(user_week_page: int) -> Tuple[str, str]:
             for delta in range(1, 7 - today_num)])
     dates = []
     for date in days:
-        date = date.split('-')
-        year = int(date[0])
-        month = int(date[1])
-        day = int(date[2])
+        date_split: List[str] = date.split('-')
+        year = int(date_split[0])
+        month = int(date_split[1])
+        day = int(date_split[2])
         date = f'{year}-{month}-{day}'
         dates.append(date)
     
-    first_date = dates[0]
-    last_date = dates[-1]
-    return first_date, last_date
+    first_date_str: str = dates[0]
+    last_date_str: str = dates[-1]
+    return first_date_str, last_date_str
 
 
 def closest_week(form: str, fac: str, group: str, subgroup: str, 
-        quality: int, mode: str):
+        quality: int, mode: str) -> Tuple[Tuple[Any, str], int]:
     change = 0
     while True:
         user_week_page = change
@@ -107,7 +107,7 @@ def closest_week(form: str, fac: str, group: str, subgroup: str,
 
 
 def week_check(form: str, fac: str, group: str, subgroup: str, quality: int, 
-        mode: str, first_date, last_date) -> int:
+        mode: str, first_date: str, last_date: str) -> int:
     doc = get_schedule_picture_path(form=form, fac=fac, group=group, 
         subgroup=subgroup, quality=quality, mode=mode, 
         first_date=first_date, last_date=last_date)
@@ -120,7 +120,7 @@ def week_check(form: str, fac: str, group: str, subgroup: str, quality: int,
 
 def week_schedule(vk, form: str, fac: str, group: str, subgroup: str, 
         quality: int, mode: str, user_id: int, first_date: str, 
-        last_date: str, event=None):
+        last_date: str, event=None) -> Tuple[str, int]:
     try:
         doc = get_schedule_picture_path(form=form, fac=fac, group=group, 
             subgroup=subgroup, quality=quality, mode=mode, 
@@ -138,8 +138,8 @@ def week_schedule(vk, form: str, fac: str, group: str, subgroup: str,
         error = 1
         return doc, error
 
-def doc_uploader(vk, doc, first_date:str, last_date: str, 
-        peer_id: int | None=None, event=None):
+def doc_uploader(vk, doc, first_date: str, last_date: str, 
+        peer_id: int | None=None, event=None) -> str:
     if event is not None:
         result = json.loads(requests.post(
             vk.docs.getMessagesUploadServer(type='doc', 

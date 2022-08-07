@@ -1,12 +1,22 @@
-from typing import List
+from typing import List, Type
 from Lib.bot.event_hint import Event_hint
 from Lib.bot.BotDB_Func import BotDB_Func
-from Lib.bot.keyboards import *
+from Lib.bot.keyboards import (stage_start_keyboard, stage_home_keyboard,
+        stage_other_keyboard, stage_passwords_keyboard, 
+        stage_setting_passwords_keyboard, stage_mail_keyboard, 
+        stage_preset_keyboard, stage_form_keyboard, 
+        stage_fac_keyboard, stage_settings_week_keyboard,
+        stage_group_keyboard, stage_session_group_keyboard, 
+        stage_subgroup_keyboard, stage_schedule_type_keyboard,
+        stage_date_keyboard, stage_week_keyboard)
 from Lib.bot.inline_keyboards import (add_new_preset, passwords_desc, 
                                     short_description)
 from Lib.bot.stages_names import Stages_names
 from Lib.bot.output_texts import (passwords_info_str, 
                                 settings_password_str, start_message_str)
+from Lib.bot.bot_getter import (get_forms, get_facs, get_session_groups, 
+        get_groups, get_subgroups)
+
 from config import db_path
 
 db = BotDB_Func(db_path=db_path)
@@ -17,14 +27,14 @@ class Pages:
         self.sn = Stages_names()
     
 
-    def reset_page(self, user_id: int):
+    def reset_page(self, user_id: int) -> None:
         text = f"Кнопки сброшены\nОбновление!\n[ Информацию об обновлении "\
             f"искать на странице сообщества ]\nНажмите кнопку 'Начать'"
         keyboard = stage_start_keyboard()
         self.s.sender(id=user_id, text=text, keyboard=keyboard)
 
 
-    def start_page(self, id:int):
+    def start_page(self, id:int) -> None:
         db.start(user_id=id)
         text = start_message_str()
         self.s.sender(id=id, text=text)
@@ -34,7 +44,7 @@ class Pages:
         Pages.home_page(self, id=id, null_user=True)
 
 
-    def home_page(self, id: int, null_user:bool|None=None):
+    def home_page(self, id: int, null_user:bool|None=None) -> None:
         db.change_stage(user_id=id, stage=self.sn.HOME)
         if null_user is not None:
             db.null_user(user_id=id)
@@ -44,7 +54,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def other_page(self, id: int):
+    def other_page(self, id: int) -> None:
         db.change_stage(user_id=id, stage=self.sn.OTHER)
         text = 'Выберите: '
         can_get_teachers = False
@@ -54,7 +64,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
         
 
-    def passwords_page(self, id: int, event):
+    def passwords_page(self, id: int, event) -> None:
         db.change_stage(user_id=id, stage=self.sn.PASSWORDS)
         if 'callback' in event.button_actions:
             text = 'Что такое код-пароль?'
@@ -68,14 +78,14 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def setting_password_page(self, id: int):
+    def setting_password_page(self, id: int) -> None:
         db.change_stage(user_id=id, stage=self.sn.SETTING_PASSWORDS)
         text = settings_password_str()
         keyboard = stage_setting_passwords_keyboard()
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def mail_page(self, id: int):
+    def mail_page(self, id: int) -> None:
         db.change_stage(user_id=id, stage=self.sn.MAIL)
         daily_mail = db.get_daily_mail(user_id=id)
         weekly_mail = db.get_weekly_mail(user_id=id)
@@ -87,7 +97,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def preset_page(self, id: int, on_delete: bool|None=None):
+    def preset_page(self, id: int, on_delete: bool|None=None) -> None:
         db.change_stage(user_id=id, stage=self.sn.PRESETS)
         if on_delete is True:
             db.change_on_delete(user_id=id, on_delete=1)
@@ -101,7 +111,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def form_page(self, id: int, update_forms: bool|None = None):
+    def form_page(self, id: int, update_forms: bool|None = None) -> None:
         db.add_new_group(user_id=id)
         text = "Выберите одну из форм обучения:"
         keyboard, error = stage_form_keyboard()
@@ -114,7 +124,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def fac_page(self, id: int, msg: str):
+    def fac_page(self, id: int, msg: str) -> None:
         forms = get_forms()
         for form in forms:
             if form.lower() == msg:
@@ -125,7 +135,7 @@ class Pages:
                 self.s.sender(id=id, text=text, keyboard=keyboard)
 
     def group_select_page(self, id: int, msg: None|str = None, 
-            update_stage: bool|None = None):
+            update_stage: bool|None = None) -> None:
         form = db.get_form(user_id=id)
         group_page = db.get_group_page(user_id=id)
         fac = ''
@@ -151,7 +161,8 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def session_group_select_page(self, id: int, update_stage:bool|None = None):
+    def session_group_select_page(self, id: int, 
+            update_stage:bool|None = None) -> None:
         if update_stage is not None:
             db.change_stage(user_id=id, stage=self.sn.SESSION_GROUP_SELECT)
         form = db.get_form(user_id=id)
@@ -166,7 +177,8 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def subgroup_page(self, id: int, session:None|bool=None, msg:None|str=None):
+    def subgroup_page(self, id: int, session:None|bool=None, 
+            msg:None|str=None) -> None:
         form = db.get_form(user_id=id)
         fac = db.get_fac(user_id=id)
         group = ''
@@ -195,7 +207,7 @@ class Pages:
 
     def schedule_type_page(self, id: int, new_group: bool|None = None, 
             back_to_schedule_type_page: bool|None = None,
-            event: Event_hint|None = None, msg: str|None = None):
+            event: Event_hint|None = None, msg: str|None = None) -> None:
         db.change_on_delete(user_id=id, on_delete=0)
         if back_to_schedule_type_page is True:
             if db.get_new_group(user_id=id):
@@ -240,7 +252,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def date_select_page(self, id: int, update:bool|None=None):
+    def date_select_page(self, id: int, update:bool|None=None) -> None:
         db.change_stage(user_id=id, stage=self.sn.DATE_SELECT)
         form = db.get_form(user_id=id)
         fac = db.get_fac(user_id=id)
@@ -259,7 +271,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def week_select_page(self, id: int):
+    def week_select_page(self, id: int) -> None:
         db.change_stage(user_id=id, stage=self.sn.WEEK_SELECT)
         week_page = db.get_week_page(user_id=id)
         form = db.get_form(user_id=id)
@@ -281,7 +293,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def settings_week_page(self, id: int, edit: str | None = None):
+    def settings_week_page(self, id: int, edit: str | None = None) -> None:
         """ edit = None -> переход на страницу с настройками
         edit = 'mode' -> изменение цветовой схемы
         edit = 'quality' -> изменение качество изображений"""

@@ -1,8 +1,8 @@
 import json
 import datetime
-from typing import List, Tuple
+from typing import List, Tuple, Type
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
-from Lib.bot.getter import (get_forms, get_facs, get_session_groups, 
+from Lib.bot.bot_getter import (get_forms, get_facs, get_session_groups, 
         get_groups, get_subgroups, closest_week, get_schedule_path)
 from Lib.bot.BotDB_Func import BotDB_Func
 from config import data_folder, db_path
@@ -10,13 +10,13 @@ from config import data_folder, db_path
 db = BotDB_Func(db_path=db_path)
 
 
-def stage_start_keyboard():
+def stage_start_keyboard() -> VkKeyboard:
     keyboard = VkKeyboard()
     keyboard.add_button('начать', color=VkKeyboardColor.PRIMARY)
     return keyboard
 
 
-def stage_home_keyboard(subgroup: str):
+def stage_home_keyboard(subgroup: str) -> VkKeyboard:
     keyboard = VkKeyboard()
     if subgroup != "None":
         keyboard.add_button('Расписание выбранной группы', 
@@ -27,7 +27,7 @@ def stage_home_keyboard(subgroup: str):
     return keyboard
 
 
-def stage_other_keyboard(can_get_teachers: bool):
+def stage_other_keyboard(can_get_teachers: bool) -> VkKeyboard:
     keyboard = VkKeyboard()
     keyboard.add_button(f"Пароли", color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
@@ -42,14 +42,14 @@ def stage_other_keyboard(can_get_teachers: bool):
     return keyboard
 
 
-def stage_passwords_keyboard():
+def stage_passwords_keyboard() -> VkKeyboard:
     keyboard = VkKeyboard()
     keyboard.add_button('Мои пароли', color=VkKeyboardColor.PRIMARY)
     keyboard.add_button('Назад', color=VkKeyboardColor.NEGATIVE)
     return keyboard
 
 
-def stage_setting_passwords_keyboard():
+def stage_setting_passwords_keyboard() -> VkKeyboard:
     keyboard = VkKeyboard()
     keyboard.add_button(f"Открытая", color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
@@ -57,7 +57,7 @@ def stage_setting_passwords_keyboard():
     return keyboard
 
 
-def stage_mail_keyboard(daily_mail: int, weekly_mail: int):
+def stage_mail_keyboard(daily_mail: int, weekly_mail: int) -> VkKeyboard:
     keyboard = VkKeyboard()
     if daily_mail == 0:
         keyboard.add_button("Ежедневная рассылка", color=VkKeyboardColor.POSITIVE)
@@ -74,7 +74,7 @@ def stage_mail_keyboard(daily_mail: int, weekly_mail: int):
 
 
 def stage_preset_keyboard(presets: List[Tuple[int, str, str, str, str]], 
-        chosen_preset: int, on_delete: bool|None = None):
+        chosen_preset: int, on_delete: bool|None = None) -> VkKeyboard:
     keyboard = VkKeyboard()
     for preset_num, _, _, group, subgroup in presets[:5]:
         color = VkKeyboardColor.POSITIVE if preset_num == chosen_preset else VkKeyboardColor.SECONDARY
@@ -90,7 +90,7 @@ def stage_preset_keyboard(presets: List[Tuple[int, str, str, str, str]],
     return keyboard
 
 
-def stage_form_keyboard():
+def stage_form_keyboard() -> Tuple[VkKeyboard, int] | Tuple[None, int]:
     try:
         forms = get_forms()
     except:
@@ -107,7 +107,7 @@ def stage_form_keyboard():
     return keyboard, 0
 
 
-def stage_fac_keyboard(form: str):
+def stage_fac_keyboard(form: str) -> VkKeyboard:
     keyboard = VkKeyboard()
     facs = get_facs(form=form)
     for fac in facs[:8]:
@@ -117,7 +117,7 @@ def stage_fac_keyboard(form: str):
     return keyboard
 
 
-def stage_group_keyboard(form: str, fac: str, group_page: int):
+def stage_group_keyboard(form: str, fac: str, group_page: int) -> VkKeyboard:
     keyboard = VkKeyboard()
     session_groups = get_session_groups(form=form, fac=fac)
     groups = get_groups(form=form, fac=fac)
@@ -143,7 +143,8 @@ def stage_group_keyboard(form: str, fac: str, group_page: int):
     return keyboard
 
 
-def stage_session_group_keyboard(form: str, fac: str, session_group_page: int):
+def stage_session_group_keyboard(form: str, fac: str, 
+        session_group_page: int) -> VkKeyboard:
     keyboard = VkKeyboard()
     groups = get_session_groups(form=form, fac=fac)
     amount_of_groups = 3
@@ -165,7 +166,7 @@ def stage_session_group_keyboard(form: str, fac: str, session_group_page: int):
     return keyboard
 
 
-def stage_subgroup_keyboard(form: str, fac: str, group: str):
+def stage_subgroup_keyboard(form: str, fac: str, group: str) -> VkKeyboard:
     keyboard = VkKeyboard()
     all_subgroups = get_subgroups(form=form, fac=fac, group=group)
     for item in range(1, all_subgroups + 1):
@@ -175,7 +176,7 @@ def stage_subgroup_keyboard(form: str, fac: str, group: str):
     return keyboard
 
 
-def stage_schedule_type_keyboard(user_id: int):
+def stage_schedule_type_keyboard(user_id: int) -> VkKeyboard:
     keyboard = VkKeyboard()
     keyboard.add_button(f"Расписание по дням", color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
@@ -189,7 +190,8 @@ def stage_schedule_type_keyboard(user_id: int):
     return keyboard
 
 
-def stage_date_keyboard(form: str, fac: str, group: str, date_page: int):
+def stage_date_keyboard(form: str, fac: str, group: str, 
+        date_page: int) -> VkKeyboard:
     keyboard = VkKeyboard()
     path = get_schedule_path(form=form, fac=fac, group=group)
     with open(path) as f:
@@ -233,7 +235,7 @@ def stage_date_keyboard(form: str, fac: str, group: str, date_page: int):
 
 
 def stage_week_keyboard(week_page: int, form: str, fac: str, group: str, 
-        subgroup: str, quality: int, mode: str):
+        subgroup: str, quality: int, mode: str) -> VkKeyboard:
     _, user_week_page = closest_week(form=form, fac=fac, group=group, 
             subgroup=subgroup, quality=quality, mode=mode)
     keyboard = VkKeyboard()
@@ -254,7 +256,7 @@ def stage_week_keyboard(week_page: int, form: str, fac: str, group: str,
     return keyboard
 
 
-def stage_settings_week_keyboard(mode: str, quality: int):
+def stage_settings_week_keyboard(mode: str, quality: int) -> VkKeyboard:
     keyboard = VkKeyboard()
     if mode == 'night':
         keyboard.add_button(f"Светлый режим", color=VkKeyboardColor.POSITIVE)

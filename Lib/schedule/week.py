@@ -1,9 +1,9 @@
 import os
 import datetime
 from PIL import Image, ImageFilter, ImageDraw, ImageFont
-from typing import List
+from typing import List, Dict, Any
 
-def schedule_week(path: str, group, schedule, font_path: str):
+def schedule_week(path: str, group, schedule, font_path: str) -> None:
     qualities = ['q1', 'q2']
     if not os.path.exists(f'{path}\\{group}'):
         os.mkdir(f'{path}\\{group}')
@@ -65,7 +65,7 @@ def schedule_week(path: str, group, schedule, font_path: str):
                                 )
 
 
-def file_input(file_path: List[dict], days, subgroup):
+def file_input(file_path: List[dict], days, subgroup) -> List[Dict[str, Any]]:
     schedule_data = file_path
     cards = []
     for card in schedule_data:
@@ -235,6 +235,7 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
                                 ), 
                             (255, 255, 255))
     # draw text
+    rows = 0
     idraw = ImageDraw.Draw(image)
     for day_in_week in days_in_week_list:
         for num_of_lesson, lesson_in_day in enumerate(day_in_week):

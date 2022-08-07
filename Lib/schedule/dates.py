@@ -1,5 +1,5 @@
 from Lib.schedule.cell_data import Cell
-from typing import List, Literal
+from typing import List, Literal, Union
 import datetime
 import calendar
 
@@ -45,7 +45,7 @@ def since(dates_value, day_of_week_value: str|List[str],
             md_to_compare = f'-{month_to_compare}-{day_to_compare}'
             for item in book:
                 if md_to_compare in item.value:
-                    year = str(item.value).split('-')[0]
+                    year: Union[int, str] = str(item.value).split('-')[0]
                     minuses_list.append(f'{int(year)}-{int(month_to_compare)}-{int(day_to_compare)}')
 
     """ gets since date """

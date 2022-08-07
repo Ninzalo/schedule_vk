@@ -1,5 +1,5 @@
 import sqlite3
-from typing import Tuple, List
+from typing import Tuple, List, Union, Optional
 
 
 class BotDB:
@@ -25,7 +25,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id,))
         return result.fetchone()[0]
 
-    def add_user(self, user_id: int):
+    def add_user(self, user_id: int) -> None:
         """Добавляем юзера в базу"""
         sql = """ INSERT INTO users_info (user_id) VALUES (?) """
         self.cursor.execute(sql, (user_id,))
@@ -40,7 +40,7 @@ class BotDB:
         result = [int(item[0]) for item in result.fetchall()]
         return result
 
-    def null_user(self, user_id: int):
+    def null_user(self, user_id: int) -> None:
         """ Выставляем стандартное значение stage и всех параметров """
         sql = """ DELETE FROM users WHERE user_id = ? AND preset_num > 1 """
         self.cursor.execute(sql, (user_id,))
@@ -56,7 +56,7 @@ class BotDB:
         self.cursor.execute(sql, (user_id,))
         return self.conn.commit()
 
-    def null_schedule(self, user_id: int):
+    def null_schedule(self, user_id: int) -> None:
         """ Выставляем стандартное значение всех параметров расписания """
         sql = """ UPDATE users
         SET form=null, fac=null, group_page=1, group_name=null, subgroup=null, 
@@ -65,7 +65,7 @@ class BotDB:
         self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
-    def add_new_preset(self, user_id: int):
+    def add_new_preset(self, user_id: int) -> None:
         """ Добавляем новый пресет пользователю """
         sql = """ INSERT INTO users (user_id, preset_num) VALUES (?, ?) """
         self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
@@ -77,7 +77,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id,))
         return result.fetchone()[0]
 
-    def change_preset(self, user_id: int, preset: int):
+    def change_preset(self, user_id: int, preset: int) -> None:
         """ Изменяем chosen_preset пользователя """
         sql = """UPDATE users_info SET chosen_preset = ? WHERE user_id = ?"""
         self.cursor.execute(sql, (preset, user_id))
@@ -106,7 +106,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id,))
         return bool(int(result.fetchone()[0]))
 
-    def change_new_group(self, user_id: int, new_group: bool):
+    def change_new_group(self, user_id: int, new_group: bool) -> None:
         """ Переключаем создание нового пресета """
         sql = """ UPDATE users_info SET new_group = ? WHERE user_id = ? """
         self.cursor.execute(sql, (int(new_group), user_id))
@@ -124,14 +124,14 @@ class BotDB:
         # print(result_list)
         # return result_list
 
-    def del_preset_by_num(self, user_id: int, preset: int):
+    def del_preset_by_num(self, user_id: int, preset: int) -> None:
         """ Удаляем группу по preset_num """
         sql = """ DELETE FROM users
         WHERE user_id = ? AND preset_num = ? """
         self.cursor.execute(sql, (user_id, preset))
         return self.conn.commit()
 
-    def update_preset_num(self, user_id: int, deleted_preset_num: int):
+    def update_preset_num(self, user_id: int, deleted_preset_num: int) -> None:
         """ Меняем preset_num, где preset_num > deleted_preset_num """
         sql = """ UPDATE users SET preset_num = preset_num - 1
         WHERE user_id = ? AND preset_num > ? """
@@ -145,7 +145,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id,))
         return result.fetchone()[0]
 
-    def change_on_delete(self, user_id: int, on_delete: int):
+    def change_on_delete(self, user_id: int, on_delete: int) -> None:
         """ Меняем on_delete_page пользователя """
         sql = """ UPDATE users_info SET on_delete_page = ? 
         WHERE user_id = ? """
@@ -159,7 +159,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id,))
         return result.fetchone()[0]
 
-    def change_stage(self, user_id: int, stage: str):
+    def change_stage(self, user_id: int, stage: str) -> None:
         """ Изменяем Stage пользователя """
         sql = """UPDATE users_info SET on_stage = ? 
         WHERE user_id = ? """
@@ -173,14 +173,14 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return str(result.fetchone()[0])
 
-    def change_form(self, user_id: int, form: str):
+    def change_form(self, user_id: int, form: str) -> None:
         """ Меняем form пользователя """
         sql = """UPDATE users SET form = ? 
         WHERE user_id = ? AND preset_num = ?"""
         self.cursor.execute(sql, (form, user_id, self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
-    def del_form(self, user_id: int):
+    def del_form(self, user_id: int) -> None:
         """ Удаляем form пользователя """
         sql = """ UPDATE users SET form=null 
         WHERE user_id=? AND preset_num = ?"""
@@ -194,14 +194,14 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return str(result.fetchone()[0])
 
-    def change_fac(self, user_id: int, fac: str):
+    def change_fac(self, user_id: int, fac: str) -> None:
         """ Меняем fac пользователя """
         sql = """UPDATE users SET fac = ? 
         WHERE user_id = ? AND preset_num = ?"""
         self.cursor.execute(sql, (fac, user_id, self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
-    def del_fac(self, user_id: int):
+    def del_fac(self, user_id: int) -> None:
         """ Удаляем fac пользователя """
         sql = """ UPDATE users SET fac=null 
         WHERE user_id=? AND preset_num = ?"""
@@ -215,7 +215,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return int(result.fetchone()[0])
 
-    def change_group_page(self, user_id: int, group_page: int):
+    def change_group_page(self, user_id: int, group_page: int) -> None:
         """ Меняем group_page пользователя """
         sql = """UPDATE users SET group_page = ? 
         WHERE user_id = ? AND preset_num = ?"""
@@ -229,11 +229,13 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return int(result.fetchone()[0])
 
-    def change_session_group_page(self, user_id: int, session_group_page: int):
+    def change_session_group_page(self, user_id: int, 
+            session_group_page: int) -> None:
         """ Меняем session_group_page пользователя """
         sql = """UPDATE users SET session_group_page = ? 
         WHERE user_id = ? AND preset_num = ?"""
-        self.cursor.execute(sql, (session_group_page, user_id, self.get_preset(user_id=user_id)))
+        self.cursor.execute(sql, (session_group_page, user_id, 
+                        self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
     def get_group(self, user_id: int) -> str:
@@ -243,14 +245,14 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return str(result.fetchone()[0])
 
-    def change_group(self, user_id: int, group: str):
+    def change_group(self, user_id: int, group: str) -> None:
         """ Меняем group пользователя """
         sql = """ UPDATE users SET group_name = ? 
         WHERE user_id=? AND preset_num = ? """
         self.cursor.execute(sql, (group, user_id, self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
-    def del_group(self, user_id: int):
+    def del_group(self, user_id: int) -> None:
         """ Удаляем group пользователя """
         sql = """ UPDATE users SET group_name=null 
         WHERE user_id=? AND preset_num = ? """
@@ -264,14 +266,14 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return str(result.fetchone()[0])
 
-    def change_subgroup(self, user_id: int, subgroup: str):
+    def change_subgroup(self, user_id: int, subgroup: str) -> None:
         """ Меняем subgroup пользователя """
         sql = """ UPDATE users SET subgroup = ? 
         WHERE user_id=? AND preset_num = ? """
         self.cursor.execute(sql, (subgroup, user_id, self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
-    def del_subgroup(self, user_id: int):
+    def del_subgroup(self, user_id: int) -> None:
         """ Удаляем subgroup пользователя """
         sql = """ UPDATE users SET subgroup=null 
         WHERE user_id=? AND preset_num = ? """
@@ -285,7 +287,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id,))
         return int(result.fetchone()[0])
     
-    def change_quality(self, user_id: int):
+    def change_quality(self, user_id: int) -> None:
         """ Меняем quality пользователя """
         if self.get_quality(user_id=user_id) == 1:
             sql = """ UPDATE users_info SET quality=2 
@@ -303,7 +305,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id,))
         return str(result.fetchone()[0])
 
-    def change_mode(self, user_id: int):
+    def change_mode(self, user_id: int) -> None:
         """ Меняем mode пользователя """
         if self.get_mode(user_id=user_id) == "night":
             sql = """ UPDATE users_info SET mode = "day" 
@@ -321,7 +323,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return int(result.fetchone()[0])
     
-    def change_week_page(self, user_id: int, week_page: int):
+    def change_week_page(self, user_id: int, week_page: int) -> None:
         """ Меняем week_page пользователя """
         sql = """ UPDATE users SET week_page = ? 
         WHERE user_id=? AND preset_num = ? """
@@ -335,7 +337,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return int(result.fetchone()[0])
     
-    def change_date_page(self, user_id: int, date_page: int):
+    def change_date_page(self, user_id: int, date_page: int) -> None:
         """ Меняем date_page пользователя """
         sql = """ UPDATE users SET date_page = ? 
         WHERE user_id=? AND preset_num = ? """
@@ -349,7 +351,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return int(result.fetchone()[0])
     
-    def change_daily_mail(self, user_id: int, daily_mail: int):
+    def change_daily_mail(self, user_id: int, daily_mail: int) -> None:
         """ Меняем daily_mail пользователя """
         sql = """ UPDATE users SET daily_mail = ? 
         WHERE user_id=? AND preset_num = ? """
@@ -371,7 +373,7 @@ class BotDB:
         result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
         return int(result.fetchone()[0])
     
-    def change_weekly_mail(self, user_id: int, weekly_mail: int):
+    def change_weekly_mail(self, user_id: int, weekly_mail: int) -> None:
         """ Меняем weekly_mail пользователя """
         sql = """ UPDATE users SET weekly_mail = ? 
         WHERE user_id=? AND preset_num = ? """
@@ -396,7 +398,7 @@ class BotDB:
             passwords.append(str(item[0]))
         return passwords
 
-    def _set_creator(self, creator_id: int, password: str):
+    def _set_creator(self, creator_id: int, password: str) -> None:
         """ Меняем создателя пароля """
         sql = """ UPDATE passwords SET creator_id = ? WHERE password = ? """
         self.cursor.execute(sql, (creator_id, password))
@@ -412,16 +414,16 @@ class BotDB:
             result = None
         return result
 
-    def add_password(self, user_id: int, password: str) -> int | bool:
+    def add_password(self, user_id: int, password: str) -> Optional[int]:
         """ Проверяем, есть ли этот пароль у пользователя """
         if len(password.split(' ')) > 1:
             return 0
         passwords = self.get_passwords(user_id=user_id)
-        success = True
+        success: Optional[int] = True
         for item in passwords:
             if password == item:
-                success = 102
-                return success
+                success_code = 102
+                return success_code
         if success:
             """ Получаем user_id создателя пароля """
             creator = self.get_creator(password=password)
@@ -481,6 +483,6 @@ class BotDB:
         result = [int(item[0]) for item in result.fetchall()]
         return result
 
-    def close(self):
+    def close(self) -> None:
         """Закрываем соединение с БД"""
         self.conn.close()

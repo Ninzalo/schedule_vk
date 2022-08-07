@@ -2,7 +2,7 @@ import json
 from Lib.bot.output_texts import schedule_str, teachers_info_str
 from Lib.bot.inline_keyboards import bot_info
 from Lib.bot.keyboards import stage_preset_keyboard
-from Lib.bot.getter import get_schedule_path
+from Lib.bot.bot_getter import get_schedule_path
 from Lib.bot.event_hint import Event_hint
 from Lib.bot.BotDB_Func import BotDB_Func
 from config import db_path
@@ -15,7 +15,7 @@ class Display:
     def __init__(self, s):
         self.s = s
 
-    def schedule_display(self, id: int, msg: str):
+    def schedule_display(self, id: int, msg: str) -> None:
         """ Отправляет сообщение с расписанием по дате """
         form = db.get_form(user_id=id)
         fac = db.get_fac(user_id=id)
@@ -38,7 +38,7 @@ class Display:
                     pass
 
 
-    def bot_info_display(self, button_actions, id: int):
+    def bot_info_display(self, button_actions, id: int) -> None:
         """ Отправляет сообщение с информацией о боте """
 
         text = 'Данный бот дублирует информацию о расписании с '\
@@ -59,12 +59,14 @@ class Display:
             self.s.sender(id=id, text=text)
 
 
-    def teachers_display(self, id: int):
+    def teachers_display(self, id: int) -> None:
+        """ Отправляет информацию о преподавателях """
         teachers_info = teachers_info_str(id=id)
         self.s.sender(id=id, text=teachers_info)
 
 
-    def passwords_info_display(self, id: int):
+    def passwords_info_display(self, id: int) -> None:
+        """ Отправляет информацию о сохраненных паролях пользователя """
         user_passwords = db.get_passwords(user_id=id)
         if not len(user_passwords) == 0:
             text = ''
@@ -77,7 +79,8 @@ class Display:
             text = 'Нет сохраненных паролей'
         self.s.sender(id=id, text=text)
 
-    def presets_display(self, user_id, event: Event_hint):
+    def presets_display(self, user_id, event: Event_hint) -> None:
+        """ Изменяет / удаляет пресет пользователя """
         user_presets = db.get_all_user_presets(user_id=user_id)
         if ('].' in event.msg and int(event.msg[0]) in user_presets
                 and len(user_presets) > 1):

@@ -9,7 +9,7 @@ def find_file_with_ext(location: str, ext_to_find: Allowed_exts|List[Allowed_ext
         ext_to_miss: Allowed_exts|None|List[Allowed_exts] = None) -> List[str]:
 
     all_files = []
-    for dirs, _folders, files, in os.walk(location):
+    for dirs, _, files, in os.walk(location):
         for file in files:
             """ Если тип расширения - str """
             if type(ext_to_find) == str: 
@@ -57,14 +57,14 @@ def find_file_with_ext(location: str, ext_to_find: Allowed_exts|List[Allowed_ext
 
 def find_folder_with_name(location: str, folder_name: str) -> List[str]:
     output_folders = []
-    for dirs, folders, _files, in os.walk(location):
+    for dirs, folders, _, in os.walk(location):
         for folder in folders:
             if folder_name in str(os.path.join(dirs, folder)):
                 output_folders.append(str(os.path.join(dirs, folder)))
     return output_folders
 
 
-def create_empty_folders(folders: list):
+def create_empty_folders(folders: list) -> None:
     for folder in folders:
         if not os.path.exists(folder):
             os.mkdir(folder)

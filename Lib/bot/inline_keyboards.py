@@ -1,6 +1,6 @@
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
-def bot_info():
+def bot_info() -> VkKeyboard:
     """ Возвращает inline клавиатуру с кнопками 
     "Сообщение разработчику", "Обсуждение" """
     settings = dict(inline=True)
@@ -24,7 +24,7 @@ def bot_info():
             )
     return inline_keyboard
 
-def add_new_preset():
+def add_new_preset() -> VkKeyboard:
     """ Возвращает inline клавиатуру с подтверждением создания пресета """
     settings = dict(inline=True)
     inline_keyboard = VkKeyboard(**settings)
@@ -35,7 +35,7 @@ def add_new_preset():
             )
     return inline_keyboard
 
-def passwords_desc():
+def passwords_desc() -> VkKeyboard:
     """ Возвращает inline клавиатуру с описанием паролей """
     settings = dict(inline=True)
     inline_keyboard = VkKeyboard(**settings)
@@ -46,7 +46,7 @@ def passwords_desc():
             )
     return inline_keyboard
 
-def short_description(): 
+def short_description() -> VkKeyboard: 
     """ Возвращает inline клавиатуру с кратким описанием функционала группы """
     settings = dict(inline=True)
     inline_keyboard = VkKeyboard(**settings)

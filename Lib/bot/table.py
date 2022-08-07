@@ -2,7 +2,7 @@ import sqlite3
 from config import db_path
 
 
-def _users_table():
+def _users_table() -> None:
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
 
@@ -26,7 +26,7 @@ def _users_table():
     cur.execute(sql)
     conn.commit()
 
-def _passwords_table():
+def _passwords_table() -> None:
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
 
@@ -42,7 +42,7 @@ def _passwords_table():
     conn.commit()
 
 
-def _users_info_table():
+def _users_info_table() -> None:
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
 
@@ -66,7 +66,7 @@ def _users_info_table():
     conn.commit()
 
 
-def create_tables():
+def create_tables() -> None:
     _users_table()
     _passwords_table()
     _users_info_table()
