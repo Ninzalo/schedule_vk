@@ -34,6 +34,10 @@ def download() -> None:
                 urls.append(f"{mstuca_url}/{url.get('href')}")
 
     time.sleep(2)
+    
+    if len(urls) == 0:
+        print(f'[INFO] На сайте нет ни одного расписания!')
+        sys.exit(0)
 
     for url in urls[:]:
         r = retry(session=session, headers=headers, url=url)
