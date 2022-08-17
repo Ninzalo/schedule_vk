@@ -14,6 +14,7 @@ def get_forms() -> List[str]:
     forms = []
     for _, folders, _, in os.walk(data_folder):
         forms.append(folders)
+    forms[0].sort()
     return forms[0]
 
 
@@ -22,6 +23,7 @@ def get_facs(form: str) -> List[str]:
     facs = []
     for _, folders, _, in os.walk(form_folder):
         facs.append(folders)
+    facs[0].sort()
     return facs[0]
 
 
@@ -32,6 +34,7 @@ def get_groups(form: str, fac: str) -> List[str]:
     for item in list_of_groups:
         if '.json' in item and 'сесс' not in item:
             groups.append(item.split('.json')[0].split("schedule_")[1])
+    groups.sort()
     return groups
 
 
@@ -42,6 +45,7 @@ def get_session_groups(form: str, fac: str) -> List[str]:
     for item in list_of_groups:
         if '.json' in item and 'сесс' in item:
             groups.append(item.split('.json')[0].split("schedule_")[1])
+    groups.sort()
     return groups
 
 
