@@ -48,7 +48,7 @@ def del_all_files_in_folders(folders: List[str]) -> None:
     for folder in folders:
         for item in os.listdir(folder):
             try:
-                os.remove(f'{folder}\\{item}')
+                os.remove(f'{folder}/{item}')
             except:
                 pass
 

@@ -5,8 +5,8 @@ from typing import List, Dict, Any
 
 def schedule_week(path: str, group, schedule, font_path: str) -> None:
     qualities = ['q1', 'q2']
-    if not os.path.exists(f'{path}\\{group}'):
-        os.mkdir(f'{path}\\{group}')
+    if not os.path.exists(f'{path}/{group}'):
+        os.mkdir(f'{path}/{group}')
 
     subgroups = schedule[0]['all_subgroups']
     first_date = schedule[0]['date']
@@ -25,11 +25,11 @@ def schedule_week(path: str, group, schedule, font_path: str) -> None:
 
     for subgroup in range(1, subgroups + 1): 
         subgroup = str(subgroup)
-        if not os.path.exists(f'{path}\\{group}\\s{subgroup}'):
-            os.mkdir(f'{path}\\{group}\\s{subgroup}')
+        if not os.path.exists(f'{path}/{group}/s{subgroup}'):
+            os.mkdir(f'{path}/{group}/s{subgroup}')
         for quality in qualities:
-            if not os.path.exists(f'{path}\\{group}\\s{subgroup}\\{quality}'):
-                os.mkdir(f'{path}\\{group}\\s{subgroup}\\{quality}')
+            if not os.path.exists(f'{path}/{group}/s{subgroup}/{quality}'):
+                os.mkdir(f'{path}/{group}/s{subgroup}/{quality}')
             for delta in range(0, max_delta + 1, 7):
                 today_date = first_date + datetime.timedelta(days=delta)
                 today_date = today_date.strftime('%Y-%m-%d') 
@@ -53,9 +53,9 @@ def schedule_week(path: str, group, schedule, font_path: str) -> None:
                 for mode in modes:
                     if mode != 'night' and mode != 'day':
                         return print('Mode error')
-                    if not os.path.exists(f'{path}\\{group}\\s{subgroup}\\{quality}\\{mode}'):
-                        os.mkdir(f'{path}\\{group}\\s{subgroup}\\{quality}\\{mode}')
-                    output_path = f'{path}\\{group}\\s{subgroup}\\{quality}\\{mode}\\week_{dates[0]}_{dates[-1]}.jpg' 
+                    if not os.path.exists(f'{path}/{group}/s{subgroup}/{quality}/{mode}'):
+                        os.mkdir(f'{path}/{group}/s{subgroup}/{quality}/{mode}')
+                    output_path = f'{path}/{group}/s{subgroup}/{quality}/{mode}/week_{dates[0]}_{dates[-1]}.jpg' 
                     gen_image(
                                 output_path=output_path, 
                                 font_path=font_path,
@@ -188,7 +188,7 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
         num_width_col.append([col, max_width_per_col])
 
     # gen image
-    font = ImageFont.truetype(font=f'{font_path}\\mono.ttf', size=font_size)
+    font = ImageFont.truetype(font=f'{font_path}/mono.ttf', size=font_size)
     start_image_width = start_width
     final_image_width = start_image_width
     for day_in_week in days_in_week_list:

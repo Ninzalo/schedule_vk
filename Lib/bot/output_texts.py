@@ -39,7 +39,7 @@ def teachers_info_str(id: int) -> str:
     """ Выводит информацию о преподавателях из файла teachers.json 
     в формате str"""
     if 'teachers' in db.get_passwords(user_id=id):
-        path = f'{teachers_info_path}\\teachers.json'
+        path = f'{teachers_info_path}/teachers.json'
         if os.path.exists(path):
             with open(path, 'r', encoding='utf-8') as teachers:
                 list_of_teachers = json.load(teachers)

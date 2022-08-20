@@ -3,18 +3,18 @@ from dotenv import load_dotenv
 from pathlib import Path
 load_dotenv()
 
-if 'test' in os.getcwd().lower().split(f'\\')[-1]:
+if 'test' in os.getcwd().lower().split(f'/')[-1]:
     token_vk = str(os.getenv('TEST_API_KEY'))
     group_id = str(os.getenv('TEST_GROUP_ID'))
 else:
     token_vk = str(os.getenv('MAIN_API_KEY'))
     group_id = str(os.getenv('MAIN_GROUP_ID'))
 
-db_path = f'{os.getcwd()}\\Lib\\db\\schedule_vk.db'
-data_folder = f'{os.getcwd()}\\data'
-font_path = f'{os.getcwd()}\\Lib\\Fonts'
-teachers_info_path = f'{os.getcwd()}\\Lib\\teachers_data'
-start_files_path = f'{os.getcwd()}\\start'
+db_path = f'{os.getcwd()}/Lib/db/schedule_vk.db'
+data_folder = f'{os.getcwd()}/data'
+font_path = f'{os.getcwd()}/Lib/Fonts'
+teachers_info_path = f'{os.getcwd()}/Lib/teachers_data'
+start_files_path = f'{os.getcwd()}/start'
 
 mstuca_url = 'https://www.mstuca.ru'
 

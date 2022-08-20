@@ -13,7 +13,7 @@ from config import data_folder, mstuca_url
 def download() -> None:
     urllib3.disable_warnings()
     all_amount_of_files = 0
-    ua = UserAgent()
+    ua = UserAgent(verify_ssl=False)
     session = requests.Session()
 
     headers = {
@@ -83,25 +83,25 @@ def download() -> None:
             else:
                 print(f'[ ERROR ] Ошибка в {names}')
 
-        if not os.path.exists(f"{data_folder}\\{form}"):
-            os.mkdir(f"{data_folder}\\{form}")
+        if not os.path.exists(f"{data_folder}/{form}"):
+            os.mkdir(f"{data_folder}/{form}")
 
-        if not os.path.exists(f"{data_folder}\\{form}\\{name_of_fac}"):
-            os.mkdir(f"{data_folder}\\{form}\\{name_of_fac}")
+        if not os.path.exists(f"{data_folder}/{form}/{name_of_fac}"):
+            os.mkdir(f"{data_folder}/{form}/{name_of_fac}")
 
-        if not os.path.exists(f"{data_folder}\\{form}\\{name_of_fac}\\xls"):
-            os.mkdir(f"{data_folder}\\{form}\\{name_of_fac}\\xls")
+        if not os.path.exists(f"{data_folder}/{form}/{name_of_fac}/xls"):
+            os.mkdir(f"{data_folder}/{form}/{name_of_fac}/xls")
 
-        if not os.path.exists(f"{data_folder}\\{form}\\{name_of_fac}\\data"):
-            os.mkdir(f"{data_folder}\\{form}\\{name_of_fac}\\data")
+        if not os.path.exists(f"{data_folder}/{form}/{name_of_fac}/data"):
+            os.mkdir(f"{data_folder}/{form}/{name_of_fac}/data")
 
         iter = 1
         for item in data:
             try:
                 get_file = retry(session=session, headers=headers, 
                         url=item['link'], stream=True)
-                xls_path = f"{data_folder}\\{form}\\{name_of_fac}\\xls"\
-                        f"\\{item['name'].strip()}.xls"
+                xls_path = f"{data_folder}/{form}/{name_of_fac}/xls"\
+                        f"/{item['name'].strip()}.xls"
                 with open(xls_path, "wb") as file:
                     for chunk in get_file.iter_content(chunk_size=576 * 1024):
                         if chunk:

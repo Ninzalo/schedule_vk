@@ -3,7 +3,8 @@ import os
 import datetime
 
 from Lib.schedule.download import download
-from Lib.schedule.find import find_file_with_ext, find_folder_with_name, create_empty_folders
+from Lib.schedule.find import (find_file_with_ext, find_folder_with_name, 
+        create_empty_folders)
 from Lib.schedule.delete import delete_old_files, remove_empty_folders
 from Lib.schedule.data_fetch import book_to_list, get_teachers_data
 from Lib.schedule.schedule_create import schedule_create, compress
@@ -47,32 +48,35 @@ def main(test):
         # iter = 1
         folder_iteration = 1
 
-        xls_folder = f'{os.path.dirname(item)}\\xls'
-        item_schedule_folder = f'{os.path.dirname(item)}\\data'
-        json_folder = f'{item_schedule_folder}\\json'
-        week_folder = f'{item_schedule_folder}\\week'
-        teachers_folder = f'{json_folder}\\teachers'
-        path_to_schedule = f'{json_folder}\\schedule'
+        xls_folder = f'{os.path.dirname(item)}/xls'
+        item_schedule_folder = f'{os.path.dirname(item)}/data'
+        json_folder = f'{item_schedule_folder}/json'
+        week_folder = f'{item_schedule_folder}/week'
+        teachers_folder = f'{json_folder}/teachers'
+        path_to_schedule = f'{json_folder}/schedule'
 
 
         if not test:
             """ Creates empty folders if needed """
-            folders = [item_schedule_folder, json_folder, week_folder, font_path,
+            folders = [item_schedule_folder, json_folder, 
+                    week_folder, font_path,
                     teachers_folder, path_to_schedule]
             create_empty_folders(folders=folders)
 
         list_of_files = os.listdir(xls_folder)
+        list_of_files.sort()
 
         for name in list_of_files[:]:
+            start_file_fetch_time = datetime.datetime.now()
             name_without_ext = name.split('.x')[0]
 
             """ gets all data from xls """
-            src = f'{xls_folder}\\{name}'
+            src = f'{xls_folder}/{name}'
             book_data = book_to_list(path=src)
 
             """ gets teachers data """
             teachers_data = get_teachers_data(book_data=book_data)
-            with open(f'{teachers_folder}\\teachers_{name_without_ext}.json', 
+            with open(f'{teachers_folder}/teachers_{name_without_ext}.json',
                     "w") as f:
                 json.dump(teachers_data, f, indent=4, ensure_ascii=False)
 
@@ -82,7 +86,7 @@ def main(test):
             # print(len(schedule))
             schedule = compress(data=schedule)
             # print(len(schedule))
-            with open(f'{path_to_schedule}\\schedule_{name_without_ext}.json', 
+            with open(f'{path_to_schedule}/schedule_{name_without_ext}.json',
                     "w") as f:
                 json.dump(schedule, f, indent=4, ensure_ascii=False)
 
@@ -90,9 +94,11 @@ def main(test):
             schedule_week(path=week_folder, group=name_without_ext, 
                     schedule=schedule, font_path=font_path)
 
+            file_fetch_time = datetime.datetime.now() - start_file_fetch_time
             print(f'[INFO] Processed {" " if folder_iteration < 10 else ""}'\
                     f'{folder_iteration} / {len(list_of_files)} '\
-                    f'book ( {name_without_ext} )')
+                    f'book ( {name_without_ext} ) '\
+                    f'in {file_fetch_time}')
             folder_iteration += 1
             all_files_iteration += 1
 
