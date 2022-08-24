@@ -73,11 +73,18 @@ def download() -> None:
 
             if name != '':
                 try:
-                    link = f'{mstuca_url}{news.find("a").get("href")}'
-                    data.append({
-                        "link": link,
-                        "name": name
-                    })
+                    smalls = news.find_all('small')
+                    for small in smalls:
+                        try:
+                            link = f'{mstuca_url}'\
+                                    f'{small.find("a").get("href")}'
+                            data.append({
+                                "link": link,
+                                "name": name
+                            })
+                            break
+                        except:
+                            pass
                 except:
                     print(f'[ ERROR ] Ошибка в {names}')
             else:

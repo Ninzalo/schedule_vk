@@ -130,16 +130,25 @@ def stage_group_keyboard(form: str, fac: str, group_page: int) -> VkKeyboard:
     fin_num_group = group_page * amount_of_groups
     start_num_group = fin_num_group - amount_of_groups
     for group in groups[start_num_group:fin_num_group]:
-        keyboard.add_button(f"{group.strip()}", color=VkKeyboardColor.PRIMARY)
+        keyboard.add_button(f"{group.strip()}", 
+                color=VkKeyboardColor.PRIMARY)
         keyboard.add_line()
+    adding_line = False
     if group_page != 1:
         if group_page != 2:
-            keyboard.add_button(f"< Стр 1", color=VkKeyboardColor.PRIMARY)
-        keyboard.add_button(f"< Стр {group_page - 1}", color=VkKeyboardColor.PRIMARY)
+            keyboard.add_button(f"< Стр 1", 
+                    color=VkKeyboardColor.PRIMARY)
+        keyboard.add_button(f"< Стр {group_page - 1}", 
+                color=VkKeyboardColor.PRIMARY)
+        adding_line = True
     if len(groups) - start_num_group > amount_of_groups:
-        keyboard.add_button(f" Стр {group_page + 1} >", color=VkKeyboardColor.PRIMARY)
-    keyboard.add_line()
-    keyboard.add_button(f"К выбору формы обучения", color=VkKeyboardColor.NEGATIVE)
+        keyboard.add_button(f" Стр {group_page + 1} >", 
+                color=VkKeyboardColor.PRIMARY)
+        adding_line = True
+    if adding_line:
+        keyboard.add_line()
+    keyboard.add_button(f"К выбору формы обучения", 
+            color=VkKeyboardColor.NEGATIVE)
     return keyboard
 
 
