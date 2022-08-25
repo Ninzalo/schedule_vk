@@ -70,32 +70,36 @@ def main(test):
             start_file_fetch_time = datetime.datetime.now()
             name_without_ext = name.split('.x')[0]
 
-            """ gets all data from xls """
-            src = f'{xls_folder}/{name}'
-            book_data = book_to_list(path=src)
-
-            """ gets teachers data """
-            teachers_data = get_teachers_data(book_data=book_data)
-            with open(f'{teachers_folder}/teachers_{name_without_ext}.json',
-                    "w") as f:
-                json.dump(teachers_data, f, indent=4, ensure_ascii=False)
-
-            """ gets schedule """
-            # print(len(teachers_data))
-            schedule = schedule_create(teachers_data=teachers_data)
-            # print(len(schedule))
-            schedule = compress(data=schedule)
-            # print(len(schedule))
-            with open(f'{path_to_schedule}/schedule_{name_without_ext}.json',
-                    "w") as f:
-                json.dump(schedule, f, indent=4, ensure_ascii=False)
-
-            """ gens images """
             try:
-                schedule_week(path=week_folder, group=name_without_ext, 
-                        schedule=schedule, font_path=font_path)
-            except Exception as _image_ex:
-                print(_image_ex)
+                """ gets all data from xls """
+                src = f'{xls_folder}/{name}'
+                book_data = book_to_list(path=src)
+
+                """ gets teachers data """
+                teachers_data = get_teachers_data(book_data=book_data)
+                with open(f'{teachers_folder}/teachers_{name_without_ext}.json',
+                        "w") as f:
+                    json.dump(teachers_data, f, indent=4, ensure_ascii=False)
+
+                """ gets schedule """
+                # print(len(teachers_data))
+                schedule = schedule_create(teachers_data=teachers_data)
+                # print(len(schedule))
+                schedule = compress(data=schedule)
+                # print(len(schedule))
+                with open(f'{path_to_schedule}/schedule_{name_without_ext}.json',
+                        "w") as f:
+                    json.dump(schedule, f, indent=4, ensure_ascii=False)
+
+                """ gens images """
+                try:
+                    schedule_week(path=week_folder, group=name_without_ext, 
+                            schedule=schedule, font_path=font_path)
+                except Exception as _image_ex:
+                    print(_image_ex)
+
+            except Exception as _xls_error:
+                print(_xls_error)
 
             file_fetch_time = datetime.datetime.now() - start_file_fetch_time
             print(f'[INFO] Processed {" " if folder_iteration < 10 else ""}'\

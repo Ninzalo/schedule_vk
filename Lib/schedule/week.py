@@ -56,13 +56,17 @@ def schedule_week(path: str, group, schedule, font_path: str) -> None:
                     if not os.path.exists(f'{path}/{group}/s{subgroup}/{quality}/{mode}'):
                         os.mkdir(f'{path}/{group}/s{subgroup}/{quality}/{mode}')
                     output_path = f'{path}/{group}/s{subgroup}/{quality}/{mode}/week_{dates[0]}_{dates[-1]}.jpg' 
-                    gen_image(
-                                output_path=output_path, 
-                                font_path=font_path,
-                                mode=mode,
-                                dict_file=dict_file,
-                                quality=quality
-                                )
+                    try:
+                        gen_image(
+                                    output_path=output_path, 
+                                    font_path=font_path,
+                                    mode=mode,
+                                    dict_file=dict_file,
+                                    quality=quality
+                                    )
+                    except Exception as _gen_image_exception:
+                        print(_gen_image_exception)
+
 
 
 def file_input(file_path: List[dict], days, subgroup) -> List[Dict[str, Any]]:
