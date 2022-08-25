@@ -91,8 +91,11 @@ def main(test):
                 json.dump(schedule, f, indent=4, ensure_ascii=False)
 
             """ gens images """
-            schedule_week(path=week_folder, group=name_without_ext, 
-                    schedule=schedule, font_path=font_path)
+            try:
+                schedule_week(path=week_folder, group=name_without_ext, 
+                        schedule=schedule, font_path=font_path)
+            except Exception as _image_ex:
+                print(_image_ex)
 
             file_fetch_time = datetime.datetime.now() - start_file_fetch_time
             print(f'[INFO] Processed {" " if folder_iteration < 10 else ""}'\
