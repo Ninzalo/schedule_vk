@@ -101,14 +101,21 @@ def since(dates_value, day_of_week_value: str|List[str],
                                 year = str(item.value).split('-')[0]
                         year = int(year)
                         max_day_in_month = calendar._monthlen(year, month)
-                        for day in range(since_day_int, max_day_in_month + 1):
-                            if calendar_fetch(month=month, day=day, year=year) == day_of_week_value:
-                                date_type_of_week = parity_check(day=day, month=month, year=year)
+                        for day in range(since_day_int, 
+                            max_day_in_month + 1):
+                            if calendar_fetch(month=month, day=day, 
+                                year=year) == day_of_week_value:
+                                date_type_of_week = parity_check(day=day,
+                                    month=month, year=year)
                                 if date_type_of_week in type_of_week_value:
-                                    if day <= until_day_int and month <= until_month_int:
-                                        dates.append(f'{year}-{month}-{day}')
-                                    elif day > until_day_int and month != until_month_int:
-                                        dates.append(f'{year}-{month}-{day}')
+                                    if (day <= until_day_int and 
+                                        month <= until_month_int):
+                                        dates.append(f'{year}-{month}-'\
+                                            f'{day}')
+                                    elif (day > until_day_int and 
+                                        month != until_month_int):
+                                        dates.append(f'{year}-{month}-'\
+                                            f'{day}')
 
                     elif month == until_month_int:
                         if len(str(month)) < 2:
@@ -121,13 +128,19 @@ def since(dates_value, day_of_week_value: str|List[str],
                                 year = str(item.value).split('-')[0]
                         year = int(year)
                         for day in range(1, until_day_int + 1):
-                            if calendar_fetch(month=month, day=day, year=year) == day_of_week_value:
-                                date_type_of_week = parity_check(day=day, month=month, year=year)
+                            if calendar_fetch(month=month, day=day, 
+                                year=year) == day_of_week_value:
+                                date_type_of_week = parity_check(day=day, 
+                                    month=month, year=year)
                                 if date_type_of_week in type_of_week_value:
-                                    if day <= until_day_int and month <= until_month_int:
-                                        dates.append(f'{year}-{month}-{day}')
-                                    elif day > until_day_int and month != until_month_int:
-                                        dates.append(f'{year}-{month}-{day}')
+                                    if (day <= until_day_int and 
+                                        month <= until_month_int):
+                                        dates.append(f'{year}-{month}-'\
+                                            f'{day}')
+                                    elif (day > until_day_int and 
+                                        month != until_month_int):
+                                        dates.append(f'{year}-{month}-'\
+                                            f'{day}')
 
                     else:
                         if len(str(month)) < 2:
@@ -141,8 +154,10 @@ def since(dates_value, day_of_week_value: str|List[str],
                         year = int(year)
                         max_day_in_month = calendar._monthlen(year, month)
                         for day in range(1, max_day_in_month + 1):
-                            if calendar_fetch(month=month, day=day, year=year) == day_of_week_value:
-                                date_type_of_week = parity_check(day=day, month=month, year=year)
+                            if calendar_fetch(month=month, day=day, 
+                                year=year) == day_of_week_value:
+                                date_type_of_week = parity_check(day=day, 
+                                    month=month, year=year)
                                 if date_type_of_week in type_of_week_value:
                                     dates.append(f'{year}-{month}-{day}')
             if year == until_year_int:
@@ -158,14 +173,21 @@ def since(dates_value, day_of_week_value: str|List[str],
                                 year = str(item.value).split('-')[0]
                         year = int(year)
                         max_day_in_month = calendar._monthlen(year, month)
-                        for day in range(since_day_int, max_day_in_month + 1):
-                            if calendar_fetch(month=month, day=day, year=year) == day_of_week_value:
-                                date_type_of_week = parity_check(day=day, month=month, year=year)
+                        for day in range(since_day_int, 
+                            max_day_in_month + 1):
+                            if calendar_fetch(month=month, day=day, 
+                                year=year) == day_of_week_value:
+                                date_type_of_week = parity_check(day=day, 
+                                    month=month, year=year)
                                 if date_type_of_week in type_of_week_value:
-                                    if day <= until_day_int and month <= until_month_int:
-                                        dates.append(f'{year}-{month}-{day}')
-                                    elif day > until_day_int and month != until_month_int:
-                                        dates.append(f'{year}-{month}-{day}')
+                                    if (day <= until_day_int and 
+                                        month <= until_month_int):
+                                        dates.append(f'{year}-{month}-'\
+                                            f'{day}')
+                                    elif (day > until_day_int and 
+                                        month != until_month_int):
+                                        dates.append(f'{year}-{month}-'\
+                                            f'{day}')
 
                     elif month == until_month_int:
                         if len(str(month)) < 2:
@@ -178,13 +200,19 @@ def since(dates_value, day_of_week_value: str|List[str],
                                 year = str(item.value).split('-')[0]
                         year = int(year)
                         for day in range(1, until_day_int + 1):
-                            if calendar_fetch(month=month, day=day, year=year) == day_of_week_value:
-                                date_type_of_week = parity_check(day=day, month=month, year=year)
+                            if calendar_fetch(month=month, day=day, 
+                                year=year) == day_of_week_value:
+                                date_type_of_week = parity_check(day=day, 
+                                    month=month, year=year)
                                 if date_type_of_week in type_of_week_value:
-                                    if day <= until_day_int and month <= until_month_int:
-                                        dates.append(f'{year}-{month}-{day}')
-                                    elif day > until_day_int and month != until_month_int:
-                                        dates.append(f'{year}-{month}-{day}')
+                                    if (day <= until_day_int and 
+                                        month <= until_month_int):
+                                        dates.append(f'{year}-{month}-'\
+                                            f'{day}')
+                                    elif (day > until_day_int and 
+                                        month != until_month_int):
+                                        dates.append(f'{year}-{month}-'\
+                                            f'{day}')
 
                     else:
                         if len(str(month)) < 2:
@@ -198,8 +226,10 @@ def since(dates_value, day_of_week_value: str|List[str],
                         year = int(year)
                         max_day_in_month = calendar._monthlen(year, month)
                         for day in range(1, max_day_in_month + 1):
-                            if calendar_fetch(month=month, day=day, year=year) == day_of_week_value:
-                                date_type_of_week = parity_check(day=day, month=month, year=year)
+                            if calendar_fetch(month=month, day=day, 
+                                year=year) == day_of_week_value:
+                                date_type_of_week = parity_check(day=day, 
+                                    month=month, year=year)
                                 if date_type_of_week in type_of_week_value:
                                     dates.append(f'{year}-{month}-{day}')
     else:
@@ -267,6 +297,7 @@ def since(dates_value, day_of_week_value: str|List[str],
             except:
                 pass
 
+    # print(dates)
     return dates
 
 

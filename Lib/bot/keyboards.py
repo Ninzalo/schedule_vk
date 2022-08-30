@@ -32,11 +32,14 @@ def stage_other_keyboard(can_get_teachers: bool) -> VkKeyboard:
     keyboard.add_button(f"Пароли", color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
     if can_get_teachers:
-        keyboard.add_button(f"Преподаватели", color=VkKeyboardColor.PRIMARY)
+        keyboard.add_button(f"Преподаватели", 
+            color=VkKeyboardColor.PRIMARY)
         keyboard.add_line()
-    keyboard.add_button("Рассылка расписания", color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button('Поиск преподавателя', 
+        color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
-    keyboard.add_button(f"🤖Информация о боте🤖", color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button(f"🤖Информация о боте🤖", 
+        color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
     keyboard.add_button(f"В начало", color=VkKeyboardColor.NEGATIVE)
     return keyboard
@@ -69,6 +72,13 @@ def stage_mail_keyboard(daily_mail: int, weekly_mail: int) -> VkKeyboard:
     else:
         keyboard.add_button("Еженедельная рассылка", color=VkKeyboardColor.SECONDARY)
     keyboard.add_line()
+    keyboard.add_button("Назад", color=VkKeyboardColor.NEGATIVE)
+    return keyboard
+
+
+def stage_find_teacher_keyboard() -> VkKeyboard:
+    keyboard = VkKeyboard()
+    keyboard.add_button("В начало", color=VkKeyboardColor.NEGATIVE)
     keyboard.add_button("Назад", color=VkKeyboardColor.NEGATIVE)
     return keyboard
 
@@ -187,12 +197,18 @@ def stage_subgroup_keyboard(form: str, fac: str, group: str) -> VkKeyboard:
 
 def stage_schedule_type_keyboard(user_id: int) -> VkKeyboard:
     keyboard = VkKeyboard()
-    keyboard.add_button(f"Расписание по дням", color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button(f"Расписание по дням", 
+        color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
-    keyboard.add_button(f"Расписание на неделю", color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button(f"Расписание на неделю", 
+        color=VkKeyboardColor.PRIMARY)
+    keyboard.add_line()
+    keyboard.add_button(f'Рассылка расписания', 
+        color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
     if len(db.get_all_user_presets(user_id=user_id)) > 1:
-        keyboard.add_button('Сохраненные группы', color=VkKeyboardColor.POSITIVE)
+        keyboard.add_button('Сохраненные группы', 
+            color=VkKeyboardColor.POSITIVE)
         keyboard.add_line()
     keyboard.add_button(f"В начало", color=VkKeyboardColor.NEGATIVE)
     keyboard.add_button(f"Подгруппы", color=VkKeyboardColor.NEGATIVE)
@@ -268,16 +284,20 @@ def stage_week_keyboard(week_page: int, form: str, fac: str, group: str,
 def stage_settings_week_keyboard(mode: str, quality: int) -> VkKeyboard:
     keyboard = VkKeyboard()
     if mode == 'night':
-        keyboard.add_button(f"Светлый режим", color=VkKeyboardColor.POSITIVE)
+        keyboard.add_button(f"Светлый режим", 
+            color=VkKeyboardColor.POSITIVE)
         keyboard.add_line()
     else:
-        keyboard.add_button(f"Темный режим", color=VkKeyboardColor.SECONDARY)
+        keyboard.add_button(f"Темный режим",
+            color=VkKeyboardColor.SECONDARY)
         keyboard.add_line()
     if quality == 1:
-        keyboard.add_button(f"Высокое качество", color=VkKeyboardColor.POSITIVE)
+        keyboard.add_button(f"Высокое качество", 
+            color=VkKeyboardColor.POSITIVE)
         keyboard.add_line()
     else:
-        keyboard.add_button(f"Низкое качество", color=VkKeyboardColor.SECONDARY)
+        keyboard.add_button(f"Низкое качество", 
+            color=VkKeyboardColor.SECONDARY)
         keyboard.add_line()
     keyboard.add_button(f"Назад", color=VkKeyboardColor.NEGATIVE)
     return keyboard

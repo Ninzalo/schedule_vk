@@ -1,14 +1,17 @@
 from typing import List, Type
+
+from vk_api import keyboard
 from Lib.bot.event_hint import Event_hint
 from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.keyboards import (stage_start_keyboard, stage_home_keyboard,
-        stage_other_keyboard, stage_passwords_keyboard, 
-        stage_setting_passwords_keyboard, stage_mail_keyboard, 
-        stage_preset_keyboard, stage_form_keyboard, 
-        stage_fac_keyboard, stage_settings_week_keyboard,
-        stage_group_keyboard, stage_session_group_keyboard, 
-        stage_subgroup_keyboard, stage_schedule_type_keyboard,
-        stage_date_keyboard, stage_week_keyboard)
+    stage_other_keyboard, stage_passwords_keyboard, 
+    stage_setting_passwords_keyboard, stage_mail_keyboard, 
+    stage_preset_keyboard, stage_form_keyboard, 
+    stage_fac_keyboard, stage_settings_week_keyboard,
+    stage_group_keyboard, stage_session_group_keyboard, 
+    stage_subgroup_keyboard, stage_schedule_type_keyboard,
+    stage_date_keyboard, stage_week_keyboard,
+    stage_find_teacher_keyboard)
 from Lib.bot.inline_keyboards import (add_new_preset, passwords_desc, 
                                     short_description)
 from Lib.bot.stages_names import Stages_names
@@ -94,6 +97,13 @@ class Pages:
                 daily_mail=daily_mail, 
                 weekly_mail=weekly_mail
                 )
+        self.s.sender(id=id, text=text, keyboard=keyboard)
+
+
+    def find_teacher_page(self, id: int) -> None:
+        db.change_stage(user_id=id, stage=self.sn.FIND_TEACHER)
+        text = 'Введите фамилию преподавателя:'
+        keyboard = stage_find_teacher_keyboard()
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
@@ -293,7 +303,7 @@ class Pages:
         self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
-    def settings_week_page(self, id: int, edit: str | None = None) -> None:
+    def settings_week_page(self, id: int, edit: str|None = None) -> None:
         """ edit = None -> переход на страницу с настройками
         edit = 'mode' -> изменение цветовой схемы
         edit = 'quality' -> изменение качество изображений"""
@@ -310,5 +320,6 @@ class Pages:
             return
         mode = db.get_mode(user_id=id)
         quality = db.get_quality(user_id=id)
-        keyboard = stage_settings_week_keyboard(mode=mode, quality=quality)
+        keyboard = stage_settings_week_keyboard(mode=mode, 
+            quality=quality)
         self.s.sender(id=id, text=text, keyboard=keyboard)

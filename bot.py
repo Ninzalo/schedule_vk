@@ -23,7 +23,8 @@ from Lib.bot.group import group_online, wall_sender
 
 from Lib.bot.table import create_tables
 
-from Lib.start_files.create_files import bot_start_file, schedule_start_file
+from Lib.start_files.create_files import bot_start_file
+from Lib.start_files.create_files import schedule_start_file
 
 import multiprocessing
 

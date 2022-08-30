@@ -147,10 +147,10 @@ def get_day_of_week(book: List[Cell], cell: Cell) -> Cell:
 
 def get_dates(book: List[Cell], cell: Cell) -> Cell:
     dates = find_cell(
-                book=book, 
-                sheet=cell.sheet, 
-                row=cell.row + 1, 
-                col=cell.col - 2)
+        book=book, 
+        sheet=cell.sheet, 
+        row=cell.row + 1, 
+        col=cell.col - 2)
     iteration = 0
     if dates.value == '':
         while True:
@@ -177,14 +177,17 @@ def get_dates(book: List[Cell], cell: Cell) -> Cell:
                 row=cell.row - iteration, 
                 col=cell.col - 2)
 
-            if dates_cell.top_line_style == 'thin' or dates_cell.top_line_style == 'dashDot':
+            if (dates_cell.top_line_style == 'thin' or 
+                dates_cell.top_line_style == 'dashDot'):
                 if '.' in str(dates_cell.value).strip():
                     if ', т' in str(dates_cell.value).strip():
                         dates = dates_cell
-                        dates.value = f'т{str(dates.value).strip().split(", т")[1]}'
+                        dates.value = f'т'\
+                            f'{str(dates.value).strip().split(", т")[1]}'
                     if ', с' in str(dates_cell.value).strip():
                         dates = dates_cell
-                        dates.value = f'с{str(dates.value).strip().split(", с")[1]}'
+                        dates.value = f'с'\
+                            f'{str(dates.value).strip().split(", с")[1]}'
                 break
 
             iteration += 1
@@ -236,6 +239,11 @@ def get_dates_list(book: List[Cell], dates: Cell, day_of_week: Cell,
                             day_of_week_value=day_of_week.value,
                             type_of_week_value=type_of_week.value,
                             book=book)
+    if isinstance(dates.value, str):
+        if ('кроме' in dates.value and
+            'с ' not in dates.value and
+            'по ' not in dates.value):
+            dates.value = []
     return dates
 
 

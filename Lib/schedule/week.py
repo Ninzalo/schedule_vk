@@ -28,16 +28,32 @@ def schedule_week(path: str, group, schedule, font_path: str) -> None:
         if not os.path.exists(f'{path}/{group}/s{subgroup}'):
             os.mkdir(f'{path}/{group}/s{subgroup}')
         for quality in qualities:
-            if not os.path.exists(f'{path}/{group}/s{subgroup}/{quality}'):
+            if not os.path.exists(f'{path}/{group}/'\
+                    f's{subgroup}/{quality}'):
                 os.mkdir(f'{path}/{group}/s{subgroup}/{quality}')
             for delta in range(0, max_delta + 1, 7):
                 today_date = first_date + datetime.timedelta(days=delta)
                 today_date = today_date.strftime('%Y-%m-%d') 
-                today_date = datetime.datetime.strptime(today_date, '%Y-%m-%d')
+                today_date = datetime.datetime.strptime(
+                        today_date, '%Y-%m-%d')
                 today_num = today_date.weekday()
                 days = []
-                days = [(today_date - datetime.timedelta(days=delta)).strftime('%Y-%m-%d') for delta in reversed(range(0, today_num + 1))] 
-                days += ([(today_date + datetime.timedelta(days=delta)).strftime('%Y-%m-%d') for delta in range(1, 7 - today_num)])
+                days = [(
+                            today_date - datetime.timedelta(days=delta)
+                        ).strftime('%Y-%m-%d') for delta in reversed(
+                                range(0, today_num + 1)
+                            )
+                        ] 
+                days += (
+                            [
+                                (today_date + datetime.timedelta(
+                                    days=delta
+                                    )
+                                ).strftime(
+                                    '%Y-%m-%d'
+                                    ) for delta in range(1, 7 - today_num)
+                            ]
+                        )
                 dates = []
                 for date in days:
                     date = date.split('-')
@@ -47,15 +63,24 @@ def schedule_week(path: str, group, schedule, font_path: str) -> None:
                     date = f'{year}-{month}-{day}'
                     dates.append(date)
 
-                dict_file = file_input(file_path=schedule, days=dates, subgroup=subgroup)
+                dict_file = file_input(file_path=schedule, days=dates, 
+                                            subgroup=subgroup
+                                        )
 
                 modes = ['day', 'night']
                 for mode in modes:
                     if mode != 'night' and mode != 'day':
                         return print('Mode error')
-                    if not os.path.exists(f'{path}/{group}/s{subgroup}/{quality}/{mode}'):
-                        os.mkdir(f'{path}/{group}/s{subgroup}/{quality}/{mode}')
-                    output_path = f'{path}/{group}/s{subgroup}/{quality}/{mode}/week_{dates[0]}_{dates[-1]}.jpg' 
+                    if not os.path.exists(f'{path}/{group}/'\
+                                f's{subgroup}/{quality}/{mode}'
+                            ):
+                        os.mkdir(
+                                    f'{path}/{group}/s{subgroup}/'\
+                                    f'{quality}/{mode}'
+                                )
+                    output_path = f'{path}/{group}/s{subgroup}/'\
+                                  f'{quality}/{mode}/week_'\
+                                  f'{dates[0]}_{dates[-1]}.jpg' 
                     try:
                         gen_image(
                                     output_path=output_path, 
@@ -69,7 +94,9 @@ def schedule_week(path: str, group, schedule, font_path: str) -> None:
 
 
 
-def file_input(file_path: List[dict], days, subgroup) -> List[Dict[str, Any]]:
+def file_input(
+                file_path: List[dict], days, subgroup
+        ) -> List[Dict[str, Any]]:
     schedule_data = file_path
     cards = []
     for card in schedule_data:
@@ -79,7 +106,9 @@ def file_input(file_path: List[dict], days, subgroup) -> List[Dict[str, Any]]:
                 write_data['date'] = card['date']
                 write_data['lessons'] = []
                 for lesson in card['lessons']:
-                    if lesson['subgroup'] == subgroup or lesson['subgroup'] == '':
+                    if (lesson['subgroup'] == subgroup or 
+                            lesson['subgroup'] == ''
+                        ):
                         write_data['lessons'].append(lesson)
                 if not write_data['lessons'] == []:
                     cards.append(write_data)
@@ -91,9 +120,10 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
         font_size = 20
     else:
         font_size = 10
-    days_in_week_list = [[[], [['1 - (8.30-10.00)']], [['2 - (10.10-11.40)']], 
-        [['3 - (12.40-14.10)']], [['4 - (14.20-15.50)']], 
-        [['5 - (16.20-17.50)']], [['6 - (18.00-19.30)']]]]
+    days_in_week_list = [[[], [['1 - (8.30-10.00)']], 
+        [['2 - (10.10-11.40)']], [['3 - (12.40-14.10)']], 
+        [['4 - (14.20-15.50)']], [['5 - (16.20-17.50)']], 
+        [['6 - (18.00-19.30)']]]]
 
     for card in dict_file:
         date = card['date']
@@ -192,7 +222,8 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
         num_width_col.append([col, max_width_per_col])
 
     # gen image
-    font = ImageFont.truetype(font=f'{font_path}/mono.ttf', size=font_size)
+    font = ImageFont.truetype(font=f'{font_path}/mono.ttf', 
+                                size=font_size)
     start_image_width = start_width
     final_image_width = start_image_width
     for day_in_week in days_in_week_list:
@@ -219,7 +250,11 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
             if rows_in_lesson >= rows:
                 rows = rows_in_lesson
         final_image_height += letter_height * rows + height_gap
-    if final_image_width == 0 or final_image_height == 0 or len(days_in_week_list) == 1:
+    if (
+            final_image_width == 0 or 
+            final_image_height == 0 or 
+            len(days_in_week_list) == 1
+        ):
         return
 
     if mode == 'night':
@@ -228,7 +263,7 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
                             (
                                 final_image_width,
                                 final_image_height
-                                ), 
+                            ), 
                             (0, 0, 0))
     else:
         fill_color = 'black'
@@ -236,7 +271,7 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
                             (
                                 final_image_width,
                                 final_image_height
-                                ), 
+                            ), 
                             (255, 255, 255))
     # draw text
     rows = 0

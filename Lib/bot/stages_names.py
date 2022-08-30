@@ -16,3 +16,4 @@ class Stages_names:
     DATE_SELECT = 'date_select'
     WEEK_SELECT = 'week_select'
     SETTINGS_WEEK = 'settings_week'
+    FIND_TEACHER = 'find_teacher'

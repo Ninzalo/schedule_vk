@@ -43,7 +43,7 @@ def main(test):
                                     folder_name='xls')
 
     for item in xls_folders[:]:
-        print(os.path.dirname(item))
+        print(str(os.path.dirname(item)).split(r'/data/')[1])
 
         # iter = 1
         folder_iteration = 1
@@ -77,9 +77,10 @@ def main(test):
 
                 """ gets teachers data """
                 teachers_data = get_teachers_data(book_data=book_data)
-                with open(f'{teachers_folder}/teachers_{name_without_ext}.json',
-                        "w") as f:
-                    json.dump(teachers_data, f, indent=4, ensure_ascii=False)
+                with open(f'{teachers_folder}/teachers_'\
+                    f'{name_without_ext}.json', "w") as f:
+                    json.dump(teachers_data, f, indent=4, 
+                        ensure_ascii=False)
 
                 """ gets schedule """
                 # print(len(teachers_data))
@@ -87,8 +88,8 @@ def main(test):
                 # print(len(schedule))
                 schedule = compress(data=schedule)
                 # print(len(schedule))
-                with open(f'{path_to_schedule}/schedule_{name_without_ext}.json',
-                        "w") as f:
+                with open(f'{path_to_schedule}/schedule_'\
+                        f'{name_without_ext}.json', "w") as f:
                     json.dump(schedule, f, indent=4, ensure_ascii=False)
 
                 """ gens images """
@@ -101,8 +102,8 @@ def main(test):
             except Exception as _xls_error:
                 print(_xls_error)
 
-            file_fetch_time = datetime.datetime.now() - start_file_fetch_time
-            print(f'[INFO] Processed {" " if folder_iteration < 10 else ""}'\
+            file_fetch_time = datetime.datetime.now()-start_file_fetch_time
+            print(f'[INFO] Processed {" " if folder_iteration <10 else ""}'\
                     f'{folder_iteration} / {len(list_of_files)} '\
                     f'book ( {name_without_ext} ) '\
                     f'in {file_fetch_time}')

@@ -3,8 +3,9 @@
 import time
 
 # from Lib.bot.keyboards import *
-from Lib.bot.keyboards import (stage_start_keyboard, stage_passwords_keyboard, 
-        stage_mail_keyboard, stage_week_keyboard)
+from Lib.bot.keyboards import (stage_start_keyboard, 
+    stage_passwords_keyboard, stage_mail_keyboard, 
+    stage_week_keyboard)
 from Lib.bot.elapsed_time import elapsed_time
 from Lib.bot.display import Display
 from Lib.bot.event_hint import Event_hint
@@ -13,6 +14,7 @@ from Lib.bot.stages_names import Stages_names
 from Lib.bot.mail import mail  
 from Lib.bot.bot_getter import get_all_weeks, get_schedule_path
 from Lib.bot.BotDB_Func import BotDB_Func
+from Lib.bot.teachers import find_teacher
 from config import data_folder, db_path
 
 
@@ -92,17 +94,17 @@ class Bot_class:
             if 'расписание' == msg:
                 self.pages.form_page(id=id)
 
-                """ Переход на stage 101 """
+                """ Переход на stage OTHER """
             elif 'другое' == msg:
                 self.pages.other_page(id=id)
 
-                """ Переход на stage 5 """
+                """ Переход на stage SHEDULE_TYPE """
             elif 'расписание выбранной группы' == msg:
                 if db.get_subgroup(user_id=id) != 'None':
                     self.pages.schedule_type_page(id=id, 
                             back_to_schedule_type_page=True)
 
-            """ Кнопки на stage 101 """
+            """ Кнопки на stage OTHER """
         elif on_stage == self.sn.OTHER:
             """ Переход на stage 100 """
             if 'в начало' == msg:
@@ -123,9 +125,9 @@ class Bot_class:
             elif 'пароли' == msg:
                 self.pages.passwords_page(id=id, event=event)
 
-                """ Переход на stage 104 """
-            elif 'рассылка расписания' == msg:
-                self.pages.mail_page(id=id)
+                """ Переход на stage FIND_TEACHERS """
+            elif 'поиск преподавателя' == msg:
+                self.pages.find_teacher_page(id=id)
 
             """ Кнопки на stage 102 """
         elif on_stage == self.sn.PASSWORDS:
@@ -186,11 +188,12 @@ class Bot_class:
                 keyboard = stage_passwords_keyboard()
                 self.s.sender(id=id, text=text, keyboard=keyboard)
 
-            """ Кнопки на stage 104 """
+            """ Кнопки на stage MAIL """
         elif on_stage == self.sn.MAIL:
-            """ Переход на stage 101 """
+            """ Переход на stage SCHEDULE_TYPE """
             if 'назад' == msg:
-                self.pages.other_page(id=id)
+                self.pages.schedule_type_page(id=id, 
+                    back_to_schedule_type_page=True)
 
                 """ Переключение ежедневной рассылки """
             elif 'ежедневная рассылка' == msg:
@@ -229,6 +232,21 @@ class Bot_class:
                     text = 'Для начала выберите свою группу и подгруппу '\
                             'во вкладке "Расписание"!'
                     self.s.sender(id=id, text=text)
+
+                """ Кнопки на stage FIND_TEACHERS """
+        elif on_stage == self.sn.FIND_TEACHER:
+            """ Переход на stage OTHER """
+            if 'назад' == msg:
+                self.pages.other_page(id=id)
+
+                """ Переход на stage HOME """
+            elif 'в начало' == msg:
+                self.pages.home_page(id=id)
+
+                """ Поиск преподавателя """
+            else:
+                text = find_teacher(name=msg)
+                self.s.sender(id=id, text=text)
 
                 """ Кнопки на stage 1 """
         elif on_stage == self.sn.FORM:
@@ -326,7 +344,7 @@ class Bot_class:
                 self.pages.schedule_type_page(id=id, new_group=True, 
                                             event=event, msg=msg)
 
-            """ Кнопки на stage 5 """
+            """ Кнопки на stage SCHEDULE_TYPE """
         elif on_stage == self.sn.SCHEDULE_TYPE:
             """ Переход на stage 4 """
             if 'подгруппы' == msg:
@@ -344,6 +362,10 @@ class Bot_class:
             elif 'расписание на неделю' == msg:
                 self.pages.week_select_page(id=id)
 
+                """ Переход на stage MAIL """
+            elif 'рассылка расписания' == msg:
+                self.pages.mail_page(id=id)
+
                 """ Переход на stage PRESETS """
             elif 'сохраненные группы' == msg:
                 self.pages.preset_page(id=id)
@@ -353,7 +375,7 @@ class Bot_class:
             """ Переход на stage SCHEDULE_TYPE """
             if 'назад' == msg:
                 self.pages.schedule_type_page(id=id, 
-                        back_to_schedule_type_page=True)
+                    back_to_schedule_type_page=True)
 
             elif 'удалить' == msg:
                 self.pages.preset_page(id=id, on_delete=True)
@@ -457,7 +479,7 @@ class Bot_class:
                 """ Переход на stage 5 """
             elif 'назад' == msg:
                 self.pages.schedule_type_page(id=id, 
-                        back_to_schedule_type_page=True)
+                    back_to_schedule_type_page=True)
 
                 """ Переход на stage 100 """
             elif 'в начало' == msg:

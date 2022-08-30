@@ -32,14 +32,18 @@ def book_to_list(path) -> list:
                 cell = worksheet.cell_value(row, col)
                 line_style = worksheet.cell(row, col).xf_index
                 line_style = workbook.xf_list[line_style]
-                top_line_style = styles_fetch(line_style.border.top_line_style)
-                bottom_line_style = styles_fetch(line_style.border.bottom_line_style)
+                top_line_style = styles_fetch(
+                    line_style.border.top_line_style)
+                bottom_line_style = styles_fetch(
+                    line_style.border.bottom_line_style)
                 if type(cell) == str:
                     pass
                 else:
                     if cell > worksheet.nrows:
-                        dt = xlrd.xldate_as_tuple(cell, workbook.datemode) 
-                        cell = str(datetime.datetime(*dt).strftime("%Y-%m-%d"))
+                        dt = xlrd.xldate_as_tuple(cell, 
+                            workbook.datemode) 
+                        cell = str(datetime.datetime(*dt).strftime(
+                            "%Y-%m-%d"))
                     else:
                         cell = str(int(cell))
                 cell = cell.strip()
@@ -71,25 +75,26 @@ def get_teachers_data(book_data: List[Cell]) -> List[Dict[str, Any]]:
 
                         """ Gets num of lesson """
                         num_of_lesson = get_num_of_lesson(book=book_data, 
-                                                    cell=cell)
+                            cell=cell)
 
                         """ Gets type of week """
                         type_of_week = get_type_of_week(book=book_data, 
-                                                    cell=cell)
+                            cell=cell)
 
                         """ Gets type of lesson """
-                        type_of_lesson = get_type_of_lesson(book=book_data, 
-                                                        cell=cell)
+                        type_of_lesson = get_type_of_lesson(
+                            book=book_data, cell=cell)
 
                         """ Gets name of lesson """
-                        lesson_name = get_name_of_lesson(book=book_data, 
-                                                    cell=cell)
+                        lesson_name = get_name_of_lesson(
+                            book=book_data, cell=cell)
 
                         """ Gets room """
                         room = get_room(book=book_data, cell=cell)
 
                         """ Gets day of week """
-                        day_of_week = get_day_of_week(book=book_data, cell=cell)
+                        day_of_week = get_day_of_week(
+                            book=book_data, cell=cell)
 
                         """ Gets dates """
                         dates = get_dates(book=book_data, cell=cell)
@@ -97,27 +102,32 @@ def get_teachers_data(book_data: List[Cell]) -> List[Dict[str, Any]]:
                         if '.' in dates.value:
                             """ Gets dates list """
                             dates = get_dates_list(book=book_data, 
-                                    dates=dates, day_of_week=day_of_week, 
-                                    type_of_week=type_of_week)
+                                dates=dates, day_of_week=day_of_week, 
+                                type_of_week=type_of_week)
 
                             """ gets subgroup """
                             subgroup = get_subgroup(cell=cell)
 
                             """ json adding """
                             list_of_equals = ['name', 'day_of_week', 
-                                    'type_of_week', 'num', 'lesson_name',
-                                    'type_of_lesson', 'room', 'dates']
+                                'type_of_week', 'num', 'lesson_name',
+                                'type_of_lesson', 'room', 'dates']
 
                             is_ok = True
                             data = {
                                 'name': str(name).split(",")[0].strip(),
-                                'all_subgroups': find_max_sheet(book=book_data) - 2,
-                                "day_of_week": str(day_of_week.value).strip(),
+                                'all_subgroups': find_max_sheet(
+                                    book=book_data) - 2,
+                                "day_of_week": str(
+                                    day_of_week.value).strip(),
                                 "subgroup": subgroup.strip(),
-                                "type_of_week": str(type_of_week.value).strip(),
+                                "type_of_week": str(
+                                    type_of_week.value).strip(),
                                 'num': str(num_of_lesson.value).strip(),
-                                "lesson_name": str(lesson_name.value).strip(),
-                                "type_of_lesson": str(type_of_lesson.value).strip(),
+                                "lesson_name": str(
+                                    lesson_name.value).strip(),
+                                "type_of_lesson": str(
+                                    type_of_lesson.value).strip(),
                                 "room": str(room.value).strip(),
                                 "dates": dates.value
                             }
