@@ -35,6 +35,17 @@ def add_new_preset() -> VkKeyboard:
             )
     return inline_keyboard
 
+def message_example() -> VkKeyboard:
+    """ Возвращает inline клавиатуру с примером ввода сообщения """
+    settings = dict(inline=True)
+    inline_keyboard = VkKeyboard(**settings)
+    inline_keyboard.add_callback_button(
+            label='Пример', 
+            color=VkKeyboardColor.POSITIVE, 
+            payload={'type': 'message_example'}
+            )
+    return inline_keyboard
+
 def passwords_desc() -> VkKeyboard:
     """ Возвращает inline клавиатуру с описанием паролей """
     settings = dict(inline=True)

@@ -1,6 +1,11 @@
 import json
-from Lib.bot.output_texts import passwords_info_str, short_description
+
+from Lib.bot.output_texts import passwords_info_str
+from Lib.bot.output_texts import short_description
+from Lib.bot.output_texts import messages_str
+
 from Lib.bot.BotDB_Func import BotDB_Func
+
 from config import db_path
 
 db = BotDB_Func(db_path=db_path)
@@ -18,25 +23,33 @@ def callback_func(event, vk):
     elif event.object.payload.get('type') == 'what_is_password':
         text = passwords_info_str()
         vk.messages.edit(
-                peer_id=event.object.peer_id,
-                message=text,
-                conversation_message_id=event.object.conversation_message_id
-                )
+            peer_id=event.object.peer_id,
+            message=text,
+            conversation_message_id=event.object.conversation_message_id
+            )
 
     elif event.object.payload.get('type') == 'add_new_preset':
         text = 'Группа сохранена'
         db.change_new_group(user_id=event.object.user_id, new_group=True)
         vk.messages.edit(
-                peer_id=event.object.peer_id,
-                message=text,
-                conversation_message_id=event.object.conversation_message_id
-                )
+            peer_id=event.object.peer_id,
+            message=text,
+            conversation_message_id=event.object.conversation_message_id
+            )
 
     elif event.object.payload.get('type') == 'short_description':
         text = short_description()
         vk.messages.edit(
-                peer_id=event.object.peer_id,
-                message=text,
-                conversation_message_id=event.object.conversation_message_id
-                )
+            peer_id=event.object.peer_id,
+            message=text,
+            conversation_message_id=event.object.conversation_message_id
+            )
+
+    elif event.object.payload.get('type') == 'message_example':
+        text = messages_str()
+        vk.messages.edit(
+            peer_id=event.object.peer_id,
+            message=text,
+            conversation_message_id=event.object.conversation_message_id
+            )
 

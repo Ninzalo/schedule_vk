@@ -29,7 +29,7 @@ def stage_home_keyboard(subgroup: str) -> VkKeyboard:
 
 def stage_other_keyboard(can_get_teachers: bool) -> VkKeyboard:
     keyboard = VkKeyboard()
-    keyboard.add_button(f"Пароли", color=VkKeyboardColor.PRIMARY)
+    keyboard.add_button(f'Сообщения', color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
     if can_get_teachers:
         keyboard.add_button(f"Преподаватели", 
@@ -42,6 +42,15 @@ def stage_other_keyboard(can_get_teachers: bool) -> VkKeyboard:
         color=VkKeyboardColor.PRIMARY)
     keyboard.add_line()
     keyboard.add_button(f"В начало", color=VkKeyboardColor.NEGATIVE)
+    return keyboard
+
+
+def messages_keyboard() -> VkKeyboard:
+    keyboard = VkKeyboard()
+    keyboard.add_button('Пароли', color=VkKeyboardColor.PRIMARY)
+    keyboard.add_line()
+    keyboard.add_button('В начало', color=VkKeyboardColor.NEGATIVE)
+    keyboard.add_button('Назад', color=VkKeyboardColor.NEGATIVE)
     return keyboard
 
 

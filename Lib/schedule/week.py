@@ -122,15 +122,16 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
         font_size = 10
     days_in_week_list = [[[], [['1 - (8.30-10.00)']], 
         [['2 - (10.10-11.40)']], [['3 - (12.40-14.10)']], 
-        [['4 - (14.20-15.50)']], [['5 - (16.20-17.50)']], 
-        [['6 - (18.00-19.30)']]]]
+        [['4 - (14.20-15.50)']], [['5 - (16.00-17.30)']], 
+        [['6 - (18.00-19.30)']], [['7 - (19.40-21.10)']]
+    ]]
 
     for card in dict_file:
         date = card['date']
         lessons_list = card['lessons']
         date_block = [[f'{lessons_list[0]["day_of_week"].capitalize()}'], 
                 [f'{date}'], [f'{lessons_list[0]["type_of_week"]}']]
-        day_in_week = [date_block, [], [], [], [], [], []]
+        day_in_week = [date_block, [], [], [], [], [], [], []]
         max_len_line = 0
         for input_json in lessons_list:
             lesson_in_day = []
@@ -240,7 +241,7 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
     start_image_height = 0
     final_image_height = start_image_height
     for day_in_week in days_in_week_list:
-        image_height = 0
+        # image_height = 0
         rows = 0
         for lesson_in_day in day_in_week:
             rows_in_lesson = 0
@@ -250,29 +251,23 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
             if rows_in_lesson >= rows:
                 rows = rows_in_lesson
         final_image_height += letter_height * rows + height_gap
-    if (
-            final_image_width == 0 or 
-            final_image_height == 0 or 
-            len(days_in_week_list) == 1
-        ):
+    if (final_image_width == 0 or 
+        final_image_height == 0 or 
+        len(days_in_week_list) == 1):
         return
 
     if mode == 'night':
         fill_color = 'white'
         image = Image.new('RGB', 
-                            (
-                                final_image_width,
-                                final_image_height
-                            ), 
-                            (0, 0, 0))
+            (final_image_width,
+            final_image_height), 
+            (0, 0, 0))
     else:
         fill_color = 'black'
         image = Image.new('RGB', 
-                            (
-                                final_image_width,
-                                final_image_height
-                            ), 
-                            (255, 255, 255))
+            (final_image_width,
+            final_image_height), 
+            (255, 255, 255))
     # draw text
     rows = 0
     idraw = ImageDraw.Draw(image)
@@ -298,17 +293,21 @@ def gen_image(output_path, font_path, mode, dict_file, quality):
                 if num == num_of_lesson:
                     max_len_line = width_of_col
             idraw.line(xy=(
-                            (start_width + gap + max_len_line * letter_width + gap, start_height), 
-                            (start_width + gap + max_len_line * letter_width + gap, start_height + letter_height * rows + height_gap)), 
-                        fill=fill_color, 
-                        width=line_width)
+                (start_width + gap + max_len_line * letter_width + gap, 
+                start_height), 
+                (start_width + gap + max_len_line * letter_width + gap,
+                start_height + letter_height * rows + height_gap)), 
+                fill=fill_color, 
+                width=line_width)
             # horizontal line
             idraw.line(xy=(
-                            (start_width, start_height + letter_height * rows + height_gap), 
-                            (start_width + gap + max_len_line * letter_width + gap, start_height + letter_height * rows + height_gap)), 
-                        fill=fill_color, 
-                        width=line_width)
-            start_width = start_width + gap + max_len_line * letter_width + gap
+                (start_width, 
+                start_height + letter_height * rows + height_gap), 
+                (start_width + gap + max_len_line * letter_width + gap, 
+                start_height + letter_height * rows + height_gap)), 
+                fill=fill_color, 
+                width=line_width)
+            start_width = start_width+gap+max_len_line * letter_width+gap
         start_width = start_width_for_new_row
         start_height = start_height + letter_height * rows + height_gap
     image.save(output_path)

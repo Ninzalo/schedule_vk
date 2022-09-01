@@ -1,8 +1,11 @@
 from typing import List, Type
 
 from vk_api import keyboard
+
 from Lib.bot.event_hint import Event_hint
+
 from Lib.bot.BotDB_Func import BotDB_Func
+
 from Lib.bot.keyboards import (stage_start_keyboard, stage_home_keyboard,
     stage_other_keyboard, stage_passwords_keyboard, 
     stage_setting_passwords_keyboard, stage_mail_keyboard, 
@@ -12,13 +15,26 @@ from Lib.bot.keyboards import (stage_start_keyboard, stage_home_keyboard,
     stage_subgroup_keyboard, stage_schedule_type_keyboard,
     stage_date_keyboard, stage_week_keyboard,
     stage_find_teacher_keyboard)
-from Lib.bot.inline_keyboards import (add_new_preset, passwords_desc, 
-                                    short_description)
+
+from Lib.bot.keyboards import messages_keyboard
+
+from Lib.bot.inline_keyboards import add_new_preset
+from Lib.bot.inline_keyboards import passwords_desc
+from Lib.bot.inline_keyboards import short_description
+from Lib.bot.inline_keyboards import message_example
+
 from Lib.bot.stages_names import Stages_names
-from Lib.bot.output_texts import (passwords_info_str, 
-                                settings_password_str, start_message_str)
-from Lib.bot.bot_getter import (get_forms, get_facs, get_session_groups, 
-        get_groups, get_subgroups)
+
+from Lib.bot.output_texts import passwords_info_str
+from Lib.bot.output_texts import settings_password_str
+from Lib.bot.output_texts import start_message_str
+from Lib.bot.output_texts import messages_str
+
+from Lib.bot.bot_getter import get_forms
+from Lib.bot.bot_getter import get_facs
+from Lib.bot.bot_getter import get_session_groups
+from Lib.bot.bot_getter import get_groups
+from Lib.bot.bot_getter import get_subgroups
 
 from config import db_path
 
@@ -31,8 +47,9 @@ class Pages:
     
 
     def reset_page(self, user_id: int) -> None:
-        text = f"Кнопки сброшены\nОбновление!\n[ Информацию об обновлении "\
-            f"искать на странице сообщества ]\nНажмите кнопку 'Начать'"
+        text = f"Кнопки сброшены\nОбновление!\n[ Информацию об "\
+            f"обновлении искать на странице сообщества ]"\
+            f"\nНажмите кнопку 'Начать'"
         keyboard = stage_start_keyboard()
         self.s.sender(id=user_id, text=text, keyboard=keyboard)
 
@@ -65,6 +82,21 @@ class Pages:
             can_get_teachers = True
         keyboard = stage_other_keyboard(can_get_teachers=can_get_teachers)
         self.s.sender(id=id, text=text, keyboard=keyboard)
+
+
+    def messages_page(self, id: int, event) -> None:
+        db.change_stage(user_id=id, stage=self.sn.MESSAGES)
+        if 'callback' in event.button_actions:
+            text = f'Формат сообщения: <пароль> <сообщение>'
+            inline_keyboard = message_example()
+            self.s.sender(id=id, text=text, 
+                inline_keyboard=inline_keyboard)
+        else:
+            text = messages_str()
+            self.s.sender(id=id, text=text)
+        text = f'Введите сообщение:'
+        keyboard = messages_keyboard()
+        self.s.sender(id=id, text=text, keyboard=keyboard)
         
 
     def passwords_page(self, id: int, event) -> None:
@@ -72,7 +104,8 @@ class Pages:
         if 'callback' in event.button_actions:
             text = 'Что такое код-пароль?'
             inline_keyboard = passwords_desc()
-            self.s.sender(id=id, text=text, inline_keyboard=inline_keyboard)
+            self.s.sender(id=id, text=text, 
+                inline_keyboard=inline_keyboard)
         else:
             text = passwords_info_str() 
             self.s.sender(id=id, text=text)

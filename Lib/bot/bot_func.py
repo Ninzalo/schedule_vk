@@ -110,6 +110,14 @@ class Bot_class:
             if 'в начало' == msg:
                 self.pages.home_page(id=id)
 
+                """ Переход на stage MESSAGES """
+            elif 'сообщения' == msg:
+                self.pages.messages_page(id=id, event=event)
+
+                """ Переход на stage FIND_TEACHERS """
+            elif 'поиск преподавателя' == msg:
+                self.pages.find_teacher_page(id=id)
+
                 """ Вывод списка преподавателей """
             elif 'преподаватели' == msg:
                 self.display.teachers_display(id=id)
@@ -117,27 +125,36 @@ class Bot_class:
                 """ Вывод информации о боте """
             elif 'информация о боте' in msg:
                 self.display.bot_info_display(
-                        button_actions=event.button_actions, 
-                        id=id
-                        )
+                    button_actions=event.button_actions, id=id)
 
-                """ Переход на stage 102 """
-            elif 'пароли' == msg:
+            """ Кнопки на stage MESSAGES """
+        elif on_stage == self.sn.MESSAGES:
+            """ Переход на stage PASSWORDS """
+            if 'пароли' == msg:
                 self.pages.passwords_page(id=id, event=event)
 
-                """ Переход на stage FIND_TEACHERS """
-            elif 'поиск преподавателя' == msg:
-                self.pages.find_teacher_page(id=id)
+                """ Переход на stage HOME """
+            elif 'в начало' == msg:
+                self.pages.home_page(id=id)
 
-            """ Кнопки на stage 102 """
+                """ Переход на stage OTHER """
+            elif 'назад' == msg:
+                self.pages.other_page(id=id)
+        
+                """ Рассылка от пользователей """
+            else:
+                mail(event=event, sender=self.s.sender, user_id=id)
+
+
+            """ Кнопки на stage PASSWORDS """
         elif on_stage == self.sn.PASSWORDS:
             """ Вывод паролей пользователя """
             if 'мои пароли' == msg:
                 self.display.passwords_info_display(id=id)
 
-                """ Переход на stage 101 """
+                """ Переход на stage MESSAGES """
             elif 'назад' == msg:
-                self.pages.other_page(id=id)
+                self.pages.messages_page(id=id, event=event)
 
                 """ Удаление пароля """
             elif 'del ' in msg:
@@ -498,13 +515,13 @@ class Bot_class:
                 """ Переход на stage 7 """
             elif 'назад' == msg:
                 self.pages.week_select_page(id=id)
-        
-        """ Рассылка от пользователей """
-        mail(event=event, sender=self.s.sender, user_id=id)
 
         """ Сброс кнопок """
         if id == 290711560:
             if '/res' == msg:
                 all_users = db.get_users()
                 for user_id in all_users:
-                    self.pages.reset_page(user_id=user_id)
+                    try:
+                        self.pages.reset_page(user_id=user_id)
+                    except:
+                        pass
