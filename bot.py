@@ -108,7 +108,8 @@ def mail_gather(seconds: int, time_str: str) -> None:
 
 
 def run_parallel() -> None:
-    p1 = multiprocessing.Process(target=mail_gather, args=[delay, time_str])
+    p1 = multiprocessing.Process(target=mail_gather, 
+        args=[delay, time_str])
     p2 = multiprocessing.Process(target=main_start, args=[])
 
     p1.start()

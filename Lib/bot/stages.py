@@ -235,17 +235,20 @@ class Pages:
                     db.change_stage(user_id=id, stage=self.sn.SUBGROUP)
                     db.change_group(user_id=id, group=group)
                     break
+                else:
+                    group = ''
         else:
             db.change_stage(user_id=id, stage=self.sn.SUBGROUP)
             db.del_subgroup(user_id=id)
             group = db.get_group(user_id=id)
-        text = 'Выберите подгруппу:'
-        keyboard = stage_subgroup_keyboard(
-                form=form, 
-                fac=fac, 
-                group=group
-                )
-        self.s.sender(id=id, text=text, keyboard=keyboard)
+        if group != '':
+            text = 'Выберите подгруппу:'
+            keyboard = stage_subgroup_keyboard(
+                    form=form, 
+                    fac=fac, 
+                    group=group
+                    )
+            self.s.sender(id=id, text=text, keyboard=keyboard)
 
 
     def schedule_type_page(self, id: int, new_group: bool|None = None, 

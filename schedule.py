@@ -15,11 +15,6 @@ from config import data_folder, font_path
 
 def main(test):
     start_time = datetime.datetime.now()
-    start_time_str = str(datetime.datetime.ctime(start_time)).split(' ')
-    start_time_str = [i for i in start_time_str if i != '']
-    start_day = int(start_time_str[2])
-    start_hour = int(start_time_str[3].split(':')[0])
-    start_minute = int(start_time_str[3].split(':')[1])
 
     all_files_iteration = 0
 
@@ -35,8 +30,7 @@ def main(test):
         all_files = find_file_with_ext(location=all_data_folder, 
                 ext_to_find='.xls', ext_to_miss='.xlsx')
 
-        delete_old_files(files=all_files, start_day=start_day, 
-                start_hour=start_hour, start_minute=start_minute)
+        delete_old_files(files=all_files, start_time=start_time)
 
 
     xls_folders = find_folder_with_name(location=all_data_folder, 
@@ -59,8 +53,8 @@ def main(test):
         if not test:
             """ Creates empty folders if needed """
             folders = [item_schedule_folder, json_folder, 
-                    week_folder, font_path,
-                    teachers_folder, path_to_schedule]
+                week_folder, font_path,
+                teachers_folder, path_to_schedule]
             create_empty_folders(folders=folders)
 
         list_of_files = os.listdir(xls_folder)
@@ -94,33 +88,35 @@ def main(test):
 
                 """ gens images """
                 try:
-                    schedule_week(path=week_folder, group=name_without_ext, 
-                            schedule=schedule, font_path=font_path)
+                    schedule_week(path=week_folder, 
+                        group=name_without_ext, schedule=schedule, 
+                        font_path=font_path)
                 except Exception as _image_ex:
                     print(_image_ex)
 
             except Exception as _xls_error:
                 print(_xls_error)
 
-            file_fetch_time = datetime.datetime.now()-start_file_fetch_time
-            print(f'[INFO] Processed {" " if folder_iteration <10 else ""}'\
-                    f'{folder_iteration} / {len(list_of_files)} '\
-                    f'book ( {name_without_ext} ) '\
-                    f'in {file_fetch_time}')
+            file_fetch_time = (datetime.datetime.now() - 
+                start_file_fetch_time)
+            print(f'[INFO] Processed '\
+                f'{" " if folder_iteration < 10 else ""}'\
+                f'{folder_iteration} / {len(list_of_files)} '\
+                f'book ( {name_without_ext} ) '\
+                f'in {file_fetch_time}')
             folder_iteration += 1
             all_files_iteration += 1
 
     if not test:
         all_files = find_file_with_ext(location=all_data_folder, 
-                ext_to_find=['.xls', '.json', '.jpg'])
+            ext_to_find=['.xls', '.json', '.jpg'])
 
-        delete_old_files(files=all_files, start_day=start_day, 
-                start_hour=start_hour, start_minute=start_minute)
+        delete_old_files(files=all_files, start_time=start_time)
 
         remove_empty_folders(path=all_data_folder)
 
     print(f'[INFO] Finished {all_files_iteration} files '\
-            f'in {datetime.datetime.now() - start_time}')
+        f'in {datetime.datetime.now() - start_time}')
 
 
 
