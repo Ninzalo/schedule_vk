@@ -17,4 +17,6 @@ class Stages_names:
     WEEK_SELECT = 'week_select'
     SETTINGS_WEEK = 'settings_week'
     FIND_TEACHER = 'find_teacher'
+    TEACHER_SEARCH_SETTINGS = 'teacher_search_settings'
     MESSAGES = 'messages'
+    GENERAL_SETTINGS = 'general_settings'

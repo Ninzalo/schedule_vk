@@ -1,11 +1,11 @@
 import os
 import json
 from Lib.bot.BotDB_Func import BotDB_Func
-from config import teachers_info_path, db_path
+from config import teachers_info_path
 
-db = BotDB_Func(db_path=db_path)
+db = BotDB_Func()
 
-def schedule_str(data: dict, subgroup: str, date: str) -> str:
+def schedule_str(data: dict, group: str, subgroup: str, date: str) -> str:
     """ Выводит str расписания """
     text = 'Ошибка'
     times_of_lesson = ['8:30 - 10:00', '10:10 - 11:40', '12:40 - 14:10', 
@@ -13,22 +13,13 @@ def schedule_str(data: dict, subgroup: str, date: str) -> str:
 
     if data['date'] == date:
         lessons_list = [item for item in data['lessons']]
-        new_list = []
-        for _ in range(1, len(lessons_list) + 1):
-            min_num = {
-                'num': 1000
-            }
-            min_index = 100
-            for entry_num, entry in enumerate(lessons_list):
-                if int(entry['num']) < int(min_num['num']):
-                    min_num = entry
-                    min_index = int(entry_num)
-            new_list.append(min_num)
-            lessons_list.pop(min_index)
+        lessons_list.sort(key=lambda num: num['num'])
         text = f"{data['date']}  "\
-            f"{data['lessons'][0]['day_of_week'].capitalize()}\n\n"
-        for entry in new_list:
-            if entry['subgroup'] == subgroup or entry['subgroup'] == "":
+            f"{data['lessons'][0]['day_of_week'].capitalize()}\n"
+        text += f'{group} | {subgroup}\n\n'
+        for entry in lessons_list:
+            if (entry['subgroup'] == "" or
+                entry['subgroup'] == str(subgroup)):
                 text += f'{entry["num"]} - '\
                     f'({times_of_lesson[int(entry["num"]) - 1]})\n'\
                     f'{entry["lesson_name"]} - {entry["type_of_lesson"]}'\
@@ -164,6 +155,11 @@ def short_description() -> str:
 def error_teachers_str(name: str) -> str:
     """ Выводит str об ошибке поиска преподавателя """
     result = f'Результаты поиска "{name}"'\
-        f'\n\nСлишком много символов для одного сообщения!'\
-        f'\nСделайте запрос более конкретным'
+        f'\n\nСделайте запрос более конкретным'
     return result
+
+
+def error_return_str() -> str:
+    """ Выводит str об ошибке ввода """
+    text = 'Ошибка ввода :c'
+    return text

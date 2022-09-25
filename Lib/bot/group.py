@@ -1,12 +1,14 @@
 import datetime
 import time
-from Lib.bot.BotDB_Func import BotDB_Func
-from config import group_id, db_path, bot_start_time, bot_close_time
+from Lib.bot.BotDB_Func import BotDB_Func, Notifications
+from Lib.bot.bot_return import Returns
+from config import group_id, bot_start_time, bot_close_time
 
-db = BotDB_Func(db_path=db_path)
+db = BotDB_Func()
 
 def group_online(vk_session):
-    online = vk_session.method('groups.getOnlineStatus', {'group_id': group_id}) 
+    online = vk_session.method('groups.getOnlineStatus', 
+        {'group_id': group_id}) 
     time_now = int(datetime.datetime.now().strftime('%H'))
     if online['status'] == 'none':
         if time_now >= bot_start_time or time_now < bot_close_time:
@@ -22,12 +24,16 @@ def group_online(vk_session):
                 return print(f'Failed to turn off online')
 
 
-def wall_sender(post: str, sender):
+def wall_sender(post: str) -> Returns:
+    result = Returns()
     users = db.get_users()
     text = 'Обновление!'
     for user_id in users:
-        try:
-            sender(id=user_id, text=text, preuploaded_doc=post)
-            time.sleep(0.3)
-        except:
-            pass
+        if Notifications().get(user_id=user_id) is True:
+            try:
+                result.add_return(user_id=user_id, text=text,
+                    preuploaded_doc=post)
+                time.sleep(0.3)
+            except:
+                pass
+    return result

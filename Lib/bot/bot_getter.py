@@ -2,13 +2,15 @@ import os
 import requests
 import json
 import datetime
-from typing import List, Tuple, Optional, Union, Type, Any
-from vk_api.keyboard import VkKeyboard
+from typing import List, Tuple, Any
+# from vk_api.keyboard import VkKeyboard
 from Lib.bot.event_hint import Event_hint
 from Lib.bot.BotDB_Func import BotDB_Func
+from Lib.bot.bot_return import Buttons
+# from Lib.bot.keyboards import stage_week_keyboard
 from config import data_folder, db_path
 
-db = BotDB_Func(db_path=db_path)
+db = BotDB_Func()
 
 def get_forms() -> List[str]:
     forms = []
@@ -189,7 +191,7 @@ def get_first_and_last_date(type_of_week: str, form: str,
 
 
 def get_all_weeks(vk, id: int, event: Event_hint, 
-        type_of_week: str, stage_week_keyboard) -> Tuple[str, str, VkKeyboard]:
+        type_of_week: str, stage_week_keyboard) -> Tuple[str, str, Buttons]:
     """ type_of_week = 'closest' | 'now' | 'next' | 'prev' """
 
     """ Получаем данные пользователя """
@@ -202,33 +204,31 @@ def get_all_weeks(vk, id: int, event: Event_hint,
 
     """ Получаем first_date, last_date и user_week_page """
     first_date, last_date, user_week_page = get_first_and_last_date(
-            type_of_week=type_of_week, 
-            form=form, 
-            fac=fac, 
-            group=group, 
-            subgroup=subgroup, 
-            quality=quality, 
-            mode=mode, 
-            user_id=id
-            )
+        type_of_week=type_of_week, 
+        form=form, 
+        fac=fac, 
+        group=group, 
+        subgroup=subgroup, 
+        quality=quality, 
+        mode=mode, 
+        user_id=id)
 
     """ Меняем week_page пользователя """
     db.change_week_page(user_id=id, week_page=user_week_page)
 
     """ Получаем файл расписания и код ошибки """
     doc, error = week_schedule(
-            vk=vk, 
-            form=form, 
-            fac=fac, 
-            group=group, 
-            subgroup=subgroup, 
-            quality=quality, 
-            mode=mode, 
-            user_id=id, 
-            first_date=first_date, 
-            last_date=last_date, 
-            event=event
-            )
+        vk=vk, 
+        form=form, 
+        fac=fac, 
+        group=group, 
+        subgroup=subgroup, 
+        quality=quality, 
+        mode=mode, 
+        user_id=id, 
+        first_date=first_date, 
+        last_date=last_date, 
+        event=event)
 
     """ Получаем выводимый текст """
     if error == 0:

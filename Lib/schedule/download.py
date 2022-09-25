@@ -7,6 +7,8 @@ from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 import sys
 
+from Lib.schedule.delete import remove_empty_folders
+
 from config import data_folder, mstuca_url
 
 
@@ -138,4 +140,5 @@ def retry(session, headers: dict, url: str,
         time.sleep(random.randrange(1, 5))
         if retries >= 50:
             print(f'[INFO] Сайт лег!')
+            remove_empty_folders(path=data_folder)
             sys.exit(0)

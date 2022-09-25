@@ -6,5 +6,5 @@ class Event_hint(NamedTuple):
     message: str
     id: int
     peer_id: int
-    button_actions: List[str]|None 
+    button_actions: List[str]
     attachments: list|None = None

@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from pathlib import Path
+# from pathlib import Path
 load_dotenv()
 
 if 'test' in os.getcwd().lower().split(f'/')[-1]:
@@ -24,4 +24,7 @@ time_str = '20.00'
 bot_start_time = 5
 bot_close_time = 1
 
-show_elapsed_time = False
+if 'test' in os.getcwd().lower().split(f'/')[-1]:
+    show_elapsed_time = True
+else:
+    show_elapsed_time = False

@@ -1,10 +1,11 @@
 import sqlite3
 from typing import Tuple, List, Union, Optional
+from config import db_path
 
 
 class BotDB:
-    def __init__(self, db_file):
-        self.conn = sqlite3.connect(db_file)
+    def __init__(self):
+        self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
 
     def __enter__(self):
@@ -92,9 +93,11 @@ class BotDB:
             result_list.append(int(item[0]))
         return result_list
 
-    def get_user_preset_data(self, user_id: int) -> List[Tuple[int, str, str, str, str]]:
+    def get_user_preset_data(self, 
+        user_id: int) -> List[Tuple[int, str, str, str, str]]:
         """ Получаем данные по всем пресетам пользователя """
-        sql = """ SELECT preset_num, form, fac, group_name, subgroup FROM users 
+        sql = """ SELECT preset_num, form, fac, group_name, subgroup 
+        FROM users 
         WHERE user_id = ? """
         result = self.cursor.execute(sql, (user_id,))
         result = result.fetchall()
@@ -112,18 +115,6 @@ class BotDB:
         self.cursor.execute(sql, (int(new_group), user_id))
         return self.conn.commit()
 
-    # def get_group_by_preset(self, user_id: int, preset: int):
-        # """ Получаем данные о группе по preset_num """
-        # sql = """ SELECT group_name, subgroup FROM users
-        # WHERE user_id = ? AND preset_num = ? """
-        # result = self.cursor.execute(sql, (user_id, preset))
-        # print(result)
-        # result_list = []
-        # for item in result.fetchall():
-            # result_list.append(int(item[0]))
-        # print(result_list)
-        # return result_list
-
     def del_preset_by_num(self, user_id: int, preset: int) -> None:
         """ Удаляем группу по preset_num """
         sql = """ DELETE FROM users
@@ -131,7 +122,8 @@ class BotDB:
         self.cursor.execute(sql, (user_id, preset))
         return self.conn.commit()
 
-    def update_preset_num(self, user_id: int, deleted_preset_num: int) -> None:
+    def update_preset_num(self, user_id: int, 
+        deleted_preset_num: int) -> None:
         """ Меняем preset_num, где preset_num > deleted_preset_num """
         sql = """ UPDATE users SET preset_num = preset_num - 1
         WHERE user_id = ? AND preset_num > ? """
@@ -170,14 +162,16 @@ class BotDB:
         """ Достаем form пользователя """
         sql = """ SELECT form FROM users 
         WHERE user_id = ? AND preset_num = ? """
-        result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
+        result = self.cursor.execute(sql, (user_id, 
+            self.get_preset(user_id=user_id)))
         return str(result.fetchone()[0])
 
     def change_form(self, user_id: int, form: str) -> None:
         """ Меняем form пользователя """
         sql = """UPDATE users SET form = ? 
         WHERE user_id = ? AND preset_num = ?"""
-        self.cursor.execute(sql, (form, user_id, self.get_preset(user_id=user_id)))
+        self.cursor.execute(sql, (form, user_id, 
+            self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
     def del_form(self, user_id: int) -> None:
@@ -191,14 +185,16 @@ class BotDB:
         """ Достаем fac пользователя """
         sql = """ SELECT fac FROM users 
         WHERE user_id = ? AND preset_num = ?"""
-        result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
+        result = self.cursor.execute(sql, (user_id, 
+            self.get_preset(user_id=user_id)))
         return str(result.fetchone()[0])
 
     def change_fac(self, user_id: int, fac: str) -> None:
         """ Меняем fac пользователя """
         sql = """UPDATE users SET fac = ? 
         WHERE user_id = ? AND preset_num = ?"""
-        self.cursor.execute(sql, (fac, user_id, self.get_preset(user_id=user_id)))
+        self.cursor.execute(sql, (fac, user_id, 
+            self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
     def del_fac(self, user_id: int) -> None:
@@ -212,21 +208,24 @@ class BotDB:
         """ Достаем group_page пользователя """
         sql = """ SELECT group_page FROM users 
         WHERE user_id = ? AND preset_num = ?"""
-        result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
+        result = self.cursor.execute(sql, (user_id, 
+            self.get_preset(user_id=user_id)))
         return int(result.fetchone()[0])
 
     def change_group_page(self, user_id: int, group_page: int) -> None:
         """ Меняем group_page пользователя """
         sql = """UPDATE users SET group_page = ? 
         WHERE user_id = ? AND preset_num = ?"""
-        self.cursor.execute(sql, (group_page, user_id, self.get_preset(user_id=user_id)))
+        self.cursor.execute(sql, (group_page, user_id, 
+            self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
     def get_session_group_page(self, user_id: int) -> int:
         """ Достаем session_group_page пользователя """
         sql = """ SELECT session_group_page FROM users 
         WHERE user_id = ? AND preset_num = ?"""
-        result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
+        result = self.cursor.execute(sql, (user_id, 
+            self.get_preset(user_id=user_id)))
         return int(result.fetchone()[0])
 
     def change_session_group_page(self, user_id: int, 
@@ -235,21 +234,23 @@ class BotDB:
         sql = """UPDATE users SET session_group_page = ? 
         WHERE user_id = ? AND preset_num = ?"""
         self.cursor.execute(sql, (session_group_page, user_id, 
-                        self.get_preset(user_id=user_id)))
+            self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
     def get_group(self, user_id: int) -> str:
         """ Достаем group пользователя """
         sql = """ SELECT group_name FROM users 
         WHERE user_id=? AND preset_num = ?"""
-        result = self.cursor.execute(sql, (user_id, self.get_preset(user_id=user_id)))
+        result = self.cursor.execute(sql, (user_id, 
+            self.get_preset(user_id=user_id)))
         return str(result.fetchone()[0])
 
     def change_group(self, user_id: int, group: str) -> None:
         """ Меняем group пользователя """
         sql = """ UPDATE users SET group_name = ? 
         WHERE user_id=? AND preset_num = ? """
-        self.cursor.execute(sql, (group, user_id, self.get_preset(user_id=user_id)))
+        self.cursor.execute(sql, (group, user_id, 
+            self.get_preset(user_id=user_id)))
         return self.conn.commit()
 
     def del_group(self, user_id: int) -> None:
@@ -486,3 +487,97 @@ class BotDB:
     def close(self) -> None:
         """Закрываем соединение с БД"""
         self.conn.close()
+
+
+class notifications(BotDB):
+    def get(self, user_id: int) -> bool:
+        """ Получаем notifications пользователя """
+        sql = """SELECT notifications FROM users_info 
+        WHERE user_id = ?"""
+        result = self.cursor.execute(sql, (user_id,))
+        return bool(result.fetchone()[0])
+
+    def change(self, user_id: int) -> None:
+        """ Меняем notifications пользователя """
+        if self.get(user_id=user_id) is True:
+            sql = """ UPDATE users_info SET notifications=0 
+            WHERE user_id=? """
+        else:
+            sql = """ UPDATE users_info SET notifications=1 
+            WHERE user_id=? """
+        self.cursor.execute(sql, (user_id,))
+        return self.conn.commit()
+
+class teacher_search(BotDB):
+    def user_exists(self, user_id: int) -> bool:
+        """Проверяем, есть ли пользователь в таблице teacher_search """
+        sql = """SELECT user_id FROM teacher_search 
+        WHERE user_id = ?"""
+        result = self.cursor.execute(sql, (user_id,))
+        return bool(len(result.fetchall()))
+
+    def add_user(self, user_id: int) -> None:
+        """Добавляем пользователя в таблицу teacher_search """
+        sql = """ INSERT INTO teacher_search (user_id) VALUES (?) """
+        self.cursor.execute(sql, (user_id,))
+        return self.conn.commit()
+
+    def get_teacher_page(self, user_id: int) -> int:
+        """ Получаем teacher_page пользователя """
+        sql = """SELECT teacher_page FROM teacher_search 
+        WHERE user_id = ?"""
+        result = self.cursor.execute(sql, (user_id,))
+        return result.fetchone()[0]
+
+    def change_teacher_page(self, user_id: int, page: int) -> None:
+        """ Меняем teacher_page пользователя """
+        sql = """ UPDATE teacher_search SET teacher_page=? 
+        WHERE user_id=? """
+        self.cursor.execute(sql, (page, user_id))
+        return self.conn.commit()
+
+    def get_data_page(self, user_id: int) -> int:
+        """ Получаем data_page пользователя """
+        sql = """SELECT data_page FROM teacher_search 
+        WHERE user_id = ?"""
+        result = self.cursor.execute(sql, (user_id,))
+        return result.fetchone()[0]
+
+    def change_data_page(self, user_id: int, page: int) -> None:
+        """ Меняем data_page пользователя """
+        sql = """ UPDATE teacher_search SET data_page=? 
+        WHERE user_id=? """
+        self.cursor.execute(sql, (page, user_id))
+        return self.conn.commit()
+
+    def get_full_search(self, user_id: int) -> bool:
+        """ Получаем teacher_search пользователя """
+        sql = """SELECT full_search FROM teacher_search 
+        WHERE user_id = ?"""
+        result = self.cursor.execute(sql, (user_id,))
+        return bool(result.fetchone()[0])
+
+    def change_full_search(self, user_id: int) -> None:
+        """ Меняем full_search пользователя """
+        if self.get_full_search(user_id=user_id) is True:
+            sql = """ UPDATE teacher_search SET full_search=0 
+            WHERE user_id=? """
+        else:
+            sql = """ UPDATE teacher_search SET full_search=1 
+            WHERE user_id=? """
+        self.cursor.execute(sql, (user_id,))
+        return self.conn.commit()
+
+    def get_name(self, user_id: int) -> str:
+        """ Получаем requested_name пользователя """
+        sql = """SELECT requested_name FROM teacher_search 
+        WHERE user_id = ?"""
+        result = self.cursor.execute(sql, (user_id,))
+        return result.fetchone()[0]
+
+    def change_name(self, user_id: int, name: str) -> None:
+        """ Меняем requested_name пользователя """
+        sql = """ UPDATE teacher_search SET requested_name=? 
+        WHERE user_id=? """
+        self.cursor.execute(sql, (name, user_id))
+        return self.conn.commit()
