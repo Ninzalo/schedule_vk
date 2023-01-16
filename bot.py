@@ -31,9 +31,16 @@ from Lib.start_files.create_files import schedule_start_file
 import multiprocessing
 
 
-vk_session = vk_api.VkApi(token=token_vk)
-vk = vk_session.get_api()
-longpoll = VkBotLongPoll(vk_session, group_id)
+while True:
+    try:
+        vk_session = vk_api.VkApi(token=token_vk)
+        vk = vk_session.get_api()
+        longpoll = VkBotLongPoll(vk_session, group_id)
+        break
+    except Exception as vk_connection_exception:
+        print(f'__Timeout__ ({vk_connection_exception})')
+        time.sleep(1)
+
 
 sender = Sender(vk_session=vk_session)
 sn = Stages_names()
@@ -106,10 +113,10 @@ def mail_gather(seconds: int, time_str: str) -> None:
     messages = Returns()
     while True:
         now_time = str(datetime.datetime.now().strftime("%H.%M"))
-        try:
-            group_online(vk_session=vk_session)
-        except: 
-            pass
+        # try:
+            # group_online(vk_session=vk_session)
+        # except: 
+            # pass
         if now_time == time_str:
             break
         time.sleep(seconds)

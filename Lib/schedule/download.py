@@ -68,7 +68,11 @@ def download() -> None:
             name = ''
             for item in names:
                 try: 
-                    int(item.split('.')[0])
+                    if '.' in item:
+                        int(item.split('.')[0])
+                    else:
+                        if item != '':
+                            name += f' {item}'
                 except:
                     if item != '':
                         name += f' {item}'

@@ -1,0 +1,1664 @@
+[
+    {
+        "message": "начать",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Привет😉\nДанный бот дублирует информацию о расписании с официального сайта МГТУ ГА ( обновление информации в боте происходит каждую среду )\nВся информация собрана из открытых источников\n\n",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Хотите подробнее узнать о функционале бота?",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Хочу!",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "short_description"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Выберите: ",
+                "buttons": [
+                    {
+                        "label": "Расписание",
+                        "color": "primary",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Другое",
+                        "color": "primary",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "другое",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите: ",
+                "buttons": [
+                    {
+                        "label": "Сообщения",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Поиск преподавателя",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "🤖Информация о боте🤖",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "преподаватели",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "У вас нет доступа для получения информации о преподавателях",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "информация о боте",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Данный бот дублирует информацию о расписании с официального сайта МГТУ ГА ( обновление информации в боте происходит каждую среду )\nВся информация собрана из открытых источников\n\nВопросы и предложения писать разработчику или в обсуждении:",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Сообщение разработчику",
+                        "color": "positive",
+                        "new_line": true,
+                        "payload": {
+                            "type": "open_link",
+                            "link": "https://vk.com/im?media=&sel=478270913"
+                        }
+                    },
+                    {
+                        "label": "Обсуждение",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "open_link",
+                            "link": "https://vk.com/topic-210110232_48270692"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "сообщения",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Формат сообщения: <пароль> <сообщение>",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Пример",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "message_example"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Введите сообщение:",
+                "buttons": [
+                    {
+                        "label": "Пароли",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "пароли",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Что такое код-пароль?",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Узнать",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "what_is_password"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Введите пароль:",
+                "buttons": [
+                    {
+                        "label": "Мои пароли",
+                        "color": "primary",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "мои пароли",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Нет сохраненных паролей",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "teachers",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Пароль успешно добавлен",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Пользователь @id123 ввел пароль #teachers",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Выберите параметр приватности рассылки:\nПриватная -> делать рассылку может только создатель\nОткрытая -> делать рассылку могут все пользователи, которые ввели пароль",
+                "buttons": [
+                    {
+                        "label": "Открытая",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Приватная",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "открытая",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Пароль teachers успешно сохранен",
+                "buttons": [
+                    {
+                        "label": "Мои пароли",
+                        "color": "primary",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "назад",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Формат сообщения: <пароль> <сообщение>",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Пример",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "message_example"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Введите сообщение:",
+                "buttons": [
+                    {
+                        "label": "Пароли",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "назад",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите: ",
+                "buttons": [
+                    {
+                        "label": "Сообщения",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Преподаватели",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Поиск преподавателя",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "🤖Информация о боте🤖",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "преподаватели",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Имя: Демченко А.Г.\nТелефон: \nПочта: demmasterr@yandex.ru\n\nИмя: Карлина Т.Д.\nТелефон: 79299100678\nПочта: t.karlina@mstuca.aero\n\nИмя: Горбаконь Н.В.\nТелефон: \nПочта: n.gorbakon@mstuca.aero\n\nИмя: Сушко О.П.\nТелефон: \nПочта: osushko@mail.ru\n\nИмя: Зубов О.Е.\nТелефон: \nПочта: o.zubov@mstuca.aero\n\nИмя: Илларионова О.Г.\nТелефон: 79637575620\nПочта: o.illarionova@mail.ru\n\nИмя: Гуляев В.В.\nТелефон: \nПочта: v.gulyaev@mstuca.aero\n\nИмя: Парфеновская О.А.\nТелефон: 89164058552\nПочта: nissangt-r.2010@mail.ru\n\nИмя: Мерзликин И.Н.\nТелефон: \nПочта: i_merzlikin@list.ru\n\nИмя: Буробин С.В.\nТелефон: \nПочта: s.burobin@yandex.ru\n\nИмя: Медведева Н.Н.\nТелефон: 79265552545\nПочта: nmedv@list.ru\n\nИмя: Романчева Н.И.\nТелефон: 79166160673\nПочта: n.romancheva@mstuca.aero\n\nИмя: Новиков С.М.\nТелефон: \nПочта: s.novikov@mstuca.aero\n\nИмя: Артамонова М.В.\nТелефон: \nПочта: mvartamonova@mail.ru\n\nИмя: Скоробогатова Т.В.\nТелефон: 79056162925\nПочта: skorobogatova.tati@yandex.ru\n\nИмя: Куриленок А.С.\nТелефон: 79168118171\nПочта: anton.kurilenok@yandex.ru\n\nИмя: Экзерцева Е.В.\nТелефон: 79166624512\nПочта: ekzertseva@yandex.ru\n\nИмя: Ратенко О.А.\nТелефон: \nПочта: ratenko.oleg@yandex.ru\n\nИмя: Исаков Е.Ю.\nТелефон: 89161689979\nПочта: isakove@mail.ru\n\nИмя: Наумова Т.В.\nТелефон: 89163544943\nПочта: \n\nИмя: Некрасов С.И.\nТелефон: 79167308914\nПочта: \n\nИмя: Карпинский А.Е.\nТелефон: 79162634630\nПочта: \n\nИмя: Перегудов Г.Е.\nТелефон: 79859099951\nПочта: \n\n",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "поиск преподавателя",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Введите фамилию преподавателя:",
+                "buttons": [
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "назад",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите: ",
+                "buttons": [
+                    {
+                        "label": "Сообщения",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Преподаватели",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Поиск преподавателя",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "🤖Информация о боте🤖",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "сообщения",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Формат сообщения: <пароль> <сообщение>",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Пример",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "message_example"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Введите сообщение:",
+                "buttons": [
+                    {
+                        "label": "Пароли",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "123 hey",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Вы не добавили данный пароль",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "teachers hey",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "#teachers\n\nhey",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "пароли",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Что такое код-пароль?",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Узнать",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "what_is_password"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Введите пароль:",
+                "buttons": [
+                    {
+                        "label": "Мои пароли",
+                        "color": "primary",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "del teachers",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Пароль #teachers удален",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "назад",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Формат сообщения: <пароль> <сообщение>",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Пример",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "message_example"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Введите сообщение:",
+                "buttons": [
+                    {
+                        "label": "Пароли",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "в начало",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите: ",
+                "buttons": [
+                    {
+                        "label": "Расписание",
+                        "color": "primary",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Другое",
+                        "color": "primary",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "расписание выбранной группы",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "У вас нет выбранных групп",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "расписание",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите одну из форм обучения:",
+                "buttons": [
+                    {
+                        "label": "Заочная форма обучения",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Очная форма обучения",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Обновить формы",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "обновить формы",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите одну из форм обучения:",
+                "buttons": [
+                    {
+                        "label": "Заочная форма обучения",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Очная форма обучения",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Обновить формы",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "очная форма обучения",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите один из факультетов:",
+                "buttons": [
+                    {
+                        "label": "МФ",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "ФАСК",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "ФПМиВТ",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "ФУВТ",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "К выбору формы обучения",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "фаск",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите одну из групп:\nПоказана страница 1",
+                "buttons": [
+                    {
+                        "label": "АК 1-1",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "АК 1-2",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "АК 2-1",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "АК 2-2",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": " Стр 2 >",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "К выбору формы обучения",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "ак 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите подгруппу:",
+                "buttons": [
+                    {
+                        "label": "1",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "2",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "К выбору группы",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Сохранить группу?",
+                "buttons": [],
+                "i_buttons": [
+                    {
+                        "label": "Да!",
+                        "color": "positive",
+                        "new_line": false,
+                        "payload": {
+                            "type": "add_new_preset"
+                        }
+                    }
+                ],
+                "attachments": [],
+                "docs": []
+            },
+            {
+                "user_id": 123,
+                "output_text": "Выберите: ",
+                "buttons": [
+                    {
+                        "label": "Расписание по дням",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Расписание на неделю",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Рассылка расписания",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Подгруппы",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "в начало",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите: ",
+                "buttons": [
+                    {
+                        "label": "Расписание выбранной группы",
+                        "color": "positive",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Расписание",
+                        "color": "primary",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Другое",
+                        "color": "primary",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "расписание выбранной группы",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите: ",
+                "buttons": [
+                    {
+                        "label": "Расписание по дням",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Расписание на неделю",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Рассылка расписания",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Подгруппы",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "расписание на неделю",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите неделю:",
+                "buttons": [
+                    {
+                        "label": "Текущая неделя",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "< Стр -1",
+                        "color": "primary",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Стр 1 >",
+                        "color": "primary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Настройки",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "В начало",
+                        "color": "negative",
+                        "new_line": false
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "настройки",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Выберите:",
+                "buttons": [
+                    {
+                        "label": "Светлый режим",
+                        "color": "positive",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Высокое качество",
+                        "color": "positive",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "keke",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "кек 1-1",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "4",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Ошибка ввода :c",
+                "buttons": [],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "светлый режим",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Изменена цветовая схема",
+                "buttons": [
+                    {
+                        "label": "Темный режим",
+                        "color": "secondary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Высокое качество",
+                        "color": "positive",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "высокое качество",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Изменено качество изображений",
+                "buttons": [
+                    {
+                        "label": "Темный режим",
+                        "color": "secondary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Низкое качество",
+                        "color": "secondary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "темный режим",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Изменена цветовая схема",
+                "buttons": [
+                    {
+                        "label": "Светлый режим",
+                        "color": "positive",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Низкое качество",
+                        "color": "secondary",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    },
+    {
+        "message": "низкое качество",
+        "returns": [
+            {
+                "user_id": 123,
+                "output_text": "Изменено качество изображений",
+                "buttons": [
+                    {
+                        "label": "Светлый режим",
+                        "color": "positive",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Высокое качество",
+                        "color": "positive",
+                        "new_line": true
+                    },
+                    {
+                        "label": "Назад",
+                        "color": "negative",
+                        "new_line": false
+                    }
+                ],
+                "i_buttons": [],
+                "attachments": [],
+                "docs": []
+            }
+        ]
+    }
+]
