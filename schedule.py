@@ -15,6 +15,7 @@ from config import data_folder, font_path
 
 def main(test):
     start_time = datetime.datetime.now()
+    print(f'[INFO] Process started at {start_time}')
 
     all_files_iteration = 0
 

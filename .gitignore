@@ -6,4 +6,5 @@
 /Lib/teachers_data/teachers.json
 __pycache__
 .env
+.idea
 *.DS_Store

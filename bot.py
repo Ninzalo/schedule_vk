@@ -38,7 +38,7 @@ while True:
         longpoll = VkBotLongPoll(vk_session, group_id)
         break
     except Exception as vk_connection_exception:
-        print(f'__Timeout__ ({vk_connection_exception})')
+        print(f"__Timeout__ ({vk_connection_exception})")
         time.sleep(1)
 
 
@@ -51,37 +51,40 @@ bot_class = Bot_class(vk=vk)
 def main() -> None:
     start_time = datetime.datetime.now()
     amount_of_old_messages, messages = bot_class.old_messages(
-        vk_session=vk_session)
+        vk_session=vk_session
+    )
     sender.sender(messages=messages)
     if amount_of_old_messages != 0:
-        print(f'[INFO] {amount_of_old_messages} Old '\
-            f'message{"s" if amount_of_old_messages > 1 else ""} '\
-            f'answered in {datetime.datetime.now()-start_time}')
+        print(
+            f"[INFO] {amount_of_old_messages} Old "
+            f'message{"s" if amount_of_old_messages > 1 else ""} '
+            f"answered in {datetime.datetime.now()-start_time}"
+        )
     del start_time, amount_of_old_messages
 
-    print('[INFO] Bot started')
+    print("[INFO] Bot started")
     for event in longpoll.listen():
         if event.type == VkBotEventType.MESSAGE_NEW:
             event = Event_hint(
-                msg=event.object['message']['text'].lower(),
-                message=event.object['message']['text'], 
-                id=event.object['message']['from_id'], 
-                peer_id=event.object['message']['peer_id'],
-                button_actions=event.object['client_info'][
-                    'button_actions'], 
-                attachments=event.object['message']['attachments'])
+                msg=event.object["message"]["text"].lower(),
+                message=event.object["message"]["text"],
+                id=event.object["message"]["from_id"],
+                peer_id=event.object["message"]["peer_id"],
+                button_actions=event.object["client_info"]["button_actions"],
+                attachments=event.object["message"]["attachments"],
+            )
             messages = bot_class.bot(event=event)
             sender.sender(messages=messages)
 
             """ Обработка постов """
         elif event.type == VkBotEventType.WALL_POST_NEW:
-            id_ = event.object['id']
+            id_ = event.object["id"]
             owner_id_ = event.group_id
-            wall_id = f'wall-{owner_id_}_{id_}'
+            wall_id = f"wall-{owner_id_}_{id_}"
             messages = wall_sender(post=wall_id)
             sender.sender(messages=messages)
-            
-            ''' Обработка событий '''
+
+            """ Обработка событий """
         elif event.type == VkBotEventType.MESSAGE_EVENT:
             returns = callback_func(event=event, vk=vk)
             if returns is not None:
@@ -93,30 +96,33 @@ def main_start() -> None:
         try:
             try:
                 main()
-            except (requests.exceptions.ReadTimeout, 
-                socket.timeout, 
-                urllib3_exceptions.ReadTimeoutError, 
-                socket.gaierror, 
-                urllib3_exceptions.NewConnectionError, 
-                urllib3_exceptions.MaxRetryError, 
-                requests.exceptions.ConnectionError, 
-                vk_api.exceptions.ApiError):
+            except (
+                requests.exceptions.ReadTimeout,
+                socket.timeout,
+                urllib3_exceptions.ReadTimeoutError,
+                socket.gaierror,
+                urllib3_exceptions.NewConnectionError,
+                urllib3_exceptions.MaxRetryError,
+                requests.exceptions.ConnectionError,
+                vk_api.exceptions.ApiError,
+            ):
                 time.sleep(1)
-                print('_______Timeout______')
+                print("_______Timeout______")
         except Exception as ex:
             print(ex)
             time.sleep(1)
-            print('_______Timeout______')
+            print("_______Timeout______")
 
 
 def mail_gather(seconds: int, time_str: str) -> None:
     messages = Returns()
     while True:
         now_time = str(datetime.datetime.now().strftime("%H.%M"))
+        print(now_time)
         # try:
-            # group_online(vk_session=vk_session)
-        # except: 
-            # pass
+        # group_online(vk_session=vk_session)
+        # except:
+        # pass
         if now_time == time_str:
             break
         time.sleep(seconds)
@@ -130,8 +136,7 @@ def mail_gather(seconds: int, time_str: str) -> None:
 
 
 def run_parallel() -> None:
-    p1 = multiprocessing.Process(target=mail_gather, 
-        args=[delay, time_str])
+    p1 = multiprocessing.Process(target=mail_gather, args=[delay, time_str])
     p2 = multiprocessing.Process(target=main_start, args=[])
 
     p1.start()
@@ -145,7 +150,7 @@ def table() -> None:
     create_tables()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     bot_start_file(path=os.getcwd())
     schedule_start_file(path=os.getcwd())
     table()
