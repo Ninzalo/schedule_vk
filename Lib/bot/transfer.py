@@ -1,21 +1,20 @@
-from typing import Tuple, Literal, List
+from typing import Tuple, Literal
 from Lib.bot.keyboards import stage_start_keyboard
 from Lib.bot.bot_getter import get_schedule_path
-from Lib.bot.bot_return import Returns, Return, fast_return
+from Lib.bot.bot_return import Returns
 from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.stages import Pages
 from Lib.bot.stages_names import Stages_names
-from config import db_path
 
 db = BotDB_Func()
 sn = Stages_names()
+
 
 def all_users_to_reset_page() -> Returns:
     all_users = db.get_users()
     result = Returns()
     for user_id in all_users:
-        result.returns += Pages().reset_page(
-            user_id=user_id).returns
+        result.returns += Pages().reset_page(user_id=user_id).returns
     return result
 
 
@@ -33,9 +32,8 @@ def deleted_group(user_id: int) -> Tuple[Literal[0, 1], Returns]:
         except:
             db.change_stage(user_id=user_id, stage=sn.START)
             db.null_schedule(user_id=user_id)
-            text = 'Данные о группе удалены'
+            text = "Данные о группе удалены"
             keyboard = stage_start_keyboard()
             success = 0
-            result.add_return(user_id=user_id, text=text, 
-                buttons=keyboard)
+            result.add_return(user_id=user_id, text=text, buttons=keyboard)
     return success, result

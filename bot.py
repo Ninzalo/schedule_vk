@@ -21,7 +21,9 @@ from Lib.bot.callback_func import callback_func
 
 from Lib.bot.mail import daily_mail, weekly_mail
 
-from Lib.bot.group import group_online, wall_sender
+from Lib.bot.group import wall_sender
+
+# from Lib.bot.group import group_online
 
 from Lib.bot.table import create_tables
 

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import TypedDict, List
+from typing import List
 
 
 @dataclass
@@ -12,11 +12,11 @@ class Other:
     lesson_name: str
     type_of_lesson: str
     room: str
-    dates: List[str]|None = None
+    dates: List[str] | None = None
 
 
 @dataclass
 class Schedule:
     date: str
     all_subgroups: int
-    other: Other|None = None
+    other: Other | None = None

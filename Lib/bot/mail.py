@@ -1,6 +1,5 @@
 import json
 import datetime
-import os
 import time
 from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.event_hint import Event_hint

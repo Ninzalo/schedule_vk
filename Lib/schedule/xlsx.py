@@ -1,8 +1,9 @@
 import time
 import win32com.client as win32
 
+
 def xls_to_xlsx(src, dst):
-    excel = win32.gencache.EnsureDispatch('Excel.Application')
+    excel = win32.gencache.EnsureDispatch("Excel.Application")
     try:
         excel.Application.Quit()
     except:

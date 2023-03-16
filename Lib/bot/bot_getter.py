@@ -8,7 +8,7 @@ from Lib.bot.event_hint import Event_hint
 from Lib.bot.BotDB_Func import BotDB_Func
 from Lib.bot.bot_return import Buttons
 # from Lib.bot.keyboards import stage_week_keyboard
-from config import data_folder, db_path
+from config import data_folder
 
 db = BotDB_Func()
 
