@@ -126,7 +126,7 @@ def download() -> None:
                 time.sleep(2)
             except Exception as ex:
                 print(ex)
-    print(f'[INFO] All amoount of files: {all_amount_of_files}')
+    print(f'[INFO] All amoount of files: {all_amount_of_files}\n')
 
 
 def retry(session, headers: dict, url: str, 
